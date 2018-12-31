@@ -1,0 +1,49 @@
+[28-Sep-2018 13:27:36 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 13:27:41 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 13:28:11 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 13:29:40 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 13:29:49 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 13:32:22 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 13:33:09 Africa/Abidjan] PHP Parse error:  syntax error, unexpected 'function' (T_FUNCTION), expecting identifier (T_STRING) or \\ (T_NS_SEPARATOR) in /home/wdpos3/public_html/vendor/myclabs/deep-copy/src/DeepCopy/deep_copy.php on line 5
+[28-Sep-2018 14:21:06 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:25:35 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:26:41 Africa/Abidjan] PHP Fatal error:  Call to a member function result() on boolean in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 103
+[28-Sep-2018 14:26:51 Africa/Abidjan] PHP Fatal error:  Call to a member function result() on boolean in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 103
+[28-Sep-2018 14:27:42 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:30:03 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:31:54 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:35:16 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:41:31 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:58:11 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 14:59:36 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:00:00 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:00:10 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:04:12 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:05:14 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:05:36 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:14:05 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:14:08 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:24:50 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:26:56 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:27:00 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:27:03 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:27:23 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:28:13 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:29:36 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:29:38 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:29:41 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:29:49 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:30:38 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 404
+[28-Sep-2018 15:31:41 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 406
+[28-Sep-2018 15:31:44 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 406
+[28-Sep-2018 15:31:49 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 406
+[28-Sep-2018 15:31:50 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 406
+[28-Sep-2018 15:35:34 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sma::save_barcode() in /home/wdpos3/public_html/themes/default/admin/views/pos/view.php on line 405
+[28-Sep-2018 17:59:05 Africa/Abidjan] PHP Fatal error:  require_once(): Failed opening required '/home/wdpos3/public_html/app/third_party/MPDF/mpdf.php' (include_path='.:/opt/php56/lib/php') in /home/wdpos3/public_html/app/controllers/admin/Reports.php on line 3337
+[29-Sep-2018 04:53:26 Africa/Abidjan] PHP Fatal error:  Call to undefined method Sales_model::getAllDayEndSales() in /home/wdpos3/public_html/app/controllers/admin/Sales.php on line 2697
+[29-Sep-2018 05:00:54 Africa/Abidjan] PHP Fatal error:  Cannot redeclare Sales_model::getAllDayEndSales() in /home/wdpos3/public_html/app/models/admin/Sales_model.php on line 860
+[29-Sep-2018 05:01:09 Africa/Abidjan] PHP Fatal error:  Cannot redeclare Sales_model::getAllDayEndSales() in /home/wdpos3/public_html/app/models/admin/Sales_model.php on line 860
+[29-Sep-2018 05:01:17 Africa/Abidjan] PHP Fatal error:  Cannot redeclare Sales_model::getAllDayEndSales() in /home/wdpos3/public_html/app/models/admin/Sales_model.php on line 860
+[29-Dec-2018 03:55:53 Africa/Abidjan] PHP Fatal error:  Call to a member function row() on boolean in /home/andresp/public_html/app/models/admin/Pos_model.php on line 905
+[29-Dec-2018 01:17:02 America/Santo_Domingo] PHP Fatal error:  Call to undefined method Pos_model::getTotalTodayCashSales() in /home/andresp/public_html/app/controllers/admin/Pos.php on line 1024
+[29-Dec-2018 16:04:03 America/Santo_Domingo] PHP Fatal error:  Call to undefined method Pos_model::getTotalTodayCashSales() in /home/andresp/public_html/app/controllers/admin/Pos.php on line 1001

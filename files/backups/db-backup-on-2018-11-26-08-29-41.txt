@@ -1,0 +1,1951 @@
+#
+# TABLE STRUCTURE FOR: sma_addresses
+#
+
+DROP TABLE IF EXISTS `sma_addresses`;
+
+CREATE TABLE `sma_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) NOT NULL,
+  `line1` varchar(50) NOT NULL,
+  `line2` varchar(50) DEFAULT NULL,
+  `city` varchar(25) NOT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `state` varchar(25) NOT NULL,
+  `country` varchar(50) NOT NULL,
+  `phone` varchar(50) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `company_id` (`company_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_adjustment_items
+#
+
+DROP TABLE IF EXISTS `sma_adjustment_items`;
+
+CREATE TABLE `sma_adjustment_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `adjustment_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `type` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `adjustment_id` (`adjustment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_adjustments
+#
+
+DROP TABLE IF EXISTS `sma_adjustments`;
+
+CREATE TABLE `sma_adjustments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `note` text,
+  `attachment` varchar(55) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `count_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_brands
+#
+
+DROP TABLE IF EXISTS `sma_brands`;
+
+CREATE TABLE `sma_brands` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) DEFAULT NULL,
+  `name` varchar(50) NOT NULL,
+  `image` varchar(50) DEFAULT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_calendar
+#
+
+DROP TABLE IF EXISTS `sma_calendar`;
+
+CREATE TABLE `sma_calendar` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(55) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `start` datetime NOT NULL,
+  `end` datetime DEFAULT NULL,
+  `color` varchar(7) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_captcha
+#
+
+DROP TABLE IF EXISTS `sma_captcha`;
+
+CREATE TABLE `sma_captcha` (
+  `captcha_id` bigint(13) unsigned NOT NULL AUTO_INCREMENT,
+  `captcha_time` int(10) unsigned NOT NULL,
+  `ip_address` varchar(16) CHARACTER SET latin1 NOT NULL DEFAULT '0',
+  `word` varchar(20) CHARACTER SET latin1 NOT NULL,
+  PRIMARY KEY (`captcha_id`),
+  KEY `word` (`word`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_categories
+#
+
+DROP TABLE IF EXISTS `sma_categories`;
+
+CREATE TABLE `sma_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(55) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `image` varchar(55) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_categories` (`id`, `code`, `name`, `image`, `parent_id`, `slug`, `description`) VALUES (1, 'C1', 'Category 1', NULL, NULL, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_combo_items
+#
+
+DROP TABLE IF EXISTS `sma_combo_items`;
+
+CREATE TABLE `sma_combo_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `item_code` varchar(20) NOT NULL,
+  `quantity` decimal(12,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_companies
+#
+
+DROP TABLE IF EXISTS `sma_companies`;
+
+CREATE TABLE `sma_companies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(10) unsigned DEFAULT NULL,
+  `group_name` varchar(20) NOT NULL,
+  `customer_group_id` int(11) DEFAULT NULL,
+  `customer_group_name` varchar(100) DEFAULT NULL,
+  `name` varchar(55) NOT NULL,
+  `company` varchar(255) NOT NULL,
+  `vat_no` varchar(100) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `city` varchar(55) DEFAULT NULL,
+  `state` varchar(55) DEFAULT NULL,
+  `postal_code` varchar(8) DEFAULT NULL,
+  `country` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `cf1` varchar(100) DEFAULT NULL,
+  `cf2` varchar(100) DEFAULT NULL,
+  `cf3` varchar(100) DEFAULT NULL,
+  `cf4` varchar(100) DEFAULT NULL,
+  `cf5` varchar(100) DEFAULT NULL,
+  `cf6` varchar(100) DEFAULT NULL,
+  `invoice_footer` text,
+  `payment_term` int(11) DEFAULT '0',
+  `logo` varchar(255) DEFAULT 'logo.png',
+  `award_points` int(11) DEFAULT '0',
+  `deposit_amount` decimal(25,4) DEFAULT NULL,
+  `price_group_id` int(11) DEFAULT NULL,
+  `price_group_name` varchar(50) DEFAULT NULL,
+  `gst_no` varchar(100) DEFAULT NULL,
+  `customer_credit_limit` float(11,2) DEFAULT '0.00',
+  `credit_enjoy_days` int(8) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  KEY `group_id_2` (`group_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_companies` (`id`, `group_id`, `group_name`, `customer_group_id`, `customer_group_name`, `name`, `company`, `vat_no`, `address`, `city`, `state`, `postal_code`, `country`, `phone`, `email`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `invoice_footer`, `payment_term`, `logo`, `award_points`, `deposit_amount`, `price_group_id`, `price_group_name`, `gst_no`, `customer_credit_limit`, `credit_enjoy_days`) VALUES (1, 3, 'customer', 1, 'General', 'Walk-in Customer', 'Walk-in Customer', '', 'Customer Address', 'Petaling Jaya', 'Selangor', '46000', 'Malaysia', '0123456789', 'customer@tecdiary.com', '', '', '', '', '', '', NULL, 0, 'logo.png', 0, NULL, NULL, NULL, '', '500.00', 0);
+INSERT INTO `sma_companies` (`id`, `group_id`, `group_name`, `customer_group_id`, `customer_group_name`, `name`, `company`, `vat_no`, `address`, `city`, `state`, `postal_code`, `country`, `phone`, `email`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `invoice_footer`, `payment_term`, `logo`, `award_points`, `deposit_amount`, `price_group_id`, `price_group_name`, `gst_no`, `customer_credit_limit`, `credit_enjoy_days`) VALUES (2, 4, 'supplier', NULL, NULL, 'Test Supplier', 'Supplier Company Name', NULL, 'Supplier Address', 'Petaling Jaya', 'Selangor', '46050', 'Malaysia', '0123456789', 'supplier@tecdiary.com', '-', '-', '-', '-', '-', '-', NULL, 0, 'logo.png', 0, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sma_companies` (`id`, `group_id`, `group_name`, `customer_group_id`, `customer_group_name`, `name`, `company`, `vat_no`, `address`, `city`, `state`, `postal_code`, `country`, `phone`, `email`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `invoice_footer`, `payment_term`, `logo`, `award_points`, `deposit_amount`, `price_group_id`, `price_group_name`, `gst_no`, `customer_credit_limit`, `credit_enjoy_days`) VALUES (3, NULL, 'biller', NULL, NULL, 'Mian Saleem', 'Test Biller', '5555', 'Biller adddress', 'City', '', '', 'Country', '012345678', 'saleem@tecdiary.com', '', '', '', '', '', '', ' Thank you for shopping with us. Please come again', 0, 'nav.jpg', 0, NULL, NULL, NULL, '', NULL, NULL);
+INSERT INTO `sma_companies` (`id`, `group_id`, `group_name`, `customer_group_id`, `customer_group_name`, `name`, `company`, `vat_no`, `address`, `city`, `state`, `postal_code`, `country`, `phone`, `email`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `invoice_footer`, `payment_term`, `logo`, `award_points`, `deposit_amount`, `price_group_id`, `price_group_name`, `gst_no`, `customer_credit_limit`, `credit_enjoy_days`) VALUES (4, 3, 'customer', 1, 'General', 'Test', 'Test', '', 'Customer Address', 'Petaling Jaya', 'Selangor', '46000', 'Malaysia', '0123456789', 'customer@tecdiary.com', '', '', '', '', '', '', NULL, 0, 'logo.png', 0, NULL, NULL, NULL, '', '500.00', 0);
+
+
+#
+# TABLE STRUCTURE FOR: sma_costing
+#
+
+DROP TABLE IF EXISTS `sma_costing`;
+
+CREATE TABLE `sma_costing` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `product_id` int(11) DEFAULT NULL,
+  `sale_item_id` int(11) NOT NULL,
+  `sale_id` int(11) DEFAULT NULL,
+  `purchase_item_id` int(11) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `purchase_net_unit_cost` decimal(25,4) DEFAULT NULL,
+  `purchase_unit_cost` decimal(25,4) DEFAULT NULL,
+  `sale_net_unit_price` decimal(25,4) NOT NULL,
+  `sale_unit_price` decimal(25,4) NOT NULL,
+  `quantity_balance` decimal(15,4) DEFAULT NULL,
+  `inventory` tinyint(1) DEFAULT '0',
+  `overselling` tinyint(1) DEFAULT '0',
+  `option_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (1, '2018-09-28', 1, 1, 1, 1, '2.0000', '20.0000', '20.0000', '25.0000', '25.0000', '18.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (6, '2018-09-29', 1, 6, 4, 1, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '15.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (26, '2018-11-24', 1, 26, 16, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '499.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (27, '2018-11-24', 1, 27, 16, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '499.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (28, '2018-11-24', 1, 28, 17, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '497.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (29, '2018-11-24', 1, 29, 18, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '496.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (48, '2018-11-25', 1, 48, 29, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '495.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (49, '2018-11-25', 1, 49, 29, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '495.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (50, '2018-11-25', 1, 50, 30, 2, '5.0000', '20.0000', '20.0000', '25.0000', '25.0000', '489.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (51, '2018-11-25', 1, 51, 31, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '488.0000', 1, 0, NULL);
+INSERT INTO `sma_costing` (`id`, `date`, `product_id`, `sale_item_id`, `sale_id`, `purchase_item_id`, `quantity`, `purchase_net_unit_cost`, `purchase_unit_cost`, `sale_net_unit_price`, `sale_unit_price`, `quantity_balance`, `inventory`, `overselling`, `option_id`) VALUES (52, '2018-11-25', 1, 52, 32, 2, '1.0000', '20.0000', '20.0000', '25.0000', '25.0000', '487.0000', 1, 0, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_currencies
+#
+
+DROP TABLE IF EXISTS `sma_currencies`;
+
+CREATE TABLE `sma_currencies` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(5) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `rate` decimal(12,4) NOT NULL,
+  `auto_update` tinyint(1) NOT NULL DEFAULT '0',
+  `symbol` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_currencies` (`id`, `code`, `name`, `rate`, `auto_update`, `symbol`) VALUES (1, 'USD', 'US Dollar', '1.0000', 0, NULL);
+INSERT INTO `sma_currencies` (`id`, `code`, `name`, `rate`, `auto_update`, `symbol`) VALUES (2, 'EUR', 'EURO', '0.7340', 0, NULL);
+INSERT INTO `sma_currencies` (`id`, `code`, `name`, `rate`, `auto_update`, `symbol`) VALUES (3, 'BDT', 'BDT', '1.0000', 0, 'BDT');
+
+
+#
+# TABLE STRUCTURE FOR: sma_customer_groups
+#
+
+DROP TABLE IF EXISTS `sma_customer_groups`;
+
+CREATE TABLE `sma_customer_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `percent` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`) VALUES (1, 'General', 0);
+INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`) VALUES (2, 'Reseller', -5);
+INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`) VALUES (3, 'Distributor', -15);
+INSERT INTO `sma_customer_groups` (`id`, `name`, `percent`) VALUES (4, 'New Customer (+10)', 10);
+
+
+#
+# TABLE STRUCTURE FOR: sma_date_format
+#
+
+DROP TABLE IF EXISTS `sma_date_format`;
+
+CREATE TABLE `sma_date_format` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `js` varchar(20) NOT NULL,
+  `php` varchar(20) NOT NULL,
+  `sql` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES (1, 'mm-dd-yyyy', 'm-d-Y', '%m-%d-%Y');
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES (2, 'mm/dd/yyyy', 'm/d/Y', '%m/%d/%Y');
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES (3, 'mm.dd.yyyy', 'm.d.Y', '%m.%d.%Y');
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES (4, 'dd-mm-yyyy', 'd-m-Y', '%d-%m-%Y');
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES (5, 'dd/mm/yyyy', 'd/m/Y', '%d/%m/%Y');
+INSERT INTO `sma_date_format` (`id`, `js`, `php`, `sql`) VALUES (6, 'dd.mm.yyyy', 'd.m.Y', '%d.%m.%Y');
+
+
+#
+# TABLE STRUCTURE FOR: sma_deliveries
+#
+
+DROP TABLE IF EXISTS `sma_deliveries`;
+
+CREATE TABLE `sma_deliveries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `sale_id` int(11) NOT NULL,
+  `do_reference_no` varchar(50) NOT NULL,
+  `sale_reference_no` varchar(50) NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `address` varchar(1000) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `status` varchar(15) DEFAULT NULL,
+  `attachment` varchar(50) DEFAULT NULL,
+  `delivered_by` varchar(50) DEFAULT NULL,
+  `received_by` varchar(50) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_deposits
+#
+
+DROP TABLE IF EXISTS `sma_deposits`;
+
+CREATE TABLE `sma_deposits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `company_id` int(11) NOT NULL,
+  `amount` decimal(25,4) NOT NULL,
+  `paid_by` varchar(50) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_expense_categories
+#
+
+DROP TABLE IF EXISTS `sma_expense_categories`;
+
+CREATE TABLE `sma_expense_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(55) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_expenses
+#
+
+DROP TABLE IF EXISTS `sma_expenses`;
+
+CREATE TABLE `sma_expenses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference` varchar(50) NOT NULL,
+  `amount` decimal(25,4) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `created_by` varchar(55) NOT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_gift_card_topups
+#
+
+DROP TABLE IF EXISTS `sma_gift_card_topups`;
+
+CREATE TABLE `sma_gift_card_topups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `card_id` int(11) NOT NULL,
+  `amount` decimal(15,4) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `card_id` (`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_gift_cards
+#
+
+DROP TABLE IF EXISTS `sma_gift_cards`;
+
+CREATE TABLE `sma_gift_cards` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `card_no` varchar(20) NOT NULL,
+  `value` decimal(25,4) NOT NULL,
+  `customer_id` int(11) DEFAULT NULL,
+  `customer` varchar(255) DEFAULT NULL,
+  `balance` decimal(25,4) NOT NULL,
+  `expiry` date DEFAULT NULL,
+  `created_by` varchar(55) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `card_no` (`card_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_groups
+#
+
+DROP TABLE IF EXISTS `sma_groups`;
+
+CREATE TABLE `sma_groups` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `description` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES (1, 'owner', 'Owner');
+INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES (2, 'admin', 'Administrator');
+INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES (3, 'customer', 'Customer');
+INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES (4, 'supplier', 'Supplier');
+INSERT INTO `sma_groups` (`id`, `name`, `description`) VALUES (5, 'sales', 'Sales Staff');
+
+
+#
+# TABLE STRUCTURE FOR: sma_login_attempts
+#
+
+DROP TABLE IF EXISTS `sma_login_attempts`;
+
+CREATE TABLE `sma_login_attempts` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `ip_address` varbinary(16) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_migrations
+#
+
+DROP TABLE IF EXISTS `sma_migrations`;
+
+CREATE TABLE `sma_migrations` (
+  `version` bigint(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_migrations` (`version`) VALUES ('315');
+
+
+#
+# TABLE STRUCTURE FOR: sma_notifications
+#
+
+DROP TABLE IF EXISTS `sma_notifications`;
+
+CREATE TABLE `sma_notifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comment` text NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `from_date` datetime DEFAULT NULL,
+  `till_date` datetime DEFAULT NULL,
+  `scope` tinyint(1) NOT NULL DEFAULT '3',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_notifications` (`id`, `comment`, `date`, `from_date`, `till_date`, `scope`) VALUES (1, '<p>Thank you for purchasing Stock Manager Advance. Please don\'t forget to check the documentation in help folder. If you find any error/bug, please email to support@tecdiary.com with details. You can send us your valued suggestions/feedback too.</p><p>Please rate Stock Manager Advance on your download page of codecanyon.net</p>', '2014-08-15 17:00:57', '2015-01-01 00:00:00', '2017-01-01 00:00:00', 3);
+
+
+#
+# TABLE STRUCTURE FOR: sma_order_ref
+#
+
+DROP TABLE IF EXISTS `sma_order_ref`;
+
+CREATE TABLE `sma_order_ref` (
+  `ref_id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date NOT NULL,
+  `so` int(11) NOT NULL DEFAULT '1',
+  `qu` int(11) NOT NULL DEFAULT '1',
+  `po` int(11) NOT NULL DEFAULT '1',
+  `to` int(11) NOT NULL DEFAULT '1',
+  `pos` int(11) NOT NULL DEFAULT '1',
+  `do` int(11) NOT NULL DEFAULT '1',
+  `pay` int(11) NOT NULL DEFAULT '1',
+  `re` int(11) NOT NULL DEFAULT '1',
+  `rep` int(11) NOT NULL DEFAULT '1',
+  `ex` int(11) NOT NULL DEFAULT '1',
+  `ppay` int(11) NOT NULL DEFAULT '1',
+  `qa` int(11) DEFAULT '1',
+  PRIMARY KEY (`ref_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_order_ref` (`ref_id`, `date`, `so`, `qu`, `po`, `to`, `pos`, `do`, `pay`, `re`, `rep`, `ex`, `ppay`, `qa`) VALUES (1, '2018-11-01', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+
+#
+# TABLE STRUCTURE FOR: sma_payments
+#
+
+DROP TABLE IF EXISTS `sma_payments`;
+
+CREATE TABLE `sma_payments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `sale_id` int(11) DEFAULT NULL,
+  `return_id` int(11) DEFAULT NULL,
+  `purchase_id` int(11) DEFAULT NULL,
+  `reference_no` varchar(50) DEFAULT NULL,
+  `transaction_id` varchar(50) DEFAULT NULL,
+  `paid_by` varchar(20) DEFAULT NULL,
+  `cheque_no` varchar(20) DEFAULT NULL,
+  `cc_no` varchar(20) DEFAULT NULL,
+  `cc_holder` varchar(25) DEFAULT NULL,
+  `cc_month` varchar(2) DEFAULT NULL,
+  `cc_year` varchar(4) DEFAULT NULL,
+  `cc_type` varchar(20) DEFAULT NULL,
+  `amount` decimal(25,4) DEFAULT NULL,
+  `currency` varchar(3) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `pos_paid` decimal(25,4) DEFAULT '0.0000',
+  `pos_balance` decimal(25,4) DEFAULT '0.0000',
+  `approval_code` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`, `reference_no`, `transaction_id`, `paid_by`, `cheque_no`, `cc_no`, `cc_holder`, `cc_month`, `cc_year`, `cc_type`, `amount`, `currency`, `created_by`, `attachment`, `type`, `note`, `pos_paid`, `pos_balance`, `approval_code`) VALUES (8, '2018-11-25 04:46:05', 30, NULL, NULL, 'IPAY2018/11/0018', NULL, 'cash', '', '', '', '', '', '', '125.0000', NULL, 1, NULL, 'received', '', '125.0000', '0.0000', NULL);
+INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`, `reference_no`, `transaction_id`, `paid_by`, `cheque_no`, `cc_no`, `cc_holder`, `cc_month`, `cc_year`, `cc_type`, `amount`, `currency`, `created_by`, `attachment`, `type`, `note`, `pos_paid`, `pos_balance`, `approval_code`) VALUES (9, '2018-11-25 04:46:41', 31, NULL, NULL, 'IPAY2018/11/0019', NULL, 'CC', '', '', '', '', '', '', '25.0000', NULL, 1, NULL, 'received', '', '25.0000', '0.0000', NULL);
+INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`, `reference_no`, `transaction_id`, `paid_by`, `cheque_no`, `cc_no`, `cc_holder`, `cc_month`, `cc_year`, `cc_type`, `amount`, `currency`, `created_by`, `attachment`, `type`, `note`, `pos_paid`, `pos_balance`, `approval_code`) VALUES (10, '2018-11-25 10:47:00', 29, NULL, NULL, 'IPAY2018/11/0020', NULL, 'cash', '', '', '', '', '', 'Visa', '25.0000', NULL, 1, NULL, 'received', '', '25.0000', '0.0000', NULL);
+INSERT INTO `sma_payments` (`id`, `date`, `sale_id`, `return_id`, `purchase_id`, `reference_no`, `transaction_id`, `paid_by`, `cheque_no`, `cc_no`, `cc_holder`, `cc_month`, `cc_year`, `cc_type`, `amount`, `currency`, `created_by`, `attachment`, `type`, `note`, `pos_paid`, `pos_balance`, `approval_code`) VALUES (11, '2018-11-25 12:09:00', 29, NULL, NULL, 'IPAY2018/11/0020', NULL, 'CC', '', '', '', '', '', 'Visa', '25.0000', NULL, 1, NULL, 'received', '', '25.0000', '0.0000', NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_paypal
+#
+
+DROP TABLE IF EXISTS `sma_paypal`;
+
+CREATE TABLE `sma_paypal` (
+  `id` int(11) NOT NULL,
+  `active` tinyint(4) NOT NULL,
+  `account_email` varchar(255) NOT NULL,
+  `paypal_currency` varchar(3) NOT NULL DEFAULT 'USD',
+  `fixed_charges` decimal(25,4) NOT NULL DEFAULT '2.0000',
+  `extra_charges_my` decimal(25,4) NOT NULL DEFAULT '3.9000',
+  `extra_charges_other` decimal(25,4) NOT NULL DEFAULT '4.4000',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_paypal` (`id`, `active`, `account_email`, `paypal_currency`, `fixed_charges`, `extra_charges_my`, `extra_charges_other`) VALUES (1, 1, 'mypaypal@paypal.com', 'USD', '0.0000', '0.0000', '0.0000');
+
+
+#
+# TABLE STRUCTURE FOR: sma_permissions
+#
+
+DROP TABLE IF EXISTS `sma_permissions`;
+
+CREATE TABLE `sma_permissions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `group_id` int(11) NOT NULL,
+  `products-index` tinyint(1) DEFAULT '0',
+  `products-add` tinyint(1) DEFAULT '0',
+  `products-edit` tinyint(1) DEFAULT '0',
+  `products-delete` tinyint(1) DEFAULT '0',
+  `products-cost` tinyint(1) DEFAULT '0',
+  `products-price` tinyint(1) DEFAULT '0',
+  `quotes-index` tinyint(1) DEFAULT '0',
+  `quotes-add` tinyint(1) DEFAULT '0',
+  `quotes-edit` tinyint(1) DEFAULT '0',
+  `quotes-pdf` tinyint(1) DEFAULT '0',
+  `quotes-email` tinyint(1) DEFAULT '0',
+  `quotes-delete` tinyint(1) DEFAULT '0',
+  `sales-index` tinyint(1) DEFAULT '0',
+  `sales-add` tinyint(1) DEFAULT '0',
+  `sales-edit` tinyint(1) DEFAULT '0',
+  `sales-pdf` tinyint(1) DEFAULT '0',
+  `sales-email` tinyint(1) DEFAULT '0',
+  `sales-delete` tinyint(1) DEFAULT '0',
+  `purchases-index` tinyint(1) DEFAULT '0',
+  `purchases-add` tinyint(1) DEFAULT '0',
+  `purchases-edit` tinyint(1) DEFAULT '0',
+  `purchases-pdf` tinyint(1) DEFAULT '0',
+  `purchases-email` tinyint(1) DEFAULT '0',
+  `purchases-delete` tinyint(1) DEFAULT '0',
+  `transfers-index` tinyint(1) DEFAULT '0',
+  `transfers-add` tinyint(1) DEFAULT '0',
+  `transfers-edit` tinyint(1) DEFAULT '0',
+  `transfers-pdf` tinyint(1) DEFAULT '0',
+  `transfers-email` tinyint(1) DEFAULT '0',
+  `transfers-delete` tinyint(1) DEFAULT '0',
+  `customers-index` tinyint(1) DEFAULT '0',
+  `customers-add` tinyint(1) DEFAULT '0',
+  `customers-edit` tinyint(1) DEFAULT '0',
+  `customers-delete` tinyint(1) DEFAULT '0',
+  `suppliers-index` tinyint(1) DEFAULT '0',
+  `suppliers-add` tinyint(1) DEFAULT '0',
+  `suppliers-edit` tinyint(1) DEFAULT '0',
+  `suppliers-delete` tinyint(1) DEFAULT '0',
+  `sales-deliveries` tinyint(1) DEFAULT '0',
+  `sales-add_delivery` tinyint(1) DEFAULT '0',
+  `sales-edit_delivery` tinyint(1) DEFAULT '0',
+  `sales-delete_delivery` tinyint(1) DEFAULT '0',
+  `sales-email_delivery` tinyint(1) DEFAULT '0',
+  `sales-pdf_delivery` tinyint(1) DEFAULT '0',
+  `sales-gift_cards` tinyint(1) DEFAULT '0',
+  `sales-add_gift_card` tinyint(1) DEFAULT '0',
+  `sales-edit_gift_card` tinyint(1) DEFAULT '0',
+  `sales-delete_gift_card` tinyint(1) DEFAULT '0',
+  `pos-index` tinyint(1) DEFAULT '0',
+  `sales-return_sales` tinyint(1) DEFAULT '0',
+  `reports-index` tinyint(1) DEFAULT '0',
+  `reports-warehouse_stock` tinyint(1) DEFAULT '0',
+  `reports-quantity_alerts` tinyint(1) DEFAULT '0',
+  `reports-expiry_alerts` tinyint(1) DEFAULT '0',
+  `reports-products` tinyint(1) DEFAULT '0',
+  `reports-daily_sales` tinyint(1) DEFAULT '0',
+  `reports-monthly_sales` tinyint(1) DEFAULT '0',
+  `reports-sales` tinyint(1) DEFAULT '0',
+  `reports-payments` tinyint(1) DEFAULT '0',
+  `reports-purchases` tinyint(1) DEFAULT '0',
+  `reports-profit_loss` tinyint(1) DEFAULT '0',
+  `reports-customers` tinyint(1) DEFAULT '0',
+  `reports-suppliers` tinyint(1) DEFAULT '0',
+  `reports-staff` tinyint(1) DEFAULT '0',
+  `reports-register` tinyint(1) DEFAULT '0',
+  `sales-payments` tinyint(1) DEFAULT '0',
+  `purchases-payments` tinyint(1) DEFAULT '0',
+  `purchases-expenses` tinyint(1) DEFAULT '0',
+  `products-adjustments` tinyint(1) NOT NULL DEFAULT '0',
+  `bulk_actions` tinyint(1) NOT NULL DEFAULT '0',
+  `customers-deposits` tinyint(1) NOT NULL DEFAULT '0',
+  `customers-delete_deposit` tinyint(1) NOT NULL DEFAULT '0',
+  `products-barcode` tinyint(1) NOT NULL DEFAULT '0',
+  `purchases-return_purchases` tinyint(1) NOT NULL DEFAULT '0',
+  `reports-expenses` tinyint(1) NOT NULL DEFAULT '0',
+  `reports-daily_purchases` tinyint(1) DEFAULT '0',
+  `reports-monthly_purchases` tinyint(1) DEFAULT '0',
+  `products-stock_count` tinyint(1) DEFAULT '0',
+  `edit_price` tinyint(1) DEFAULT '0',
+  `returns-index` tinyint(1) DEFAULT '0',
+  `returns-add` tinyint(1) DEFAULT '0',
+  `returns-edit` tinyint(1) DEFAULT '0',
+  `returns-delete` tinyint(1) DEFAULT '0',
+  `returns-email` tinyint(1) DEFAULT '0',
+  `returns-pdf` tinyint(1) DEFAULT '0',
+  `reports-tax` tinyint(1) DEFAULT '0',
+  `reports-sales-margin` tinyint(1) DEFAULT NULL,
+  `products-details_search` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_permissions` (`id`, `group_id`, `products-index`, `products-add`, `products-edit`, `products-delete`, `products-cost`, `products-price`, `quotes-index`, `quotes-add`, `quotes-edit`, `quotes-pdf`, `quotes-email`, `quotes-delete`, `sales-index`, `sales-add`, `sales-edit`, `sales-pdf`, `sales-email`, `sales-delete`, `purchases-index`, `purchases-add`, `purchases-edit`, `purchases-pdf`, `purchases-email`, `purchases-delete`, `transfers-index`, `transfers-add`, `transfers-edit`, `transfers-pdf`, `transfers-email`, `transfers-delete`, `customers-index`, `customers-add`, `customers-edit`, `customers-delete`, `suppliers-index`, `suppliers-add`, `suppliers-edit`, `suppliers-delete`, `sales-deliveries`, `sales-add_delivery`, `sales-edit_delivery`, `sales-delete_delivery`, `sales-email_delivery`, `sales-pdf_delivery`, `sales-gift_cards`, `sales-add_gift_card`, `sales-edit_gift_card`, `sales-delete_gift_card`, `pos-index`, `sales-return_sales`, `reports-index`, `reports-warehouse_stock`, `reports-quantity_alerts`, `reports-expiry_alerts`, `reports-products`, `reports-daily_sales`, `reports-monthly_sales`, `reports-sales`, `reports-payments`, `reports-purchases`, `reports-profit_loss`, `reports-customers`, `reports-suppliers`, `reports-staff`, `reports-register`, `sales-payments`, `purchases-payments`, `purchases-expenses`, `products-adjustments`, `bulk_actions`, `customers-deposits`, `customers-delete_deposit`, `products-barcode`, `purchases-return_purchases`, `reports-expenses`, `reports-daily_purchases`, `reports-monthly_purchases`, `products-stock_count`, `edit_price`, `returns-index`, `returns-add`, `returns-edit`, `returns-delete`, `returns-email`, `returns-pdf`, `reports-tax`, `reports-sales-margin`, `products-details_search`) VALUES (1, 5, 1, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, 1, 1, NULL, 1, 1, NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, 1, 1, 1, NULL, NULL, 1, 1, 1, NULL, NULL, 1, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, 0, 0, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, 1);
+
+
+#
+# TABLE STRUCTURE FOR: sma_pos_register
+#
+
+DROP TABLE IF EXISTS `sma_pos_register`;
+
+CREATE TABLE `sma_pos_register` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) NOT NULL,
+  `cash_in_hand` decimal(25,4) NOT NULL,
+  `status` varchar(10) NOT NULL,
+  `total_cash` decimal(25,4) DEFAULT NULL,
+  `total_cheques` int(11) DEFAULT NULL,
+  `total_cc_slips` int(11) DEFAULT NULL,
+  `total_cash_submitted` decimal(25,4) DEFAULT NULL,
+  `total_cheques_submitted` int(11) DEFAULT NULL,
+  `total_cc_slips_submitted` int(11) DEFAULT NULL,
+  `note` text,
+  `closed_at` timestamp NULL DEFAULT NULL,
+  `transfer_opened_bills` varchar(50) DEFAULT NULL,
+  `closed_by` int(11) DEFAULT NULL,
+  `total_credit_sale` decimal(25,2) DEFAULT NULL,
+  `total_credit_amount` decimal(25,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_pos_settings
+#
+
+DROP TABLE IF EXISTS `sma_pos_settings`;
+
+CREATE TABLE `sma_pos_settings` (
+  `pos_id` int(1) NOT NULL,
+  `cat_limit` int(11) NOT NULL,
+  `pro_limit` int(11) NOT NULL,
+  `default_category` int(11) NOT NULL,
+  `default_customer` int(11) NOT NULL,
+  `default_biller` int(11) NOT NULL,
+  `display_time` varchar(3) NOT NULL DEFAULT 'yes',
+  `cf_title1` varchar(255) DEFAULT NULL,
+  `cf_title2` varchar(255) DEFAULT NULL,
+  `cf_value1` varchar(255) DEFAULT NULL,
+  `cf_value2` varchar(255) DEFAULT NULL,
+  `receipt_printer` varchar(55) DEFAULT NULL,
+  `cash_drawer_codes` varchar(55) DEFAULT NULL,
+  `focus_add_item` varchar(55) DEFAULT NULL,
+  `add_manual_product` varchar(55) DEFAULT NULL,
+  `customer_selection` varchar(55) DEFAULT NULL,
+  `add_customer` varchar(55) DEFAULT NULL,
+  `toggle_category_slider` varchar(55) DEFAULT NULL,
+  `toggle_subcategory_slider` varchar(55) DEFAULT NULL,
+  `cancel_sale` varchar(55) DEFAULT NULL,
+  `suspend_sale` varchar(55) DEFAULT NULL,
+  `print_items_list` varchar(55) DEFAULT NULL,
+  `finalize_sale` varchar(55) DEFAULT NULL,
+  `today_sale` varchar(55) DEFAULT NULL,
+  `open_hold_bills` varchar(55) DEFAULT NULL,
+  `close_register` varchar(55) DEFAULT NULL,
+  `keyboard` tinyint(1) NOT NULL,
+  `pos_printers` varchar(255) DEFAULT NULL,
+  `java_applet` tinyint(1) NOT NULL,
+  `product_button_color` varchar(20) NOT NULL DEFAULT 'default',
+  `tooltips` tinyint(1) DEFAULT '1',
+  `paypal_pro` tinyint(1) DEFAULT '0',
+  `stripe` tinyint(1) DEFAULT '0',
+  `rounding` tinyint(1) DEFAULT '0',
+  `char_per_line` tinyint(4) DEFAULT '42',
+  `pin_code` varchar(20) DEFAULT NULL,
+  `purchase_code` varchar(100) DEFAULT 'purchase_code',
+  `envato_username` varchar(50) DEFAULT 'envato_username',
+  `version` varchar(10) DEFAULT '3.4.7',
+  `after_sale_page` tinyint(1) DEFAULT '0',
+  `item_order` tinyint(1) DEFAULT '0',
+  `authorize` tinyint(1) DEFAULT '0',
+  `toggle_brands_slider` varchar(55) DEFAULT NULL,
+  `remote_printing` tinyint(1) DEFAULT '1',
+  `printer` int(11) DEFAULT NULL,
+  `order_printers` varchar(55) DEFAULT NULL,
+  `auto_print` tinyint(1) DEFAULT '0',
+  `customer_details` tinyint(1) DEFAULT NULL,
+  `local_printers` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`pos_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_pos_settings` (`pos_id`, `cat_limit`, `pro_limit`, `default_category`, `default_customer`, `default_biller`, `display_time`, `cf_title1`, `cf_title2`, `cf_value1`, `cf_value2`, `receipt_printer`, `cash_drawer_codes`, `focus_add_item`, `add_manual_product`, `customer_selection`, `add_customer`, `toggle_category_slider`, `toggle_subcategory_slider`, `cancel_sale`, `suspend_sale`, `print_items_list`, `finalize_sale`, `today_sale`, `open_hold_bills`, `close_register`, `keyboard`, `pos_printers`, `java_applet`, `product_button_color`, `tooltips`, `paypal_pro`, `stripe`, `rounding`, `char_per_line`, `pin_code`, `purchase_code`, `envato_username`, `version`, `after_sale_page`, `item_order`, `authorize`, `toggle_brands_slider`, `remote_printing`, `printer`, `order_printers`, `auto_print`, `customer_details`, `local_printers`) VALUES (1, 22, 20, 1, 1, 3, '1', 'GST Reg', 'VAT Reg', '123456789', '987654321', 'BIXOLON SRP-350II', 'x1C', 'Ctrl+F3', 'Ctrl+Shift+M', 'Ctrl+Shift+C', 'Ctrl+Shift+A', 'Ctrl+F11', 'Ctrl+F12', 'F4', 'F7', 'F9', 'F8', 'Ctrl+F1', 'Ctrl+F2', 'Ctrl+F10', 1, 'BIXOLON SRP-350II, BIXOLON SRP-350II', 0, 'default', 1, 0, 0, 0, 42, NULL, 'purchase_code', 'envato_username', '3.4.7', 0, 0, 0, NULL, 1, NULL, NULL, 0, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_price_groups
+#
+
+DROP TABLE IF EXISTS `sma_price_groups`;
+
+CREATE TABLE `sma_price_groups` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_price_groups` (`id`, `name`) VALUES (1, 'Default');
+
+
+#
+# TABLE STRUCTURE FOR: sma_printers
+#
+
+DROP TABLE IF EXISTS `sma_printers`;
+
+CREATE TABLE `sma_printers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(55) NOT NULL,
+  `type` varchar(25) NOT NULL,
+  `profile` varchar(25) NOT NULL,
+  `char_per_line` tinyint(3) unsigned DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `ip_address` varbinary(45) DEFAULT NULL,
+  `port` varchar(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_product_photos
+#
+
+DROP TABLE IF EXISTS `sma_product_photos`;
+
+CREATE TABLE `sma_product_photos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `photo` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_product_prices
+#
+
+DROP TABLE IF EXISTS `sma_product_prices`;
+
+CREATE TABLE `sma_product_prices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `price_group_id` int(11) NOT NULL,
+  `price` decimal(25,4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `price_group_id` (`price_group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_product_variants
+#
+
+DROP TABLE IF EXISTS `sma_product_variants`;
+
+CREATE TABLE `sma_product_variants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `cost` decimal(25,4) DEFAULT NULL,
+  `price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_products
+#
+
+DROP TABLE IF EXISTS `sma_products`;
+
+CREATE TABLE `sma_products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `unit` int(11) DEFAULT NULL,
+  `cost` decimal(25,4) DEFAULT NULL,
+  `price` decimal(25,4) NOT NULL,
+  `alert_quantity` decimal(15,4) DEFAULT '20.0000',
+  `image` varchar(255) DEFAULT 'no_image.png',
+  `category_id` int(11) NOT NULL,
+  `subcategory_id` int(11) DEFAULT NULL,
+  `cf1` varchar(255) DEFAULT NULL,
+  `cf2` varchar(255) DEFAULT NULL,
+  `cf3` varchar(255) DEFAULT NULL,
+  `cf4` varchar(255) DEFAULT NULL,
+  `cf5` varchar(255) DEFAULT NULL,
+  `cf6` varchar(255) DEFAULT NULL,
+  `quantity` decimal(15,4) DEFAULT '0.0000',
+  `tax_rate` int(11) DEFAULT NULL,
+  `track_quantity` tinyint(1) DEFAULT '1',
+  `details` varchar(1000) DEFAULT NULL,
+  `warehouse` int(11) DEFAULT NULL,
+  `barcode_symbology` varchar(55) NOT NULL DEFAULT 'code128',
+  `file` varchar(100) DEFAULT NULL,
+  `product_details` text,
+  `tax_method` tinyint(1) DEFAULT '0',
+  `type` varchar(55) NOT NULL DEFAULT 'standard',
+  `supplier1` int(11) DEFAULT NULL,
+  `supplier1price` decimal(25,4) DEFAULT NULL,
+  `supplier2` int(11) DEFAULT NULL,
+  `supplier2price` decimal(25,4) DEFAULT NULL,
+  `supplier3` int(11) DEFAULT NULL,
+  `supplier3price` decimal(25,4) DEFAULT NULL,
+  `supplier4` int(11) DEFAULT NULL,
+  `supplier4price` decimal(25,4) DEFAULT NULL,
+  `supplier5` int(11) DEFAULT NULL,
+  `supplier5price` decimal(25,4) DEFAULT NULL,
+  `promotion` tinyint(1) DEFAULT '0',
+  `promo_price` decimal(25,4) DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `supplier1_part_no` varchar(50) DEFAULT NULL,
+  `supplier2_part_no` varchar(50) DEFAULT NULL,
+  `supplier3_part_no` varchar(50) DEFAULT NULL,
+  `supplier4_part_no` varchar(50) DEFAULT NULL,
+  `supplier5_part_no` varchar(50) DEFAULT NULL,
+  `sale_unit` int(11) DEFAULT NULL,
+  `purchase_unit` int(11) DEFAULT NULL,
+  `brand` int(11) DEFAULT NULL,
+  `slug` varchar(55) DEFAULT NULL,
+  `featured` tinyint(1) DEFAULT NULL,
+  `weight` decimal(10,4) DEFAULT NULL,
+  `hsn_code` int(11) DEFAULT NULL,
+  `views` int(11) NOT NULL DEFAULT '0',
+  `hide` tinyint(1) NOT NULL DEFAULT '0',
+  `second_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `category_id` (`category_id`),
+  KEY `id` (`id`),
+  KEY `id_2` (`id`),
+  KEY `category_id_2` (`category_id`),
+  KEY `unit` (`unit`),
+  KEY `brand` (`brand`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_products` (`id`, `code`, `name`, `unit`, `cost`, `price`, `alert_quantity`, `image`, `category_id`, `subcategory_id`, `cf1`, `cf2`, `cf3`, `cf4`, `cf5`, `cf6`, `quantity`, `tax_rate`, `track_quantity`, `details`, `warehouse`, `barcode_symbology`, `file`, `product_details`, `tax_method`, `type`, `supplier1`, `supplier1price`, `supplier2`, `supplier2price`, `supplier3`, `supplier3price`, `supplier4`, `supplier4price`, `supplier5`, `supplier5price`, `promotion`, `promo_price`, `start_date`, `end_date`, `supplier1_part_no`, `supplier2_part_no`, `supplier3_part_no`, `supplier4_part_no`, `supplier5_part_no`, `sale_unit`, `purchase_unit`, `brand`, `slug`, `featured`, `weight`, `hsn_code`, `views`, `hide`, `second_name`) VALUES (1, 'test', 'Test-1', 1, '20.0000', '25.0000', '0.0000', 'no_image.png', 1, NULL, '', '', '', '', '', '', '504.0000', 1, 1, '', NULL, 'code128', '', '', 1, 'standard', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, 1, 1, 0, 'test-1', NULL, '0.0000', NULL, 0, 0, '');
+
+
+#
+# TABLE STRUCTURE FOR: sma_purchase_items
+#
+
+DROP TABLE IF EXISTS `sma_purchase_items`;
+
+CREATE TABLE `sma_purchase_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `purchase_id` int(11) DEFAULT NULL,
+  `transfer_id` int(11) DEFAULT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_code` varchar(50) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `net_unit_cost` decimal(25,4) NOT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int(11) DEFAULT NULL,
+  `tax` varchar(20) DEFAULT NULL,
+  `discount` varchar(20) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `expiry` date DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `quantity_balance` decimal(15,4) DEFAULT '0.0000',
+  `date` date NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `unit_cost` decimal(25,4) DEFAULT NULL,
+  `real_unit_cost` decimal(25,4) DEFAULT NULL,
+  `quantity_received` decimal(15,4) DEFAULT NULL,
+  `supplier_part_no` varchar(50) DEFAULT NULL,
+  `purchase_item_id` int(11) DEFAULT NULL,
+  `product_unit_id` int(11) DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `purchase_id` (`purchase_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_purchase_items` (`id`, `purchase_id`, `transfer_id`, `product_id`, `product_code`, `product_name`, `option_id`, `net_unit_cost`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `expiry`, `subtotal`, `quantity_balance`, `date`, `status`, `unit_cost`, `real_unit_cost`, `quantity_received`, `supplier_part_no`, `purchase_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `gst`, `cgst`, `sgst`, `igst`) VALUES (1, 1, NULL, 1, 'test', 'Test-1', NULL, '20.0000', '20.0000', 1, '0.0000', 1, '0', '0', '0.0000', NULL, '400.0000', '17.0000', '2018-09-28', 'received', '20.0000', '20.0000', '20.0000', NULL, NULL, 1, 'pcs', '20.0000', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_purchase_items` (`id`, `purchase_id`, `transfer_id`, `product_id`, `product_code`, `product_name`, `option_id`, `net_unit_cost`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `expiry`, `subtotal`, `quantity_balance`, `date`, `status`, `unit_cost`, `real_unit_cost`, `quantity_received`, `supplier_part_no`, `purchase_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `gst`, `cgst`, `sgst`, `igst`) VALUES (2, 2, NULL, 1, 'test', 'Test-1', NULL, '20.0000', '500.0000', 1, '0.0000', 1, '0', '0', '0.0000', NULL, '10000.0000', '487.0000', '2018-09-29', 'received', '20.0000', '20.0000', '500.0000', NULL, NULL, 1, 'pcs', '500.0000', NULL, NULL, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_purchases
+#
+
+DROP TABLE IF EXISTS `sma_purchases`;
+
+CREATE TABLE `sma_purchases` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `reference_no` varchar(55) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `supplier_id` int(11) NOT NULL,
+  `supplier` varchar(55) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `note` varchar(1000) NOT NULL,
+  `total` decimal(25,4) DEFAULT NULL,
+  `product_discount` decimal(25,4) DEFAULT NULL,
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `order_discount` decimal(25,4) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT NULL,
+  `product_tax` decimal(25,4) DEFAULT NULL,
+  `order_tax_id` int(11) DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT NULL,
+  `total_tax` decimal(25,4) DEFAULT '0.0000',
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `paid` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `status` varchar(55) DEFAULT '',
+  `payment_status` varchar(20) DEFAULT 'pending',
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `payment_term` tinyint(4) DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
+  `return_id` int(11) DEFAULT NULL,
+  `surcharge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `return_purchase_ref` varchar(55) DEFAULT NULL,
+  `purchase_id` int(11) DEFAULT NULL,
+  `return_purchase_total` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_purchases` (`id`, `reference_no`, `date`, `supplier_id`, `supplier`, `warehouse_id`, `note`, `total`, `product_discount`, `order_discount_id`, `order_discount`, `total_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `paid`, `status`, `payment_status`, `created_by`, `updated_by`, `updated_at`, `attachment`, `payment_term`, `due_date`, `return_id`, `surcharge`, `return_purchase_ref`, `purchase_id`, `return_purchase_total`, `cgst`, `sgst`, `igst`) VALUES (1, 'SL-0001', '2018-09-29 07:11:00', 2, 'Supplier Company Name', 1, '', '400.0000', '0.0000', '', '0.0000', '0.0000', '0.0000', 1, '0.0000', '0.0000', '0.0000', '400.0000', '0.0000', 'received', 'pending', 1, NULL, NULL, NULL, 0, NULL, NULL, '0.0000', NULL, NULL, '0.0000', NULL, NULL, NULL);
+INSERT INTO `sma_purchases` (`id`, `reference_no`, `date`, `supplier_id`, `supplier`, `warehouse_id`, `note`, `total`, `product_discount`, `order_discount_id`, `order_discount`, `total_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `paid`, `status`, `payment_status`, `created_by`, `updated_by`, `updated_at`, `attachment`, `payment_term`, `due_date`, `return_id`, `surcharge`, `return_purchase_ref`, `purchase_id`, `return_purchase_total`, `cgst`, `sgst`, `igst`) VALUES (2, 'PO2018/09/0001', '2018-09-30 06:30:00', 2, 'Supplier Company Name', 1, '', '10000.0000', '0.0000', '', '0.0000', '0.0000', '0.0000', 1, '0.0000', '0.0000', '0.0000', '10000.0000', '0.0000', 'received', 'pending', 1, NULL, NULL, NULL, 0, NULL, NULL, '0.0000', NULL, NULL, '0.0000', NULL, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_quote_items
+#
+
+DROP TABLE IF EXISTS `sma_quote_items`;
+
+CREATE TABLE `sma_quote_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quote_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int(11) DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `product_unit_id` int(11) DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `quote_id` (`quote_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_quotes
+#
+
+DROP TABLE IF EXISTS `sma_quotes`;
+
+CREATE TABLE `sma_quotes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `biller_id` int(11) NOT NULL,
+  `biller` varchar(55) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `internal_note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `product_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount` decimal(25,4) DEFAULT NULL,
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT '0.0000',
+  `product_tax` decimal(25,4) DEFAULT '0.0000',
+  `order_tax_id` int(11) DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT NULL,
+  `total_tax` decimal(25,4) DEFAULT NULL,
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `status` varchar(20) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `attachment` varchar(55) DEFAULT NULL,
+  `supplier_id` int(11) DEFAULT NULL,
+  `supplier` varchar(55) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_return_items
+#
+
+DROP TABLE IF EXISTS `sma_return_items`;
+
+CREATE TABLE `sma_return_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `return_id` int(11) unsigned NOT NULL,
+  `product_id` int(11) unsigned NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int(11) DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `product_unit_id` int(11) DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `return_id` (`return_id`),
+  KEY `product_id` (`product_id`),
+  KEY `product_id_2` (`product_id`,`return_id`),
+  KEY `return_id_2` (`return_id`,`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_returns
+#
+
+DROP TABLE IF EXISTS `sma_returns`;
+
+CREATE TABLE `sma_returns` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `biller_id` int(11) NOT NULL,
+  `biller` varchar(55) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `staff_note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `product_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount` decimal(25,4) DEFAULT '0.0000',
+  `product_tax` decimal(25,4) DEFAULT '0.0000',
+  `order_tax_id` int(11) DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT '0.0000',
+  `total_tax` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `total_items` smallint(6) DEFAULT NULL,
+  `paid` decimal(25,4) DEFAULT '0.0000',
+  `surcharge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `attachment` varchar(55) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_sale_items
+#
+
+DROP TABLE IF EXISTS `sma_sale_items`;
+
+CREATE TABLE `sma_sale_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sale_id` int(11) unsigned NOT NULL,
+  `product_id` int(11) unsigned NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int(11) DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `sale_item_id` int(11) DEFAULT NULL,
+  `product_unit_id` int(11) DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `sale_id` (`sale_id`),
+  KEY `product_id` (`product_id`),
+  KEY `product_id_2` (`product_id`,`sale_id`),
+  KEY `sale_id_2` (`sale_id`,`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (1, 1, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '2.0000', 1, '0.0000', 1, '0', '0', '0.0000', '50.0000', '', '25.0000', NULL, 1, 'pcs', '2.0000', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (6, 4, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (26, 16, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (27, 16, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (28, 17, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (29, 18, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (48, 29, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (49, 29, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (50, 30, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '5.0000', 1, '0.0000', 1, '0', '0', '0.0000', '125.0000', '', '25.0000', NULL, 1, 'pcs', '5.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (51, 31, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+INSERT INTO `sma_sale_items` (`id`, `sale_id`, `product_id`, `product_code`, `product_name`, `product_type`, `option_id`, `net_unit_price`, `unit_price`, `quantity`, `warehouse_id`, `item_tax`, `tax_rate_id`, `tax`, `discount`, `item_discount`, `subtotal`, `serial_no`, `real_unit_price`, `sale_item_id`, `product_unit_id`, `product_unit_code`, `unit_quantity`, `comment`, `gst`, `cgst`, `sgst`, `igst`) VALUES (52, 32, 1, 'test', 'Test-1', 'standard', NULL, '25.0000', '25.0000', '1.0000', 1, '0.0000', 1, '0', '0', '0.0000', '25.0000', '', '25.0000', NULL, 1, 'pcs', '1.0000', '', NULL, NULL, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_sales
+#
+
+DROP TABLE IF EXISTS `sma_sales`;
+
+CREATE TABLE `sma_sales` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `customer_id` int(11) NOT NULL,
+  `customer` varchar(55) NOT NULL,
+  `biller_id` int(11) NOT NULL,
+  `biller` varchar(55) NOT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `staff_note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `product_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `total_discount` decimal(25,4) DEFAULT '0.0000',
+  `order_discount` decimal(25,4) DEFAULT '0.0000',
+  `product_tax` decimal(25,4) DEFAULT '0.0000',
+  `order_tax_id` int(11) DEFAULT NULL,
+  `order_tax` decimal(25,4) DEFAULT '0.0000',
+  `total_tax` decimal(25,4) DEFAULT '0.0000',
+  `shipping` decimal(25,4) DEFAULT '0.0000',
+  `grand_total` decimal(25,4) NOT NULL,
+  `sale_status` varchar(20) DEFAULT NULL,
+  `payment_status` varchar(20) DEFAULT NULL,
+  `payment_term` tinyint(4) DEFAULT NULL,
+  `due_date` date DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `total_items` smallint(6) DEFAULT NULL,
+  `pos` tinyint(1) NOT NULL DEFAULT '0',
+  `paid` decimal(25,4) DEFAULT '0.0000',
+  `return_id` int(11) DEFAULT NULL,
+  `surcharge` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `attachment` varchar(55) DEFAULT NULL,
+  `return_sale_ref` varchar(55) DEFAULT NULL,
+  `sale_id` int(11) DEFAULT NULL,
+  `return_sale_total` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `rounding` decimal(10,4) DEFAULT NULL,
+  `suspend_note` varchar(255) DEFAULT NULL,
+  `api` tinyint(1) DEFAULT '0',
+  `shop` tinyint(1) DEFAULT '0',
+  `address_id` int(11) DEFAULT NULL,
+  `reserve_id` int(11) DEFAULT NULL,
+  `hash` varchar(255) DEFAULT NULL,
+  `manual_payment` varchar(55) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  `payment_method` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_sales` (`id`, `date`, `reference_no`, `customer_id`, `customer`, `biller_id`, `biller`, `warehouse_id`, `note`, `staff_note`, `total`, `product_discount`, `order_discount_id`, `total_discount`, `order_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `sale_status`, `payment_status`, `payment_term`, `due_date`, `created_by`, `updated_by`, `updated_at`, `total_items`, `pos`, `paid`, `return_id`, `surcharge`, `attachment`, `return_sale_ref`, `sale_id`, `return_sale_total`, `rounding`, `suspend_note`, `api`, `shop`, `address_id`, `reserve_id`, `hash`, `manual_payment`, `cgst`, `sgst`, `igst`, `payment_method`) VALUES (29, '2018-11-25 04:45:39', 'SALE/POS2018/11/0026', 4, 'Test', 3, 'Test Biller', 1, '', '', '50.0000', '0.0000', '', '0.0000', '0.0000', '0.0000', 1, '0.0000', '0.0000', '0.0000', '50.0000', 'completed', 'paid', 0, NULL, 1, NULL, NULL, 2, 1, '50.0000', NULL, '0.0000', NULL, NULL, NULL, '0.0000', '0.0000', NULL, 0, 0, NULL, NULL, 'e76df659730da5899464541ad26613b396754e5c2a4a1356fc432f707b7137ee', NULL, NULL, NULL, NULL, 'credit');
+INSERT INTO `sma_sales` (`id`, `date`, `reference_no`, `customer_id`, `customer`, `biller_id`, `biller`, `warehouse_id`, `note`, `staff_note`, `total`, `product_discount`, `order_discount_id`, `total_discount`, `order_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `sale_status`, `payment_status`, `payment_term`, `due_date`, `created_by`, `updated_by`, `updated_at`, `total_items`, `pos`, `paid`, `return_id`, `surcharge`, `attachment`, `return_sale_ref`, `sale_id`, `return_sale_total`, `rounding`, `suspend_note`, `api`, `shop`, `address_id`, `reserve_id`, `hash`, `manual_payment`, `cgst`, `sgst`, `igst`, `payment_method`) VALUES (30, '2018-11-25 04:46:05', 'SALE/POS2018/11/0027', 4, 'Test', 3, 'Test Biller', 1, '', '', '125.0000', '0.0000', '', '0.0000', '0.0000', '0.0000', 1, '0.0000', '0.0000', '0.0000', '125.0000', 'completed', 'paid', 0, NULL, 1, NULL, NULL, 5, 1, '125.0000', NULL, '0.0000', NULL, NULL, NULL, '0.0000', '0.0000', NULL, 0, 0, NULL, NULL, '5d8aaee929c9d6c46dc850c6dfd02b4ee04907dbfb013fc6c49b890c44ab5107', NULL, NULL, NULL, NULL, '');
+INSERT INTO `sma_sales` (`id`, `date`, `reference_no`, `customer_id`, `customer`, `biller_id`, `biller`, `warehouse_id`, `note`, `staff_note`, `total`, `product_discount`, `order_discount_id`, `total_discount`, `order_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `sale_status`, `payment_status`, `payment_term`, `due_date`, `created_by`, `updated_by`, `updated_at`, `total_items`, `pos`, `paid`, `return_id`, `surcharge`, `attachment`, `return_sale_ref`, `sale_id`, `return_sale_total`, `rounding`, `suspend_note`, `api`, `shop`, `address_id`, `reserve_id`, `hash`, `manual_payment`, `cgst`, `sgst`, `igst`, `payment_method`) VALUES (31, '2018-11-25 04:46:41', 'SALE/POS2018/11/0028', 4, 'Test', 3, 'Test Biller', 1, '', '', '25.0000', '0.0000', '', '0.0000', '0.0000', '0.0000', 1, '0.0000', '0.0000', '0.0000', '25.0000', 'completed', 'paid', 0, NULL, 1, NULL, NULL, 1, 1, '25.0000', NULL, '0.0000', NULL, NULL, NULL, '0.0000', '0.0000', NULL, 0, 0, NULL, NULL, 'fb830e00d2c4cf87c7dd2ae088e9b1c55ec5da8378432bdfb7a794266523b145', NULL, NULL, NULL, NULL, '');
+INSERT INTO `sma_sales` (`id`, `date`, `reference_no`, `customer_id`, `customer`, `biller_id`, `biller`, `warehouse_id`, `note`, `staff_note`, `total`, `product_discount`, `order_discount_id`, `total_discount`, `order_discount`, `product_tax`, `order_tax_id`, `order_tax`, `total_tax`, `shipping`, `grand_total`, `sale_status`, `payment_status`, `payment_term`, `due_date`, `created_by`, `updated_by`, `updated_at`, `total_items`, `pos`, `paid`, `return_id`, `surcharge`, `attachment`, `return_sale_ref`, `sale_id`, `return_sale_total`, `rounding`, `suspend_note`, `api`, `shop`, `address_id`, `reserve_id`, `hash`, `manual_payment`, `cgst`, `sgst`, `igst`, `payment_method`) VALUES (32, '2018-11-25 14:32:13', 'SALE/POS2018/11/0029', 1, 'Walk-in Customer', 3, 'Test Biller', 1, '', '', '25.0000', '0.0000', '', '0.0000', '0.0000', '0.0000', 1, '0.0000', '0.0000', '0.0000', '25.0000', 'completed', 'due', 0, NULL, 1, NULL, NULL, 1, 1, '0.0000', NULL, '0.0000', NULL, NULL, NULL, '0.0000', '0.0000', NULL, 0, 0, NULL, NULL, '2d2c9134ba8c3691afc309d9538f02c8509417b549f6cb50624c23260dad604e', NULL, NULL, NULL, NULL, 'credit');
+
+
+#
+# TABLE STRUCTURE FOR: sma_sessions
+#
+
+DROP TABLE IF EXISTS `sma_sessions`;
+
+CREATE TABLE `sma_sessions` (
+  `id` varchar(40) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `timestamp` int(10) unsigned NOT NULL DEFAULT '0',
+  `data` blob NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ci_sessions_timestamp` (`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('0033m1fd0bd9lk1rlncrt9qjgophb6fl', '::1', 1543040643, '__ci_last_regenerate|i:1543040635;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543040635;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('02f3e89864b2d6d2c969bba9366bd2e91e23c893', '103.95.99.185', 1538153743, '__ci_last_regenerate|i:1538153564;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149375;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";message|s:38:\"Group permissions successfully updated\";__ci_vars|a:1:{s:7:\"message\";s:3:\"old\";}');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('09hut9juia1o2b8rh2sls9bsq1r8goje', '::1', 1540963370, '__ci_last_regenerate|i:1540963135;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540963370;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('0bcrcqfh5op3m6h4a4bk2ffjf6g3kj66', '::1', 1543134409, '__ci_last_regenerate|i:1543134103;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543134366;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('0c1d17bdf6d55821dbe88b239c333cb24473ba4e', '103.95.99.185', 1538143266, '__ci_last_regenerate|i:1538142125;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538142126;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('0ng8be1kmt5rr95qnh323mmko5oopo7l', '::1', 1543123689, '__ci_last_regenerate|i:1543123390;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543123689;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('0urdao368oio9mj69r1vr4hup9883a34', '::1', 1543133242, '__ci_last_regenerate|i:1543133117;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543133164;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('12ed9b796ebd220999a4c58a454a769be0ec9fe2', '27.147.133.105', 1538201528, '__ci_last_regenerate|i:1538201255;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('13de1ba673b54ce210569d6a1814e6375eca9faf', '103.95.99.185', 1538158295, '__ci_last_regenerate|i:1538158032;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('150aee6b4217f22dd38434617328041aba6f6a69', '103.95.99.186', 1538147136, '__ci_last_regenerate|i:1538147114;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538147136;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('188fb214c1f867caabadbdf90c5e86cc185326d6', '27.147.133.105', 1538203274, '__ci_last_regenerate|i:1538202632;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('18fb1ad5d85240ff3c5e375e19cde02e929affad', '103.95.99.189', 1538156810, '__ci_last_regenerate|i:1538156586;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('1a396e8d081d9ee3855fccd52181819ca22124ce', '103.95.99.185', 1538228506, '__ci_last_regenerate|i:1538228506;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538204425\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";user_csrf|s:20:\"GjBwvo49A1tfsRz37W8L\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('1qeasse5aoesife4eqb5bi1njvg08dlk', '::1', 1538374675, '__ci_last_regenerate|i:1538374528;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538227163\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538374601;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('1sp3qpug88th5m1nsusvn5p8sbo7igfk', '::1', 1543132926, '__ci_last_regenerate|i:1543132814;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543132926;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('1suqfs63u68chda68ot2eomed6d1itg9', '::1', 1543049860, '__ci_last_regenerate|i:1543049847;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543049859;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('27jp7j2jardevrq8d26pl7n1r1kkb71d', '::1', 1543122492, '__ci_last_regenerate|i:1543122283;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543122492;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('2ae4582dc39a2548a6059afbefce72f9946bc709', '103.95.99.188', 1538149357, '__ci_last_regenerate|i:1538149070;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149344;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('2nrrtos367i1vgku7o7rb7oj7b4lsi0l', '::1', 1540963661, '__ci_last_regenerate|i:1540963507;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540963660;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('31ea7e79d9dd90186ba3d13b2131668080352c0b', '103.95.99.190', 1538155351, '__ci_last_regenerate|i:1538155325;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('321a0644cb4728665af858453812830da07fb947', '103.95.99.185', 1538157411, '__ci_last_regenerate|i:1538157119;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('33c11ee81e6da95a4b81c790d5e80b5e899a588c', '186.1.121.204', 1538150038, '__ci_last_regenerate|i:1538150038;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538150038;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('363pfvn4nhg6b6lp0lru1hl6ffs94i0i', '::1', 1543046924, '__ci_last_regenerate|i:1543046796;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543046922;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('3e576ad3ecea39662fea06d8475557ffc16c15ec', '103.95.99.185', 1538145986, '__ci_last_regenerate|i:1538145691;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538145691;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('3q3gk6elvp7nk2pri0u46fhovd7ho1i9', '::1', 1543131086, '__ci_last_regenerate|i:1543130851;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543131086;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('45499cf9c066a385101fad0d18c987a3da371a0f', '103.95.99.186', 1538152869, '__ci_last_regenerate|i:1538152681;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149375;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('46m84snmqcq91gup4mhnsu07ri6ee6ne', '::1', 1543126621, '__ci_last_regenerate|i:1543126535;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543126621;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('4ac8873dd24ffc2cb94bba7ce973d99e976a114a', '64.233.173.48', 1538204563, '__ci_last_regenerate|i:1538204332;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538195316\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('4bgbrnb7v8u0gv370299smb3eknj6aku', '::1', 1543043092, '__ci_last_regenerate|i:1543042839;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543043057;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('4cdd329db4ad6a3b3e85dc7c539bbe87689612d3', '186.1.121.204', 1538147648, '__ci_last_regenerate|i:1538147645;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538147648;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('4jnqqpcmbhs1v8jg8ru7avcmhioj5csj', '::1', 1538278031, '__ci_last_regenerate|i:1538277957;requested_page|s:5:\"admin\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('4t9ohr5rafo1qdpcddc285md8c6d6jtv', '::1', 1540962460, '__ci_last_regenerate|i:1540962342;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540962459;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('52j3a3trk42sj9qcvo2sorjf910lkdbq', '::1', 1542107294, '__ci_last_regenerate|i:1542107231;requested_page|s:5:\"sales\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1540961226\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('5b3d9704aeec736df69c88b37011ff1dd987645c', '27.147.133.105', 1538195388, '__ci_last_regenerate|i:1538195297;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('5ed30598b75a7802af1fb74492cd0e32680b8ba8', '103.95.99.185', 1538143540, '__ci_last_regenerate|i:1538143280;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538142126;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('5fa96401f20f045b949462ddb566cc246ce675f1', '186.1.121.204', 1538141617, '__ci_last_regenerate|i:1538141616;requested_page|s:5:\"admin\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('5i0sjhl80n38pa44maf83bam6v95q5h7', '::1', 1543120059, '__ci_last_regenerate|i:1543119859;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543120039;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('5tc00lrosj5aje5fjhmd3lhoafhdafee', '::1', 1543048141, '__ci_last_regenerate|i:1543048118;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543048140;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('5vm8tfv3066fn397nerv2sr9ud2m7rde', '::1', 1543035696, '__ci_last_regenerate|i:1543034432;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543034718;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6235fcff6c64c26b5190a1b28a0557068adf8f5c', '103.95.99.185', 1538157552, '__ci_last_regenerate|i:1538157485;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('63fda9ce612336ef15cb62ccb4260aaa52f7e6f1', '27.147.133.105', 1538201624, '__ci_last_regenerate|i:1538201592;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('66e4b5ad2714fe0d482625c03f182372d324f8ef', '103.95.99.185', 1538144278, '__ci_last_regenerate|i:1538144081;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538144276;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6b6887073c70c1eb2db869e3601a849014e1db38', '103.95.99.185', 1538227324, '__ci_last_regenerate|i:1538227075;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538204425\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6bdbe8daf9f505e287bc8fdcfad0de92636ccfc6', '27.147.133.105', 1538201246, '__ci_last_regenerate|i:1538198050;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6e59b58d7dd36785b6de3a888a7380273c1c449a', '103.95.99.186', 1538229521, '__ci_last_regenerate|i:1538229519;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538204425\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";user_csrf|s:20:\"GjBwvo49A1tfsRz37W8L\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6eonmig89kd3ra2thkpp2kujmsafb1f6', '::1', 1543040628, '__ci_last_regenerate|i:1543040274;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543040418;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6i0ojajmq9ojt2soa7rv668hmplv842c', '::1', 1543125184, '__ci_last_regenerate|i:1543125180;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543125183;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('6npk7to1u22ou8ra2h96mb4jhsb17doh', '::1', 1543135496, '__ci_last_regenerate|i:1543135142;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543135262;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('70332282d80dd4170726f94a4bc933f8e5810b9e', '103.95.99.185', 1538227718, '__ci_last_regenerate|i:1538227424;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538204425\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";user_csrf|s:20:\"GjBwvo49A1tfsRz37W8L\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('70mc13ig5c0hiq7ehhb7tg8rkm5r4jfo', '::1', 1543126218, '__ci_last_regenerate|i:1543126215;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543126218;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('735aef704bc9ff4c6e5a4a32b3e35b8484303163', '103.95.99.185', 1538141910, '__ci_last_regenerate|i:1538141804;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('75rqutv6hhahfm0d9hafrph1mhl78p10', '::1', 1543037298, '__ci_last_regenerate|i:1543037018;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543037294;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('77gldndid0ekbv4682e6jc189ijjdpbj', '::1', 1543129674, '__ci_last_regenerate|i:1543129672;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543129673;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('77p0u7rumcie44bore9l6kdvb26abfau', '::1', 1543117992, '__ci_last_regenerate|i:1543117790;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543117992;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('7dc3c4336e9819e7e815721875f5d9b87c548b15', '186.1.121.204', 1538148638, '__ci_last_regenerate|i:1538148638;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538148638;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('7ei6d531tki15ark6okr85n8d9nmm0et', '::1', 1543047813, '__ci_last_regenerate|i:1543047781;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543047813;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('7nrddfmok0carsbodoitei5bnv8vi4h9', '::1', 1543050554, '__ci_last_regenerate|i:1543050479;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543050493;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('7tcbl6a2qo38r8e8i5ndvvvus3q8obph', '::1', 1543032791, '__ci_last_regenerate|i:1543032526;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543032789;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('82nr68m4vcprqp2bnb6i9qt5tko1en5d', '::1', 1543116721, '__ci_last_regenerate|i:1543116688;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543116302;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('85c4e7cc410fece199e49faf13d67182536833af', '103.95.99.184', 1538145009, '__ci_last_regenerate|i:1538144769;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538145003;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('868a35fb932bd39a198c1f45a534049a51e51633', '103.95.99.185', 1538152203, '__ci_last_regenerate|i:1538152183;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149375;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('8aad2555ada5b1e339fa978aeb2c48c0a2b7bb39', '103.95.99.185', 1538156489, '__ci_last_regenerate|i:1538156209;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('8du7f16p6f5g963ogpn9os74bhh9djp0', '::1', 1543134924, '__ci_last_regenerate|i:1543134831;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543134835;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('8puhipg8mk20bmuj03elo2mqbo7ndhjd', '::1', 1538374208, '__ci_last_regenerate|i:1538374059;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538227163\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";message|s:38:\"<p>You are successfully logged in.</p>\";__ci_vars|a:1:{s:7:\"message\";s:3:\"old\";}');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('8t0vuo4s8c0qjg4a6qs8c1ca94pvmi3e', '::1', 1543051601, '__ci_last_regenerate|i:1543051386;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543051601;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('92b22039f9e3979d4e0dc22e4bc8c0dd5ab12cd0', '27.147.133.105', 1538196470, '__ci_last_regenerate|i:1538196197;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('9323f6237cfb5a0a7f0cdf8fec1146987d5f9639', '103.95.99.188', 1538147052, '__ci_last_regenerate|i:1538146776;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538147052;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('94clog88c1m33gsrtrhoabipc526t16b', '::1', 1543132661, '__ci_last_regenerate|i:1543132446;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543132660;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('94d96b5d9aa93473c6b74212c41b3e0187fe4fde', '103.95.99.187', 1538144735, '__ci_last_regenerate|i:1538144466;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538144734;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('9928uifkcgu340bt5bk5qke2mruo64us', '::1', 1543031131, '__ci_last_regenerate|i:1543031091;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543031127;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('9iqg988h9b22eoughdfk0o4f515vhod1', '::1', 1543130742, '__ci_last_regenerate|i:1543130447;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543130742;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('9kmciikh9glu9v6e52s4ngvgmc52chsv', '::1', 1543120958, '__ci_last_regenerate|i:1543120552;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543120958;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('9r4uvhqgc7mj71bppkpdfheqmbv8kjor', '::1', 1540963882, '__ci_last_regenerate|i:1540963881;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540963881;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('9tfcctrlojrsbcmv1uu3drerf8m9hf2p', '::1', 1540961249, '__ci_last_regenerate|i:1540961130;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540961248;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('a5ac9fb2d9c49395bc2a0506d33df819e6eb12a1', '103.95.99.185', 1538144056, '__ci_last_regenerate|i:1538143586;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538142126;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('a8p7phurae2lbn54if4qrl3avnj1pnui', '::1', 1543137474, '__ci_last_regenerate|i:1543136982;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543137121;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('aa48e61cdf315d7da8eb5213a53a12a548e85378', '27.147.133.105', 1538203900, '__ci_last_regenerate|i:1538203900;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('akoesidpqhc9vd459aj73aot18slkhsl', '::1', 1543049371, '__ci_last_regenerate|i:1543049330;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543049370;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('astqd8t3t4olnt5iees4dabvg2sbfuu8', '::1', 1543033607, '__ci_last_regenerate|i:1543033371;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543033604;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('b2epel7jlep68kph3jsbmbhaerqd8vc2', '::1', 1543118367, '__ci_last_regenerate|i:1543118167;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543118366;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('ba66ed548c8ec8451e86b7d8bd7f6e3caacd1aa7', '103.95.99.185', 1538230334, '__ci_last_regenerate|i:1538230328;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538204425\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";user_csrf|s:20:\"GjBwvo49A1tfsRz37W8L\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('bc43827b29fe13068aa17facd69553256e838619', '103.95.99.190', 1538155025, '__ci_last_regenerate|i:1538154905;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155018;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('bd007697fffee8fb4551dc4ba7ee9400bc1518f7', '186.1.121.204', 1538142057, '__ci_last_regenerate|i:1538142002;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";message|s:38:\"<p>You are successfully logged in.</p>\";__ci_vars|a:1:{s:7:\"message\";s:3:\"old\";}');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('bgk54j2gk4flatnguaumfvd3o956kf1u', '::1', 1540962266, '__ci_last_regenerate|i:1540961975;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540962265;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('br4jn5issmesvcfn1cslic1mnh6c9qjs', '::1', 1543055331, '__ci_last_regenerate|i:1543055329;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543055330;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('c618f1d90e60bd43fb2a6f51643780fc85369252', '103.95.99.185', 1538154674, '__ci_last_regenerate|i:1538154588;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149375;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('c6ec7b837e7478d129a1b27d26e86f29772cd6c1', '103.95.99.184', 1538156194, '__ci_last_regenerate|i:1538155895;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('cb12d7bd6fbe232b21f8c3b58eb45ff34febafdb', '27.147.133.105', 1538196806, '__ci_last_regenerate|i:1538196705;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('cd8a0f059d73f024e8baa60fbc682a1c5cfd996e', '103.95.99.185', 1538145316, '__ci_last_regenerate|i:1538145090;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538145316;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('cdf39c310d2700fd5b7b98a6d587815382f60fd9', '103.95.99.184', 1538149376, '__ci_last_regenerate|i:1538149372;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149375;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('cdqmp0ruiqpgpimtd0sgh1ifusg3o4mn', '::1', 1543036088, '__ci_last_regenerate|i:1543035836;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543036085;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('cq28am4nmqeat0mqh48kltf09qoom41f', '::1', 1543044184, '__ci_last_regenerate|i:1543043383;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543043445;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('d16c9a81a6e1f957042e99581a9e175fcf272132', '103.95.99.185', 1538158778, '__ci_last_regenerate|i:1538158777;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155337;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('d29ee687811c32cc5c489957fe9fbb016580a1ce', '27.147.133.105', 1538203697, '__ci_last_regenerate|i:1538203443;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('d5ef1dca58fb1c70f4ae8789c4e982920dea0ca7', '186.1.121.204', 1538146691, '__ci_last_regenerate|i:1538146676;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538146691;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('dfcc2vt4jo87ckik7lqtkr2d0k3e0o89', '::1', 1543134053, '__ci_last_regenerate|i:1543133577;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543133833;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('dqrtem466ugvsroh8hdrv7lk90dmhhq0', '::1', 1543219685, '__ci_last_regenerate|i:1543219529;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543143489\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('dsskafuj4h7g5415b8n12li4qfkumom5', '::1', 1543123387, '__ci_last_regenerate|i:1543123087;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543123113;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('e323ush1ufmr28tock68bun9n6o788vh', '::1', 1543114562, '__ci_last_regenerate|i:1543114356;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543114562;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('e3a1afij1skosjqamo93er6tck3upcpl', '::1', 1543034368, '__ci_last_regenerate|i:1543034119;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543034366;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('e4t7ooia9tkiqbu9khump18gullg75ak', '::1', 1543130191, '__ci_last_regenerate|i:1543130099;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543130190;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('e8d6e6ffa4389e54f1bf8fee8022e75cb087678e', '103.95.99.185', 1538228864, '__ci_last_regenerate|i:1538228863;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538204425\";last_ip|s:14:\"27.147.133.105\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";user_csrf|s:20:\"GjBwvo49A1tfsRz37W8L\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('ee08b32747821ce16c3e520c3c9a5d39acd3196a', '103.95.99.185', 1538153983, '__ci_last_regenerate|i:1538153982;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538149375;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('f0ca1f20fe7067941a121987c6d9a79c2fff2462', '27.147.133.105', 1538197360, '__ci_last_regenerate|i:1538197251;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('f1e4e4197c83a54cd6093e16e202c6e9641aa652', '103.95.99.185', 1538148934, '__ci_last_regenerate|i:1538148700;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538148934;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('f3fc6f94c1a05536f447825d6e890ee85203be16', '186.1.121.204', 1538154070, '__ci_last_regenerate|i:1538150896;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538150919;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('f5574237f335b8aefea7bd75c1bb88086fd8ecd6', '27.147.133.105', 1538202320, '__ci_last_regenerate|i:1538202043;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538142056\";last_ip|s:13:\"186.1.121.204\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('f7fc11929e0d73706e7c5068d5424f75cc870ba6', '186.1.121.204', 1538154920, '__ci_last_regenerate|i:1538154897;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538154904;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('fd8bf972e5d2207d6506c68b3a5c6b9580de0ddf', '186.1.121.204', 1538155283, '__ci_last_regenerate|i:1538155282;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538141892\";last_ip|s:13:\"103.95.99.185\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538155283;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('fff853aaadb9484f21b93256c628294c505cbed7', '103.95.99.185', 1538148589, '__ci_last_regenerate|i:1538148289;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1426618492\";last_ip|s:9:\"127.0.0.1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1538148589;user_csrf|s:20:\"le2hjYobEHsvy6XwtFpz\";register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-28 14:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('fv7c9l6spqpld9e1rf5maa189jn0nh1h', '::1', 1543047466, '__ci_last_regenerate|i:1543047152;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543047198;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;message|s:27:\"POS Sale successfully added\";__ci_vars|a:1:{s:7:\"message\";s:3:\"new\";}');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('g3jf79bviu9m5j0em56e65fga83o1fm5', '::1', 1543126183, '__ci_last_regenerate|i:1543125887;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543126183;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('g6ekpta29qn8lp3supvgm8a0b2gi5fib', '::1', 1543122027, '__ci_last_regenerate|i:1543121728;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543122027;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('gusr1012ko9jn8pbjf0sa4r91dhuv5fb', '::1', 1543138219, '__ci_last_regenerate|i:1543137477;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543137121;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('hlkf3u0pf9r59isg9qon5u5e5033o0dd', '::1', 1543116347, '__ci_last_regenerate|i:1543116253;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543116302;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('i9rld3q2rd52t9taeck19bd65diort1t', '::1', 1543033794, '__ci_last_regenerate|i:1543033677;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543033791;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('icf3etnegv40co3issp14mr83d2inu6v', '::1', 1543116252, '__ci_last_regenerate|i:1543114689;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543114702;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('im883hlsi2p6g1f7dq5tkg2a8eabhb9r', '::1', 1543117081, '__ci_last_regenerate|i:1543117071;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543117081;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('jhhiopc6pnspkbma8uf9r0epmi6jdndd', '::1', 1543046466, '__ci_last_regenerate|i:1543046234;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543046466;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('jhpdrrtgdt59v79l5vj63m61jnrm2fls', '::1', 1543041144, '__ci_last_regenerate|i:1543041060;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543041141;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('k8bqklsu9cp394ig7cs6b2iqhmldsht5', '::1', 1543048839, '__ci_last_regenerate|i:1543048690;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543048734;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('kk26dtfp3dujqso7peq1ofn9r147j0q2', '::1', 1543132347, '__ci_last_regenerate|i:1543131155;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543131164;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('kq71juql8dmmspv03phklp388g5kfev2', '::1', 1543047499, '__ci_last_regenerate|i:1543047472;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543047498;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('kqe37tqjtmncth83gg0fjeq4u8tfied8', '::1', 1543136201, '__ci_last_regenerate|i:1543136047;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543136201;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('kqpidt56i2um1lnkbkvvo34ea6m82jkf', '::1', 1543054500, '__ci_last_regenerate|i:1543054232;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543054499;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('kvi8j6jfu0itgs0l3b552ohunh962bei', '::1', 1540961870, '__ci_last_regenerate|i:1540961639;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540961869;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('l7tbhpuv5scnkdiet0reapcfipoqrop3', '::1', 1543036511, '__ci_last_regenerate|i:1543036346;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543036508;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('lh3hvehrkfpk0padcahetqji1c4bllaj', '::1', 1543054892, '__ci_last_regenerate|i:1543054667;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543054891;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('mbtpji53vqemmuajs6o65v3dkp6qjoah', '::1', 1543117753, '__ci_last_regenerate|i:1543117461;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543117470;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('mh69nfnn8ig0v76tj6as77cqcup9qqlj', '::1', 1543143694, '__ci_last_regenerate|i:1543143480;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543114382\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543143694;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('mkc5auiilh5qo6n123advp5mdmi62q02', '::1', 1543120548, '__ci_last_regenerate|i:1543120232;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543120521;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('muag9q7rdu6lf3g49j8aktt0bs8qrjvr', '::1', 1543136905, '__ci_last_regenerate|i:1543136627;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543136905;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('n25kj289ta895cg4o3ogej4gavrfnan5', '::1', 1543044885, '__ci_last_regenerate|i:1543044868;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543044884;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('nbt9e3vavjev5l5kv8ajplvj5fevqeqm', '::1', 1543038167, '__ci_last_regenerate|i:1543037968;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543038155;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('nmi5mdanole13l2999rvi6l1l7b4bt1o', '::1', 1543031083, '__ci_last_regenerate|i:1543030785;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543030996;message|s:29:\"Settings successfully updated\";__ci_vars|a:1:{s:7:\"message\";s:3:\"old\";}');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('priuto2t9lqhjbogrgsh7cm8ru0rrjlq', '::1', 1543136026, '__ci_last_regenerate|i:1543135725;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543136026;register_id|s:1:\"2\";cash_in_hand|s:9:\"5000.0000\";register_open_time|s:19:\"2018-11-25 08:21:52\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('psuhald9gmg6233khti4j4gj9b8pdfj6', '::1', 1543121299, '__ci_last_regenerate|i:1543121013;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543121299;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('qn4co0q3vp9iidte17p8jnrpomueginp', '::1', 1543138512, '__ci_last_regenerate|i:1543138512;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('qq50fpm45vtvqe3ds455opfhetg3s8rs', '::1', 1543032960, '__ci_last_regenerate|i:1543032956;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543032956;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('rldodgo24fkmlgef3cu4jogjku6814ad', '::1', 1543037848, '__ci_last_regenerate|i:1543037574;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543037845;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('ruvoprkigkq2m3sqdaun0b12i4tjr4k5', '::1', 1543124115, '__ci_last_regenerate|i:1543123707;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543124115;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('s8435dpq2j01hk6774buervcq68fg13t', '::1', 1543045587, '__ci_last_regenerate|i:1543045528;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543045587;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('t6n6fnqfe6ntnmederus5giv84vt4cbg', '::1', 1543036790, '__ci_last_regenerate|i:1543036717;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543036786;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('titds7ceqvgpoj68ge4bueeipe5if3l2', '::1', 1543042633, '__ci_last_regenerate|i:1543042380;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543042488;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('ttlvr1k2choj57qnmbc4ps3pd65q6cce', '::1', 1543118881, '__ci_last_regenerate|i:1543118655;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1543030796\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543118880;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('ubu67k5qt35n2f2p9h1fdtm13a7f31gr', '::1', 1543045949, '__ci_last_regenerate|i:1543045883;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543045948;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";remove_posls|i:1;');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('ukc4pc6osich7qe02abevil75lu1pnko', '::1', 1543041630, '__ci_last_regenerate|i:1543041527;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1542107273\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1543041629;register_id|s:1:\"1\";cash_in_hand|s:6:\"0.0000\";register_open_time|s:19:\"2018-09-29 01:17:24\";');
+INSERT INTO `sma_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES ('vc87jujisegn65qe6d7cnkbbk9qujrhi', '::1', 1540963019, '__ci_last_regenerate|i:1540962747;requested_page|s:5:\"admin\";identity|s:18:\"owner@tecdiary.com\";username|s:5:\"owner\";email|s:18:\"owner@tecdiary.com\";user_id|s:1:\"1\";old_last_login|s:10:\"1538374206\";last_ip|s:3:\"::1\";avatar|N;gender|s:4:\"male\";group_id|s:1:\"1\";warehouse_id|N;view_right|s:1:\"0\";edit_right|s:1:\"0\";allow_discount|s:1:\"0\";biller_id|N;company_id|N;show_cost|s:1:\"0\";show_price|s:1:\"0\";last_activity|i:1540963018;');
+
+
+#
+# TABLE STRUCTURE FOR: sma_settings
+#
+
+DROP TABLE IF EXISTS `sma_settings`;
+
+CREATE TABLE `sma_settings` (
+  `setting_id` int(1) NOT NULL,
+  `logo` varchar(255) NOT NULL,
+  `logo2` varchar(255) NOT NULL,
+  `site_name` varchar(55) NOT NULL,
+  `language` varchar(20) NOT NULL,
+  `default_warehouse` int(2) NOT NULL,
+  `accounting_method` tinyint(4) NOT NULL DEFAULT '0',
+  `default_currency` varchar(3) NOT NULL,
+  `default_tax_rate` int(2) NOT NULL,
+  `rows_per_page` int(2) NOT NULL,
+  `version` varchar(10) NOT NULL DEFAULT '1.0',
+  `default_tax_rate2` int(11) NOT NULL DEFAULT '0',
+  `dateformat` int(11) NOT NULL,
+  `sales_prefix` varchar(20) DEFAULT NULL,
+  `quote_prefix` varchar(20) DEFAULT NULL,
+  `purchase_prefix` varchar(20) DEFAULT NULL,
+  `transfer_prefix` varchar(20) DEFAULT NULL,
+  `delivery_prefix` varchar(20) DEFAULT NULL,
+  `payment_prefix` varchar(20) DEFAULT NULL,
+  `return_prefix` varchar(20) DEFAULT NULL,
+  `returnp_prefix` varchar(20) DEFAULT NULL,
+  `expense_prefix` varchar(20) DEFAULT NULL,
+  `item_addition` tinyint(1) NOT NULL DEFAULT '0',
+  `theme` varchar(20) NOT NULL,
+  `product_serial` tinyint(4) NOT NULL,
+  `default_discount` int(11) NOT NULL,
+  `product_discount` tinyint(1) NOT NULL DEFAULT '0',
+  `discount_method` tinyint(4) NOT NULL,
+  `tax1` tinyint(4) NOT NULL,
+  `tax2` tinyint(4) NOT NULL,
+  `overselling` tinyint(1) NOT NULL DEFAULT '0',
+  `restrict_user` tinyint(4) NOT NULL DEFAULT '0',
+  `restrict_calendar` tinyint(4) NOT NULL DEFAULT '0',
+  `timezone` varchar(100) DEFAULT NULL,
+  `iwidth` int(11) NOT NULL DEFAULT '0',
+  `iheight` int(11) NOT NULL,
+  `twidth` int(11) NOT NULL,
+  `theight` int(11) NOT NULL,
+  `watermark` tinyint(1) DEFAULT NULL,
+  `reg_ver` tinyint(1) DEFAULT NULL,
+  `allow_reg` tinyint(1) DEFAULT NULL,
+  `reg_notification` tinyint(1) DEFAULT NULL,
+  `auto_reg` tinyint(1) DEFAULT NULL,
+  `protocol` varchar(20) NOT NULL DEFAULT 'mail',
+  `mailpath` varchar(55) DEFAULT '/usr/sbin/sendmail',
+  `smtp_host` varchar(100) DEFAULT NULL,
+  `smtp_user` varchar(100) DEFAULT NULL,
+  `smtp_pass` varchar(255) DEFAULT NULL,
+  `smtp_port` varchar(10) DEFAULT '25',
+  `smtp_crypto` varchar(10) DEFAULT NULL,
+  `corn` datetime DEFAULT NULL,
+  `customer_group` int(11) NOT NULL,
+  `default_email` varchar(100) NOT NULL,
+  `mmode` tinyint(1) NOT NULL,
+  `bc_fix` tinyint(4) NOT NULL DEFAULT '0',
+  `auto_detect_barcode` tinyint(1) NOT NULL DEFAULT '0',
+  `captcha` tinyint(1) NOT NULL DEFAULT '1',
+  `reference_format` tinyint(1) NOT NULL DEFAULT '1',
+  `racks` tinyint(1) DEFAULT '0',
+  `attributes` tinyint(1) NOT NULL DEFAULT '0',
+  `product_expiry` tinyint(1) NOT NULL DEFAULT '0',
+  `decimals` tinyint(2) NOT NULL DEFAULT '2',
+  `qty_decimals` tinyint(2) NOT NULL DEFAULT '2',
+  `decimals_sep` varchar(2) NOT NULL DEFAULT '.',
+  `thousands_sep` varchar(2) NOT NULL DEFAULT ',',
+  `invoice_view` tinyint(1) DEFAULT '0',
+  `default_biller` int(11) DEFAULT NULL,
+  `envato_username` varchar(50) DEFAULT NULL,
+  `purchase_code` varchar(100) DEFAULT NULL,
+  `rtl` tinyint(1) DEFAULT '0',
+  `each_spent` decimal(15,4) DEFAULT NULL,
+  `ca_point` tinyint(4) DEFAULT NULL,
+  `each_sale` decimal(15,4) DEFAULT NULL,
+  `sa_point` tinyint(4) DEFAULT NULL,
+  `update` tinyint(1) DEFAULT '0',
+  `sac` tinyint(1) DEFAULT '0',
+  `display_all_products` tinyint(1) DEFAULT '0',
+  `display_symbol` tinyint(1) DEFAULT NULL,
+  `symbol` varchar(50) DEFAULT NULL,
+  `remove_expired` tinyint(1) DEFAULT '0',
+  `barcode_separator` varchar(2) NOT NULL DEFAULT '-',
+  `set_focus` tinyint(1) NOT NULL DEFAULT '0',
+  `price_group` int(11) DEFAULT NULL,
+  `barcode_img` tinyint(1) NOT NULL DEFAULT '1',
+  `ppayment_prefix` varchar(20) DEFAULT 'POP',
+  `disable_editing` smallint(6) DEFAULT '90',
+  `qa_prefix` varchar(55) DEFAULT NULL,
+  `update_cost` tinyint(1) DEFAULT NULL,
+  `apis` tinyint(1) NOT NULL DEFAULT '0',
+  `state` varchar(100) DEFAULT NULL,
+  `pdf_lib` varchar(20) DEFAULT 'dompdf',
+  PRIMARY KEY (`setting_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_settings` (`setting_id`, `logo`, `logo2`, `site_name`, `language`, `default_warehouse`, `accounting_method`, `default_currency`, `default_tax_rate`, `rows_per_page`, `version`, `default_tax_rate2`, `dateformat`, `sales_prefix`, `quote_prefix`, `purchase_prefix`, `transfer_prefix`, `delivery_prefix`, `payment_prefix`, `return_prefix`, `returnp_prefix`, `expense_prefix`, `item_addition`, `theme`, `product_serial`, `default_discount`, `product_discount`, `discount_method`, `tax1`, `tax2`, `overselling`, `restrict_user`, `restrict_calendar`, `timezone`, `iwidth`, `iheight`, `twidth`, `theight`, `watermark`, `reg_ver`, `allow_reg`, `reg_notification`, `auto_reg`, `protocol`, `mailpath`, `smtp_host`, `smtp_user`, `smtp_pass`, `smtp_port`, `smtp_crypto`, `corn`, `customer_group`, `default_email`, `mmode`, `bc_fix`, `auto_detect_barcode`, `captcha`, `reference_format`, `racks`, `attributes`, `product_expiry`, `decimals`, `qty_decimals`, `decimals_sep`, `thousands_sep`, `invoice_view`, `default_biller`, `envato_username`, `purchase_code`, `rtl`, `each_spent`, `ca_point`, `each_sale`, `sa_point`, `update`, `sac`, `display_all_products`, `display_symbol`, `symbol`, `remove_expired`, `barcode_separator`, `set_focus`, `price_group`, `barcode_img`, `ppayment_prefix`, `disable_editing`, `qa_prefix`, `update_cost`, `apis`, `state`, `pdf_lib`) VALUES (1, 'logo2.png', 'logo.jpg', 'Paragon Group', 'english', 1, 0, 'BDT', 1, 10, '3.4.7', 1, 5, 'SALE', 'QUOTE', 'PO', 'TR', 'DO', 'IPAY', 'SR', 'PR', '', 0, 'default', 1, 1, 1, 1, 1, 1, 0, 1, 0, 'Africa/Abidjan', 800, 800, 150, 150, 0, 0, 0, 0, NULL, 'mail', '/usr/sbin/sendmail', 'pop.gmail.com', 'contact@sma.tecdiary.org', 'jEFTM4T63AiQ9dsidxhPKt9CIg4HQjCN58n/RW9vmdC/UDXCzRLR469ziZ0jjpFlbOg43LyoSmpJLBkcAHh0Yw==', '25', NULL, NULL, 1, 'contact@tecdiary.com', 0, 4, 1, 0, 2, 1, 1, 0, 2, 2, '.', ',', 0, 3, 'mike1989', '02923204-110b-4702-b8d4-7e1e610de168', 0, NULL, NULL, NULL, NULL, 0, 0, 0, 0, '', 0, '-', 0, 1, 1, 'POP', 90, '', 0, 0, 'AN', 'mpdf');
+
+
+#
+# TABLE STRUCTURE FOR: sma_skrill
+#
+
+DROP TABLE IF EXISTS `sma_skrill`;
+
+CREATE TABLE `sma_skrill` (
+  `id` int(11) NOT NULL,
+  `active` tinyint(4) NOT NULL,
+  `account_email` varchar(255) NOT NULL DEFAULT 'testaccount2@moneybookers.com',
+  `secret_word` varchar(20) NOT NULL DEFAULT 'mbtest',
+  `skrill_currency` varchar(3) NOT NULL DEFAULT 'USD',
+  `fixed_charges` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `extra_charges_my` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `extra_charges_other` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_skrill` (`id`, `active`, `account_email`, `secret_word`, `skrill_currency`, `fixed_charges`, `extra_charges_my`, `extra_charges_other`) VALUES (1, 1, 'testaccount2@moneybookers.com', 'mbtest', 'USD', '0.0000', '0.0000', '0.0000');
+
+
+#
+# TABLE STRUCTURE FOR: sma_stock_count_items
+#
+
+DROP TABLE IF EXISTS `sma_stock_count_items`;
+
+CREATE TABLE `sma_stock_count_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `stock_count_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_code` varchar(50) DEFAULT NULL,
+  `product_name` varchar(255) DEFAULT NULL,
+  `product_variant` varchar(55) DEFAULT NULL,
+  `product_variant_id` int(11) DEFAULT NULL,
+  `expected` decimal(15,4) NOT NULL,
+  `counted` decimal(15,4) NOT NULL,
+  `cost` decimal(25,4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `stock_count_id` (`stock_count_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_stock_counts
+#
+
+DROP TABLE IF EXISTS `sma_stock_counts`;
+
+CREATE TABLE `sma_stock_counts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `reference_no` varchar(55) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `type` varchar(10) NOT NULL,
+  `initial_file` varchar(50) NOT NULL,
+  `final_file` varchar(50) DEFAULT NULL,
+  `brands` varchar(50) DEFAULT NULL,
+  `brand_names` varchar(100) DEFAULT NULL,
+  `categories` varchar(50) DEFAULT NULL,
+  `category_names` varchar(100) DEFAULT NULL,
+  `note` text,
+  `products` int(11) DEFAULT NULL,
+  `rows` int(11) DEFAULT NULL,
+  `differences` int(11) DEFAULT NULL,
+  `matches` int(11) DEFAULT NULL,
+  `missing` int(11) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `finalized` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_suspended_bills
+#
+
+DROP TABLE IF EXISTS `sma_suspended_bills`;
+
+CREATE TABLE `sma_suspended_bills` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `customer_id` int(11) NOT NULL,
+  `customer` varchar(55) DEFAULT NULL,
+  `count` int(11) NOT NULL,
+  `order_discount_id` varchar(20) DEFAULT NULL,
+  `order_tax_id` int(11) DEFAULT NULL,
+  `total` decimal(25,4) NOT NULL,
+  `biller_id` int(11) DEFAULT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `suspend_note` varchar(255) DEFAULT NULL,
+  `shipping` decimal(15,4) DEFAULT '0.0000',
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_suspended_items
+#
+
+DROP TABLE IF EXISTS `sma_suspended_items`;
+
+CREATE TABLE `sma_suspended_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `suspend_id` int(11) unsigned NOT NULL,
+  `product_id` int(11) unsigned NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `net_unit_price` decimal(25,4) NOT NULL,
+  `unit_price` decimal(25,4) NOT NULL,
+  `quantity` decimal(15,4) DEFAULT '0.0000',
+  `warehouse_id` int(11) DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `tax_rate_id` int(11) DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `discount` varchar(55) DEFAULT NULL,
+  `item_discount` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) NOT NULL,
+  `serial_no` varchar(255) DEFAULT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `product_type` varchar(20) DEFAULT NULL,
+  `real_unit_price` decimal(25,4) DEFAULT NULL,
+  `product_unit_id` int(11) DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `comment` varchar(255) DEFAULT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_tax_rates
+#
+
+DROP TABLE IF EXISTS `sma_tax_rates`;
+
+CREATE TABLE `sma_tax_rates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(55) NOT NULL,
+  `code` varchar(10) DEFAULT NULL,
+  `rate` decimal(12,4) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES (1, 'No Tax', 'NT', '0.0000', '2');
+INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES (2, 'VAT @10%', 'VAT10', '10.0000', '1');
+INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES (3, 'GST @6%', 'GST', '6.0000', '1');
+INSERT INTO `sma_tax_rates` (`id`, `name`, `code`, `rate`, `type`) VALUES (4, 'VAT @20%', 'VT20', '20.0000', '1');
+
+
+#
+# TABLE STRUCTURE FOR: sma_transfer_items
+#
+
+DROP TABLE IF EXISTS `sma_transfer_items`;
+
+CREATE TABLE `sma_transfer_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transfer_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `product_code` varchar(55) NOT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `option_id` int(11) DEFAULT NULL,
+  `expiry` date DEFAULT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `tax_rate_id` int(11) DEFAULT NULL,
+  `tax` varchar(55) DEFAULT NULL,
+  `item_tax` decimal(25,4) DEFAULT NULL,
+  `net_unit_cost` decimal(25,4) DEFAULT NULL,
+  `subtotal` decimal(25,4) DEFAULT NULL,
+  `quantity_balance` decimal(15,4) NOT NULL,
+  `unit_cost` decimal(25,4) DEFAULT NULL,
+  `real_unit_cost` decimal(25,4) DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  `warehouse_id` int(11) DEFAULT NULL,
+  `product_unit_id` int(11) DEFAULT NULL,
+  `product_unit_code` varchar(10) DEFAULT NULL,
+  `unit_quantity` decimal(15,4) NOT NULL,
+  `gst` varchar(20) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `transfer_id` (`transfer_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_transfers
+#
+
+DROP TABLE IF EXISTS `sma_transfers`;
+
+CREATE TABLE `sma_transfers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transfer_no` varchar(55) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `from_warehouse_id` int(11) NOT NULL,
+  `from_warehouse_code` varchar(55) NOT NULL,
+  `from_warehouse_name` varchar(55) NOT NULL,
+  `to_warehouse_id` int(11) NOT NULL,
+  `to_warehouse_code` varchar(55) NOT NULL,
+  `to_warehouse_name` varchar(55) NOT NULL,
+  `note` varchar(1000) DEFAULT NULL,
+  `total` decimal(25,4) DEFAULT NULL,
+  `total_tax` decimal(25,4) DEFAULT NULL,
+  `grand_total` decimal(25,4) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `status` varchar(55) NOT NULL DEFAULT 'pending',
+  `shipping` decimal(25,4) NOT NULL DEFAULT '0.0000',
+  `attachment` varchar(55) DEFAULT NULL,
+  `cgst` decimal(25,4) DEFAULT NULL,
+  `sgst` decimal(25,4) DEFAULT NULL,
+  `igst` decimal(25,4) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_units
+#
+
+DROP TABLE IF EXISTS `sma_units`;
+
+CREATE TABLE `sma_units` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(10) NOT NULL,
+  `name` varchar(55) NOT NULL,
+  `base_unit` int(11) DEFAULT NULL,
+  `operator` varchar(1) DEFAULT NULL,
+  `unit_value` varchar(55) DEFAULT NULL,
+  `operation_value` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `base_unit` (`base_unit`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_units` (`id`, `code`, `name`, `base_unit`, `operator`, `unit_value`, `operation_value`) VALUES (1, 'pcs', 'PCS', NULL, NULL, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_user_logins
+#
+
+DROP TABLE IF EXISTS `sma_user_logins`;
+
+CREATE TABLE `sma_user_logins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `ip_address` varbinary(16) NOT NULL,
+  `login` varchar(100) NOT NULL,
+  `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES (7, 1, NULL, '::1', 'owner@tecdiary.com', '2018-10-31 10:47:07');
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES (8, 1, NULL, '::1', 'owner@tecdiary.com', '2018-11-13 17:07:53');
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES (9, 1, NULL, '::1', 'owner@tecdiary.com', '2018-11-24 09:39:57');
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES (10, 1, NULL, '::1', 'owner@tecdiary.com', '2018-11-25 08:53:02');
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES (11, 1, NULL, '::1', 'owner@tecdiary.com', '2018-11-25 16:58:09');
+INSERT INTO `sma_user_logins` (`id`, `user_id`, `company_id`, `ip_address`, `login`, `time`) VALUES (12, 1, NULL, '::1', 'owner@tecdiary.com', '2018-11-26 14:05:40');
+
+
+#
+# TABLE STRUCTURE FOR: sma_users
+#
+
+DROP TABLE IF EXISTS `sma_users`;
+
+CREATE TABLE `sma_users` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `last_ip_address` varbinary(45) DEFAULT NULL,
+  `ip_address` varbinary(45) NOT NULL,
+  `username` varchar(100) NOT NULL,
+  `password` varchar(40) NOT NULL,
+  `salt` varchar(40) DEFAULT NULL,
+  `email` varchar(100) NOT NULL,
+  `activation_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_code` varchar(40) DEFAULT NULL,
+  `forgotten_password_time` int(11) unsigned DEFAULT NULL,
+  `remember_code` varchar(40) DEFAULT NULL,
+  `created_on` int(11) unsigned NOT NULL,
+  `last_login` int(11) unsigned DEFAULT NULL,
+  `active` tinyint(1) unsigned DEFAULT NULL,
+  `first_name` varchar(50) DEFAULT NULL,
+  `last_name` varchar(50) DEFAULT NULL,
+  `company` varchar(100) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `avatar` varchar(55) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `warehouse_id` int(10) unsigned DEFAULT NULL,
+  `biller_id` int(10) unsigned DEFAULT NULL,
+  `company_id` int(11) DEFAULT NULL,
+  `show_cost` tinyint(1) DEFAULT '0',
+  `show_price` tinyint(1) DEFAULT '0',
+  `award_points` int(11) DEFAULT '0',
+  `view_right` tinyint(1) NOT NULL DEFAULT '0',
+  `edit_right` tinyint(1) NOT NULL DEFAULT '0',
+  `allow_discount` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`,`warehouse_id`,`biller_id`),
+  KEY `group_id_2` (`group_id`,`company_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_users` (`id`, `last_ip_address`, `ip_address`, `username`, `password`, `salt`, `email`, `activation_code`, `forgotten_password_code`, `forgotten_password_time`, `remember_code`, `created_on`, `last_login`, `active`, `first_name`, `last_name`, `company`, `phone`, `avatar`, `gender`, `group_id`, `warehouse_id`, `biller_id`, `company_id`, `show_cost`, `show_price`, `award_points`, `view_right`, `edit_right`, `allow_discount`) VALUES (1, '::1', '\0\0', 'owner', '2c8ab736b2ccab4f50e72d5fd7d21020cbb77ae7', NULL, 'owner@tecdiary.com', NULL, NULL, NULL, NULL, 1351661704, 1543219540, 1, 'Owner', 'Owner', 'Stock Manager', '012345678', NULL, 'male', 1, NULL, NULL, NULL, 0, 0, 0, 0, 0, 0);
+
+
+#
+# TABLE STRUCTURE FOR: sma_variants
+#
+
+DROP TABLE IF EXISTS `sma_variants`;
+
+CREATE TABLE `sma_variants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(55) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: sma_warehouses
+#
+
+DROP TABLE IF EXISTS `sma_warehouses`;
+
+CREATE TABLE `sma_warehouses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(50) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `map` varchar(255) DEFAULT NULL,
+  `phone` varchar(55) DEFAULT NULL,
+  `email` varchar(55) DEFAULT NULL,
+  `price_group_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_warehouses` (`id`, `code`, `name`, `address`, `map`, `phone`, `email`, `price_group_id`) VALUES (1, 'WHI', 'Warehouse 1', '<p>Address, City</p>', NULL, '012345678', 'whi@tecdiary.com', NULL);
+INSERT INTO `sma_warehouses` (`id`, `code`, `name`, `address`, `map`, `phone`, `email`, `price_group_id`) VALUES (2, 'WHII', 'Warehouse 2', '<p>Warehouse 2, Jalan Sultan Ismail, 54000, Kuala Lumpur</p>', NULL, '0105292122', 'whii@tecdiary.com', NULL);
+
+
+#
+# TABLE STRUCTURE FOR: sma_warehouses_products
+#
+
+DROP TABLE IF EXISTS `sma_warehouses_products`;
+
+CREATE TABLE `sma_warehouses_products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `rack` varchar(55) DEFAULT NULL,
+  `avg_cost` decimal(25,4) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+INSERT INTO `sma_warehouses_products` (`id`, `product_id`, `warehouse_id`, `quantity`, `rack`, `avg_cost`) VALUES (1, 1, 1, '504.0000', NULL, '20.0000');
+INSERT INTO `sma_warehouses_products` (`id`, `product_id`, `warehouse_id`, `quantity`, `rack`, `avg_cost`) VALUES (2, 1, 2, '0.0000', NULL, '20.0000');
+
+
+#
+# TABLE STRUCTURE FOR: sma_warehouses_products_variants
+#
+
+DROP TABLE IF EXISTS `sma_warehouses_products_variants`;
+
+CREATE TABLE `sma_warehouses_products_variants` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `option_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `warehouse_id` int(11) NOT NULL,
+  `quantity` decimal(15,4) NOT NULL,
+  `rack` varchar(55) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `option_id` (`option_id`),
+  KEY `product_id` (`product_id`),
+  KEY `warehouse_id` (`warehouse_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
