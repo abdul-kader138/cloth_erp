@@ -279,5 +279,6 @@ $lang['merchant_copy']                              = "Copia Comercial";
 
 
 //closing Register
+$lang['total_cash_in_hand']                        = "Total efectivo en mano";
 $lang['denominations']                             = "Denominaciones";
 $lang['denominations_info']                        = "Denominaciones (ingrese la cantidad de efectivo en el registro)";

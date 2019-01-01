@@ -335,6 +335,7 @@ $lang['payment_method']                            = "Payment Method";
 $lang['sale_status']                               = "Sale Status";
 
 //closing Register
+$lang['total_cash_in_hand']                        = "Total Cash In Hand";
 $lang['denominations']                             = "Denominations";
 $lang['denominations_info']                        = "Denominations (Enter how much cash in the register)";
 
