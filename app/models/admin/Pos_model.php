@@ -1434,9 +1434,44 @@ class Pos_model extends CI_Model
             return $q->row();
         }
         return false;
+    }
 
+    public function getRegisterCreditAmount($date, $user_id = NULL)
+    {
+        if (!$date) {
+            $date = $this->session->userdata('register_open_time');
+        }
+        if (!$user_id) {
+            $user_id = $this->session->userdata('user_id');
+        }
+        $this->db->select('SUM( COALESCE( amount, 0 ) ) AS total', FALSE)
+            ->where('payments.date >', $date)->where('payments.payment_method','credit')->group_by('id');
+        $this->db->where('payments.created_by', $user_id);
 
+        $q = $this->db->get('payments');
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return false;
+    }
 
+    public function getRegisterCashAmount($date, $user_id = NULL)
+    {
+        if (!$date) {
+            $date = $this->session->userdata('register_open_time');
+        }
+        if (!$user_id) {
+            $user_id = $this->session->userdata('user_id');
+        }
+        $this->db->select('SUM( COALESCE( amount, 0 ) ) AS total', FALSE)
+            ->where('payments.date >', $date)->where('payments.paid_by','cash')->group_by('id');
+        $this->db->where('payments.created_by', $user_id);
+
+        $q = $this->db->get('payments');
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return false;
     }
 
 }

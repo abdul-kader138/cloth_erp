@@ -282,3 +282,17 @@ $lang['merchant_copy']                              = "Copia Comercial";
 $lang['total_cash_in_hand']                        = "Total efectivo en mano";
 $lang['denominations']                             = "Denominaciones";
 $lang['denominations_info']                        = "Denominaciones (ingrese la cantidad de efectivo en el registro)";
+
+$lang['cash_payment']                              = "Pago en efectivo";
+$lang['credit_payment']                            = "Pago de crédito";
+$lang['credit_card_payment']                       = "Pago con tarjeta de crédito";
+$lang['cheque_payment']                            = "Cheque de pago";
+$lang['gift_payment']                              = "Pago con tarjeta de regalo";
+$lang['refund']                                    = "Reembolsos";
+$lang['return']                                    = "Devoluciones";
+$lang['expense']                                   = "Gastos";
+$lang['total_sales']                               = "Ventas totales";
+$lang['cash_in_hand']                              = "Dinero en efectivo";
+$lang['total_cash']                                = "Total Cash";
+$lang['total_credit_card_slip']                    = "Total de tarjetas de crédito";
+$lang['total_cheque']                              = "Total Cheques";

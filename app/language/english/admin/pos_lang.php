@@ -339,3 +339,18 @@ $lang['total_cash_in_hand']                        = "Total Cash In Hand";
 $lang['denominations']                             = "Denominations";
 $lang['denominations_info']                        = "Denominations (Enter how much cash in the register)";
 
+
+$lang['cash_payment']                              = "Cash Payment";
+$lang['credit_payment']                            = "Credit Payment";
+$lang['credit_card_payment']                       = "Credit Card Payment";
+$lang['cheque_payment']                            = "Cheque Payment";
+$lang['gift_payment']                              = "Gift Card Payment";
+$lang['refund']                                    = "Refunds";
+$lang['return']                                    = "Returns";
+$lang['expense']                                   = "Expenses";
+$lang['total_sales']                               = "Total Sales";
+$lang['cash_in_hand']                              = "Cash In Hand";
+$lang['total_cash']                                = "Total Cash";
+$lang['total_credit_card_slip']                    = "Total Credit Card Slips";
+$lang['total_cheque']                              = "Total Cheques";
+

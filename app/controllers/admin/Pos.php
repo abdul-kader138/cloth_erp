@@ -727,6 +727,8 @@ class Pos extends MY_Controller
                 $this->data['cash_in_hand'] = NULL;
                 $this->data['register_open_time'] = NULL;
             }
+
+
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
             $this->data['ccsales'] = $this->pos_model->getRegisterCCSales($register_open_time, $user_id);
             $this->data['cashsales'] = $this->pos_model->getRegisterCashSales($register_open_time, $user_id);
@@ -1846,5 +1848,19 @@ class Pos extends MY_Controller
         $this->datatables->add_column("Actions", $action, "id, cemail")->unset_column('cemail');
         echo $this->datatables->generate();
     }
+
+    function register_all_info()
+    {
+        if ($this->input->post('start_date')) {
+            $start_date = $this->input->post('start_date');
+        }
+        $result = $this->pos_model->getRegisterCreditAmount($start_date);
+        $result_cash = $this->pos_model->getRegisterCashAmount($start_date);
+        $result->credit_sales = $result->total;
+        $result->cash_sales = $result_cash->total;
+        if ($result !== false) echo json_encode($result);
+        else  echo 0;
+    }
+
 
 }
