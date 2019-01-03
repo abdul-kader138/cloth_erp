@@ -308,10 +308,17 @@ class Sales_model extends CI_Model
                     if ($product->type == 'combo') {
                         $combo_items = $this->site->getProductComboItems($return_item['product_id'], $return_item['warehouse_id']);
                         foreach ($combo_items as $combo_item) {
-                            $this->UpdateCostingAndPurchaseItem($return_item, $combo_item->id, ($return_item['quantity']*$combo_item->qty));
+
+                            // this model is not avail need to find out
+                            $this->updateCostingLine($return_item['id'], $combo_item->id, $return_item['quantity']);
+                            $this->updatePurchaseItem(NULL,($return_item['quantity']*$combo_item->qty), NULL, $combo_item->id, $return_item['warehouse_id']);
+//                            $this->UpdateCostingAndPurchaseItem($return_item, $combo_item->id, ($return_item['quantity']*$combo_item->qty));
                         }
                     } else {
-                        $this->UpdateCostingAndPurchaseItem($return_item, $return_item['product_id'], $return_item['quantity']);
+//                        $this->UpdateCostingAndPurchaseItem($return_item, $return_item['product_id'], $return_item['quantity']);
+                        $this->updateCostingLine($return_item['id'], $return_item['product_id'], $return_item['quantity']);
+                        $this->updatePurchaseItem(NULL, $return_item['quantity'], $return_item['id']);
+
                     }
                 }
                 $this->db->update('sales', array('return_sale_ref' => $data['return_sale_ref'], 'surcharge' => $data['surcharge'],'return_sale_total' => $data['grand_total'], 'return_id' => $sale_id), array('id' => $data['sale_id']));
@@ -1100,6 +1107,99 @@ class Sales_model extends CI_Model
             return $q->row();
         }
         return false;
+    }
+
+    public function updateCostingLine($sale_item_id, $product_id, $quantity)
+    {
+        if ($costings = $this->getCostingLines($sale_item_id, $product_id)) {
+            foreach ($costings as $cost) {
+                if ($cost->quantity >= $quantity) {
+                    $qty = $cost->quantity - $quantity;
+                    $bln = $cost->quantity_balance && $cost->quantity_balance >= $quantity ? $cost->quantity_balance - $quantity : 0;
+                    $this->db->update('costing', array('quantity' => $qty, 'quantity_balance' => $bln), array('id' => $cost->id));
+                    $quantity = 0;
+                } elseif ($cost->quantity < $quantity) {
+                    $qty = $quantity - $cost->quantity;
+                    $this->db->delete('costing', array('id' => $cost->id));
+                    $quantity = $qty;
+                }
+            }
+            return TRUE;
+        }
+        return FALSE;
+    }
+
+    public function updatePurchaseItem($id, $qty, $sale_item_id, $product_id = NULL, $warehouse_id = NULL, $option_id = NULL)
+    {
+        if ($id) {
+            if($pi = $this->getPurchaseItemByID($id)) {
+                $pr = $this->site->getProductByID($pi->product_id);
+                if ($pr->type == 'combo') {
+                    $combo_items = $this->site->getProductComboItems($pr->id, $pi->warehouse_id);
+                    foreach ($combo_items as $combo_item) {
+                        if($combo_item->type == 'standard') {
+                            $cpi = $this->site->getPurchasedItem(array('product_id' => $combo_item->id, 'warehouse_id' => $pi->warehouse_id, 'option_id' => NULL));
+                            $bln = $pi->quantity_balance + ($qty*$combo_item->qty);
+                            $this->db->update('purchase_items', array('quantity_balance' => $bln), array('id' => $combo_item->id));
+                        }
+                    }
+                } else {
+                    $bln = $pi->quantity_balance + $qty;
+                    $this->db->update('purchase_items', array('quantity_balance' => $bln), array('id' => $id));
+                }
+            }
+        } else {
+            if ($sale_item_id) {
+                if ($sale_item = $this->getSaleItemByID($sale_item_id)) {
+                    $option_id = isset($sale_item->option_id) && !empty($sale_item->option_id) ? $sale_item->option_id : NULL;
+                    $clause = array('product_id' => $sale_item->product_id, 'warehouse_id' => $sale_item->warehouse_id, 'option_id' => $option_id);
+                    if ($pi = $this->site->getPurchasedItem($clause)) {
+                        $quantity_balance = $pi->quantity_balance+$qty;
+                        $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), array('id' => $pi->id));
+                    } else {
+                        $clause['purchase_id'] = NULL;
+                        $clause['transfer_id'] = NULL;
+                        $clause['quantity'] = 0;
+                        $clause['quantity_balance'] = $qty;
+                        $this->db->insert('purchase_items', $clause);
+                    }
+                }
+            } else {
+                if ($product_id && $warehouse_id) {
+                    $pr = $this->site->getProductByID($product_id);
+                    $clause = array('product_id' => $product_id, 'warehouse_id' => $warehouse_id, 'option_id' => $option_id);
+                    if ($pr->type == 'standard') {
+                        if ($pi = $this->site->getPurchasedItem($clause)) {
+                            $quantity_balance = $pi->quantity_balance+$qty;
+                            $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), array('id' => $pi->id));
+                        } else {
+                            $clause['purchase_id'] = NULL;
+                            $clause['transfer_id'] = NULL;
+                            $clause['quantity'] = 0;
+                            $clause['quantity_balance'] = $qty;
+                            $this->db->insert('purchase_items', $clause);
+                        }
+                    } elseif ($pr->type == 'combo') {
+                        $combo_items = $this->site->getProductComboItems($pr->id, $warehouse_id);
+                        foreach ($combo_items as $combo_item) {
+                            $clause = array('product_id' => $combo_item->id, 'warehouse_id' => $warehouse_id, 'option_id' => NULL);
+                            if($combo_item->type == 'standard') {
+                                if ($pi = $this->site->getPurchasedItem($clause)) {
+                                    $quantity_balance = $pi->quantity_balance+($qty*$combo_item->qty);
+                                    $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), $clause);
+                                } else {
+                                    $clause['transfer_id'] = NULL;
+                                    $clause['purchase_id'] = NULL;
+                                    $clause['quantity'] = 0;
+                                    $clause['quantity_balance'] = $qty;
+                                    $this->db->insert('purchase_items', $clause);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

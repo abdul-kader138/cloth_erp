@@ -121,7 +121,7 @@
                     </a>
                 </li>
                 <li class="dropdown">
-                    <a class="btn borange pos-tip" id="close_register" title="<span><?=lang('close_register')?></span>" data-placement="bottom" data-html="true" data-backdrop="static" href="<?=admin_url('pos/close_register')?>" data-toggle="modal" data-target="#myModal">
+                    <a class="btn borange pos-tip" id="close_register" title="<span><?=lang('close_register')?></span>" data-placement="bottom" data-html="true" data-backdrop="static" href="<?=admin_url('pos/close_register_new')?>" data-toggle="modal" data-target="#myModal">
                         <i class="fa fa-times-circle"></i>
                     </a>
                 </li>

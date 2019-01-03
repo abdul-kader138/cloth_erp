@@ -762,6 +762,7 @@ class Pos extends MY_Controller
         if (!$this->Owner && !$this->Admin) {
             $user_id = $this->session->userdata('user_id');
         }
+        $user_id_session=$this->session->userdata('user_id');
         $this->form_validation->set_rules('total_cash', lang("total_cash"), 'trim|required|numeric');
         $this->form_validation->set_rules('total_cheques', lang("total_cheques"), 'trim|required|numeric');
         $this->form_validation->set_rules('total_cc_slips', lang("total_cc_slips"), 'trim|required|numeric');
@@ -775,6 +776,12 @@ class Pos extends MY_Controller
                 $rid = $this->session->userdata('register_id');
                 $user_id = $this->session->userdata('user_id');
             }
+            $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
+//            if($user_register->user_id != $user_id_session){
+//                $this->session->set_flashdata('error', lang("reg_not_authorized"));
+//                admin_redirect("pos/registers");
+//            }
+
             $data = array(
                 'closed_at' => date('Y-m-d H:i:s'),
                 'total_cash' => $this->input->post('total_cash'),
@@ -800,6 +807,11 @@ class Pos extends MY_Controller
             admin_redirect("welcome");
         } else {
             $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
+//            if($user_register->user_id != $user_id_session){
+//                $this->session->set_flashdata('error', (validation_errors() ? validation_errors() : $this->session->flashdata('register_closed')));
+//                admin_redirect("pos/registers");
+//            }
+
             if ($this->Owner || $this->Admin) {
                 $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
                 $register_open_time = $user_register ? $user_register->date : NULL;
@@ -810,29 +822,7 @@ class Pos extends MY_Controller
                 $this->data['cash_in_hand'] = NULL;
                 $this->data['register_open_time'] = NULL;
             }
-            $this->data['cash_in_hand'] = $user_register ? $user_register->cash_in_hand : NULL;
-            $this->data['register_open_time'] = $user_register ? $user_register->date : NULL;
 
-            $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-            $this->data['ccsales'] = $this->pos_model->getRegisterCCSales($register_open_time, $user_id);
-            $this->data['cashsales'] = $this->pos_model->getRegisterCashSales($register_open_time, $user_id);
-            $this->data['chsales'] = $this->pos_model->getRegisterChSales($register_open_time, $user_id);
-            $this->data['gcsales'] = $this->pos_model->getRegisterGCSales($register_open_time);
-            $this->data['creditsales'] = $this->pos_model->getRegisterCreditSales($register_open_time);
-            // $this->data['creditsalesamount'] = $this->pos_model->getRegisterCreditSalesAmount($register_open_time);
-            // $this->data['totalcashsales'] = $this->pos_model->getTotalTodayCashSales();
-            // $this->data['totalcashsalesamount'] = $this->pos_model->getTotalTodayCashSalesAmount();
-            $this->data['pppsales'] = $this->pos_model->getRegisterPPPSales($register_open_time, $user_id);
-            $this->data['stripesales'] = $this->pos_model->getRegisterStripeSales($register_open_time, $user_id);
-            $this->data['authorizesales'] = $this->pos_model->getRegisterAuthorizeSales($register_open_time, $user_id);
-            $this->data['totalsales'] = $this->pos_model->getRegisterSales($register_open_time, $user_id);
-            $this->data['totalsalesamount'] = $this->pos_model->getRegisterSalesAmount($register_open_time, $user_id);
-            $this->data['refunds'] = $this->pos_model->getRegisterRefunds($register_open_time, $user_id);
-            $this->data['returns'] = $this->pos_model->getRegisterReturns($register_open_time, $user_id);
-            $this->data['cashrefunds'] = $this->pos_model->getRegisterCashRefunds($register_open_time, $user_id);
-            $this->data['expenses'] = $this->pos_model->getRegisterExpenses($register_open_time, $user_id);
-            $this->data['users'] = $this->pos_model->getUsers($user_id);
-            $this->data['suspended_bills'] = $this->pos_model->getSuspendedsales($user_id);
             $this->data['user_id'] = $user_id;
             $this->data['modal_js'] = $this->site->modal_js();
             $this->data['status'] = false;
@@ -1856,8 +1846,24 @@ class Pos extends MY_Controller
         }
         $result = $this->pos_model->getRegisterCreditAmount($start_date);
         $result_cash = $this->pos_model->getRegisterCashAmount($start_date);
+        $result_gc = $this->pos_model->getRegisterGCAmount($start_date);
+        $result_ch = $this->pos_model->getRegisterChAmount($start_date);
+        $result_cc = $this->pos_model->getRegisterCCAmount($start_date);
+        $result_return = $this->pos_model->getRegisterReturnAmount($start_date);
+        $result_return_common = $this->pos_model->getRegisterReturns($start_date);
+        $result_expense = $this->pos_model->getRegisterExpenses($start_date);
+        $result_all_sales = $this->pos_model->getRegisterAllSales($start_date);
         $result->credit_sales = $result->total;
         $result->cash_sales = $result_cash->total;
+        $result->gc_sales = $result_gc->total;
+        $result->ch_sales = $result_ch->total;
+        $result->cc_sales = $result_cc->total;
+        $result->cc_slip = $result_cc->total_cc_slips;
+        $result->ch_slip = $result_ch->total_ch_slips;
+        $result->return_amount =  $result_return_common->total;
+        $result->refund_amount =  (($result_return->total * (-1)));
+        $result->result_expense = $result_expense->total;
+        $result->result_all_sales = $result_all_sales->total;
         if ($result !== false) echo json_encode($result);
         else  echo 0;
     }

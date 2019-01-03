@@ -353,4 +353,5 @@ $lang['cash_in_hand']                              = "Cash In Hand";
 $lang['total_cash']                                = "Total Cash";
 $lang['total_credit_card_slip']                    = "Total Credit Card Slips";
 $lang['total_cheque']                              = "Total Cheques";
+$lang['reg_not_authorized']                        = "You are not authorized to close this register";
 

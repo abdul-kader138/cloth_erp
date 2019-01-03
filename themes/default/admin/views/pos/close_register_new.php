@@ -1,11 +1,7 @@
 <style>
     .modal-dialog {
         width: 750px;
-        /*margin: auto;*/
     }
-
-    /* General Buttons */
-
 </style>
 
 <div class="modal-dialog">
@@ -172,11 +168,11 @@
                                     </tr>
                                     <tr>
                                         <td width="70%"><?= lang("credit_card_payment", "credit_card_payment"); ?></td>
-                                        <td width="30%" id="total_credit"></td>
+                                        <td width="30%" id="credit_card_payment"></td>
                                     </tr>
                                     <tr>
                                         <td width="70%"><?= lang("cheque_payment", "cheque_payment"); ?></td>
-                                        <td width="30%" id="credit_card_payment"></td>
+                                        <td width="30%" id="cheque_payment"></td>
                                     </tr>
                                     <tr>
                                         <td width="70%"><?= lang("gift_payment", "gift_payment"); ?></td>
@@ -188,7 +184,7 @@
                                     </tr>
                                     <tr>
                                         <td width="70%"> <?= lang("return", "return"); ?></td>
-                                        <td width="30%" id="total_amex"></td>
+                                        <td width="30%" id="return"></td>
                                     </tr>
                                     <tr>
                                         <td width="70%"><?= lang("expense", "expense"); ?></td>
@@ -210,7 +206,7 @@
                                     </tr>
                                     <tr>
                                         <td width="70%"><b><?= lang("total_cash", "total_cash"); ?> </b></td>
-                                        <td width="30%" id="total_cash"><b></b></td>
+                                        <td width="30%" id="grand_total"><b></b></td>
                                     </tr>
                                     <tr>
                                         <td width="70%">
@@ -269,9 +265,7 @@
 </div>
 
 </div>
-<script src="<?= $assets ?>js/jquery-dateformat.min.js"></script>
 <script>
-
     $(document).ready(function () {
         calculateTotal();
         $('#sched_cash').click(function () {
@@ -325,73 +319,57 @@
                         $('#time_scheduler_error').addClass('hidden');
                         //
                         var total_cash = parseFloat(respon.cash_sales);
-                        // var credit = parseFloat(respon.credit);
-                        // var debit = parseFloat(respon.debit);
-                        // var cheque = parseFloat(respon.cheque);
-                        // var amex = parseFloat(respon.amex);
-                        // var visa = parseFloat(respon.visa);
-                        // var mc = parseFloat(respon.mc);
-                        // var gift = parseFloat(respon.gift);
-                        // var deposit = parseFloat(respon.deposit);
-                        // var total_sale = parseFloat(respon.grand_total);
-                        // var total_return = parseFloat(respon.return);
+                        var credit = parseFloat(respon.cc_sales);
+                        var cheque = parseFloat(respon.ch_sales);
+                        var gift = parseFloat(respon.gc_sales);
                         var total_credit_sales = parseFloat(respon.credit_sales);
-                        // var total_credit_sales_paid = parseFloat(respon.credit_sales_paid);
-                        // var total_payment = 0.0;
-                        // if (total_sale) $('#total_sale').html(total_sale.toFixed(2));
-                        // if (cash) {
-                        //     $('#total_cash').html(cash.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(cash.toFixed(2))
-                        // }
-                        // if (total_credit_sales) {
-                        //     $('#total_credit_sale').html(total_credit_sales_paid.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(total_credit_sales_paid.toFixed(2))
-                        // }
-                        if (total_credit_sales) $('#credit_payment').html(total_credit_sales.toFixed(2));
-                        if (total_cash) $('#cash_payment').html(total_cash.toFixed(2));
-
-                        // if (debit) {
-                        //     $('#total_debit').html(debit.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(debit.toFixed(2))
-                        // }
-                        // if (cheque) {
-                        //     $('#total_cheque').html(cheque.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(cheque.toFixed(2))
-                        //     console.log('go to cheque' + total_payment);
-                        // }
-                        // if (amex) {
-                        //     $('#total_amex').html(amex.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(amex.toFixed(2))
-                        // }
-                        // if (visa) {
-                        //     $('#total_visa').html(visa.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(visa.toFixed(2))
-                        // }
-                        // if (mc) {
-                        //     $('#total_mc').html(mc.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(mc.toFixed(2))
-                        //     console.log('go to mc' + total_payment);
-                        // }
-                        // if (gift) {
-                        //     $('#total_gift').html(gift.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(gift.toFixed(2))
-                        // }
-                        // if (deposit) {
-                        //     $('#total_deposit').html(deposit.toFixed(2));
-                        //     total_payment = total_payment + parseFloat(deposit.toFixed(2))
-                        // }
-                        // if (total_return) {
-                        //     var return_amount = total_return.toFixed(2);
-                        //     $('#total_return').html(return_amount.substring(1));
-                        // }
-                        // if (total_payment) {
-                        //     var total = total_payment.toFixed(2);
-                        //     $('#total_payment').html(total);
-                        // }
-                        // var total_dues = (parseFloat(total_sale) - parseFloat(total_payment));
-                        // if (total_dues) $('#total_due').text(total_dues.toFixed(2));
-                        // if (sDate) $('#sDate').html(sDate);
-                        // if (eDate) $('#eDate').html(eDate);
+                        var ch_slip = parseFloat(respon.ch_slip);
+                        var cc_slip = parseFloat(respon.cc_slip);
+                        var return_amount = parseFloat(respon.return_amount);
+                        var result_expense = parseFloat(respon.result_expense);
+                        var result_refund = parseFloat(respon.refund_amount);
+                        var result_all_sales = parseFloat(respon.result_all_sales);
+                        var total_cash_in_hand=$('#cash_in_hand_cal').val();
+                        var total_cash_amount=0;
+                        var total_expense_amount=0;
+                        if (total_credit_sales)
+                        {
+                            $('#credit_payment').html(total_credit_sales.toFixed(2));
+                            total_cash_amount +=parseFloat(total_credit_sales.toFixed(2));
+                        }
+                        if (total_cash) {
+                            $('#cash_payment').html(total_cash.toFixed(2));
+                            total_cash_amount +=parseFloat(total_cash.toFixed(2));
+                        }
+                        if (cheque){
+                            $('#cheque_payment').html(cheque.toFixed(2));
+                            total_cash_amount +=parseFloat(cheque.toFixed(2));
+                        }
+                        if (gift) {
+                            $('#gift_payment').html(gift.toFixed(2));
+                            total_cash_amount +=parseFloat(gift.toFixed(2));
+                        }
+                        if (credit){
+                            $('#credit_card_payment').html(credit.toFixed(2));
+                            total_cash_amount += parseFloat(credit.toFixed(2));
+                        }
+                        if (cc_slip) $('#total_credit_card_slip').val(cc_slip);
+                        if (ch_slip) $('#total_cheque').val(ch_slip);
+                        if (return_amount) {
+                            $('#return').html(return_amount.toFixed(2));
+                            total_expense_amount +=parseFloat(return_amount.toFixed(2));
+                        }
+                        if (result_expense) {
+                            $('#expense').html(result_expense.toFixed(2));
+                            total_expense_amount +=parseFloat(result_expense.toFixed(2));
+                        }
+                        if (result_refund) {
+                            $('#refund').html(result_refund.toFixed(2));
+                            total_expense_amount +=parseFloat(result_refund.toFixed(2));
+                        }
+                        if (result_all_sales) $('#total_sales').html(result_all_sales.toFixed(2));
+                        var total_register_cash=( (total_cash_amount +parseFloat(total_cash_in_hand)) - total_expense_amount);
+                        $('#grand_total').html(total_register_cash.toFixed(2));
                     }
                 });
             });

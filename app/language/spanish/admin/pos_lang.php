@@ -296,3 +296,4 @@ $lang['cash_in_hand']                              = "Dinero en efectivo";
 $lang['total_cash']                                = "Total Cash";
 $lang['total_credit_card_slip']                    = "Total de tarjetas de crédito";
 $lang['total_cheque']                              = "Total Cheques";
+$lang['reg_not_authorized']                        = "No estás autorizado para cerrar este registro.";
