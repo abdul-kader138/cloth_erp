@@ -762,10 +762,22 @@ class Pos extends MY_Controller
         if (!$this->Owner && !$this->Admin) {
             $user_id = $this->session->userdata('user_id');
         }
+
+
         $user_id_session=$this->session->userdata('user_id');
-        $this->form_validation->set_rules('total_cash', lang("total_cash"), 'trim|required|numeric');
-        $this->form_validation->set_rules('total_cheques', lang("total_cheques"), 'trim|required|numeric');
-        $this->form_validation->set_rules('total_cc_slips', lang("total_cc_slips"), 'trim|required|numeric');
+        $user_register = $this->pos_model->registerData($user_id);
+        if($user_register->user_id != $user_id_session){
+            $this->session->set_flashdata('error', lang("reg_not_authorized"));
+            echo '<script type="text/javascript">
+             $(\'#myModal\').modal(\'hide\');
+             location.reload(true);
+              </script>';
+        }
+
+
+        $this->form_validation->set_rules('total_credit_card_slip', lang("total_credit_card_slip"), 'trim|required|numeric');
+//        $this->form_validation->set_rules('total_cheques', lang("total_cheques"), 'trim|required|numeric');
+//        $this->form_validation->set_rules('total_cc_slips', lang("total_cc_slips"), 'trim|required|numeric');
 
         if ($this->form_validation->run() == TRUE) {
             if ($this->Owner || $this->Admin) {
@@ -777,24 +789,39 @@ class Pos extends MY_Controller
                 $user_id = $this->session->userdata('user_id');
             }
             $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
-//            if($user_register->user_id != $user_id_session){
-//                $this->session->set_flashdata('error', lang("reg_not_authorized"));
-//                admin_redirect("pos/registers");
-//            }
+            if($user_register->user_id != $user_id_session){
+                $this->session->set_flashdata('error', lang("reg_not_authorized"));
+                admin_redirect("pos/registers");
+            }
 
             $data = array(
+                'r_1_c' => $this->input->post('r_1_c'),
+                'r_5_c' => $this->input->post('r_5_c'),
+                'r_10_c' => $this->input->post('r_10_c'),
+                'r_20_c' => $this->input->post('r_20_c'),
+                'r_25_c' => $this->input->post('r_25_c'),
+                'r_50_c' => $this->input->post('r_50_c'),
+                'r_100_c' => $this->input->post('r_100_c'),
+                'r_200_c' => $this->input->post('r_200_c'),
+                'r_500_c' => $this->input->post('r_500_c'),
+                'r_1000_c' => $this->input->post('r_1000_c'),
+                'r_2000_c' => $this->input->post('r_2000_c'),
                 'closed_at' => date('Y-m-d H:i:s'),
-                'total_cash' => $this->input->post('total_cash'),
-                'total_credit_amount' => $this->input->post('total_credit_amount'),
-                'total_credit_sale' => $this->input->post('total_credit_sale'),
-                'total_cheques' => $this->input->post('total_cheques'),
-                'total_cc_slips' => $this->input->post('total_cc_slips'),
-                'total_cash_submitted' => $this->input->post('total_cash_submitted'),
-                'total_cheques_submitted' => $this->input->post('total_cheques_submitted'),
-                'total_cc_slips_submitted' => $this->input->post('total_cc_slips_submitted'),
+                'cash_payment' => $this->input->post('cash_payment_1'),
+                'credit_payment' => $this->input->post('credit_payment_1'),
+                'credit_card_payment' => $this->input->post('credit_card_payment_1'),
+                'cheque_payment' => $this->input->post('cheque_payment_1'),
+                'gift_payment' => $this->input->post('gift_payment_1'),
+                'refund' => $this->input->post('refund_1'),
+                'expense' => $this->input->post('expense_1'),
+                'return' => $this->input->post('return_1'),
+                'total_sales' => $this->input->post('total_sales_1'),
+                'total_amount' => $this->input->post('grand_total_1'),
+                'current_cash_in_hand' => $this->input->post('current_cash_in_hand_1'),
+                'total_credit_card_slip' => $this->input->post('total_credit_card_slip'),
+                'total_cheque' => $this->input->post('total_cheque'),
                 'note' => $this->input->post('note'),
                 'status' => 'close',
-                'transfer_opened_bills' => $this->input->post('transfer_opened_bills'),
                 'closed_by' => $this->session->userdata('user_id'),
             );
         } elseif ($this->input->post('close_register')) {
@@ -802,15 +829,12 @@ class Pos extends MY_Controller
             admin_redirect("pos");
         }
 
-        if ($this->form_validation->run() == TRUE && $this->pos_model->closeRegister($rid, $user_id, $data)) {
+//        if ($this->form_validation->run() == TRUE && $this->pos_model->closeRegister($rid, $user_id, $data)) {
+        if ($this->form_validation->run() == TRUE) {
             $this->session->set_flashdata('message', lang("register_closed"));
             admin_redirect("welcome");
         } else {
-            $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
-//            if($user_register->user_id != $user_id_session){
-//                $this->session->set_flashdata('error', (validation_errors() ? validation_errors() : $this->session->flashdata('register_closed')));
-//                admin_redirect("pos/registers");
-//            }
+
 
             if ($this->Owner || $this->Admin) {
                 $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
@@ -823,6 +847,7 @@ class Pos extends MY_Controller
                 $this->data['register_open_time'] = NULL;
             }
 
+            $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
             $this->data['user_id'] = $user_id;
             $this->data['modal_js'] = $this->site->modal_js();
             $this->data['status'] = false;
