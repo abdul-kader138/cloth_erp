@@ -1,4 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+<?php
+if ($this->session->userdata('message') ){
+    echo "<div class=\"alert alert-danger\"><button type=\"button\" class=\"close fa-2x\" data-dismiss=\"alert\">&times;</button>" . $this->session->userdata('message')  . "</div>";
+}
+?>
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-briefcase"></i><?= lang("open_registers"); ?></h2>
@@ -39,3 +44,4 @@
         </div>
     </div>
 </div>
+
