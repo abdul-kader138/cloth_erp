@@ -2408,7 +2408,7 @@ class Reports extends MY_Controller
         if ($pdf || $xls) {
 
             $this->db
-                ->select("date, closed_at, CONCAT(" . $this->db->dbprefix('users') . ".first_name, ' ', " . $this->db->dbprefix('users') . ".last_name, ' (', users.email, ')') as user, cash_in_hand, total_cc_slips, total_cheques, total_cash, total_cc_slips_submitted, total_cheques_submitted,total_cash_submitted, total_credit_sale,note", FALSE)
+                ->select("date, closed_at, CONCAT(" . $this->db->dbprefix('users') . ".first_name, ' ', " . $this->db->dbprefix('users') . ".last_name, ' (', users.email, ')') as user, cash_in_hand, total_cc_slips, total_cheques, total_credit_card_slip,total_cash,total_sales,total_amount, total_cc_slips_submitted, total_cheques_submitted,total_cash_submitted, total_credit_sale,note", FALSE)
                 ->from("pos_register")
                 ->join('users', 'users.id=pos_register.user_id', 'left')
                 ->order_by('date desc');
@@ -2438,15 +2438,12 @@ class Reports extends MY_Controller
                 $this->excel->getActiveSheet()->SetCellValue('A1', lang('open_time'));
                 $this->excel->getActiveSheet()->SetCellValue('B1', lang('close_time'));
                 $this->excel->getActiveSheet()->SetCellValue('C1', lang('user'));
-                $this->excel->getActiveSheet()->SetCellValue('D1', lang('cash_in_hand'));
-                $this->excel->getActiveSheet()->SetCellValue('E1', lang('cc_slips'));
-                $this->excel->getActiveSheet()->SetCellValue('F1', lang('cheques'));
-                $this->excel->getActiveSheet()->SetCellValue('G1', lang('total_cash'));
-                $this->excel->getActiveSheet()->SetCellValue('H1', lang('cc_slips_submitted'));
-                $this->excel->getActiveSheet()->SetCellValue('I1', lang('cheques_submitted'));
-                $this->excel->getActiveSheet()->SetCellValue('J1', lang('total_cash_submitted'));
-                $this->excel->getActiveSheet()->SetCellValue('K1', lang('Credit_Sale'));
-                $this->excel->getActiveSheet()->SetCellValue('L1', lang('note'));
+                $this->excel->getActiveSheet()->SetCellValue('D1', lang('open_amount'));
+                $this->excel->getActiveSheet()->SetCellValue('E1', lang('cheques'));
+                $this->excel->getActiveSheet()->SetCellValue('F1', lang('cc_slips'));
+                $this->excel->getActiveSheet()->SetCellValue('G1', lang('total_sales'));
+                $this->excel->getActiveSheet()->SetCellValue('H1', lang('cash_in_hand'));
+                $this->excel->getActiveSheet()->SetCellValue('I1', lang('note'));
 
                 $row = 2;
                 foreach ($data as $data_row) {
@@ -2454,19 +2451,11 @@ class Reports extends MY_Controller
                     $this->excel->getActiveSheet()->SetCellValue('B' . $row, $data_row->closed_at);
                     $this->excel->getActiveSheet()->SetCellValue('C' . $row, $data_row->user);
                     $this->excel->getActiveSheet()->SetCellValue('D' . $row, $data_row->cash_in_hand);
-                    $this->excel->getActiveSheet()->SetCellValue('E' . $row, $data_row->total_cc_slips);
-                    $this->excel->getActiveSheet()->SetCellValue('F' . $row, $data_row->total_cheques);
-                    $this->excel->getActiveSheet()->SetCellValue('G' . $row, $data_row->total_cash);
-                    $this->excel->getActiveSheet()->SetCellValue('H' . $row, $data_row->total_cc_slips_submitted);
-                    $this->excel->getActiveSheet()->SetCellValue('I' . $row, $data_row->total_cheques_submitted);
-                    $this->excel->getActiveSheet()->SetCellValue('J' . $row, $data_row->total_cash_submitted);
-                    $this->excel->getActiveSheet()->SetCellValue('K' . $row, $data_row->total_credit_sale);
-                    $this->excel->getActiveSheet()->SetCellValue('L' . $row, $data_row->note);
-                    if($data_row->total_cash_submitted < $data_row->total_cash || $data_row->total_cheques_submitted < $data_row->total_cheques || $data_row->total_cc_slips_submitted < $data_row->total_cc_slips) {
-                        $this->excel->getActiveSheet()->getStyle('A'.$row.':L'.$row)->applyFromArray(
-                                array( 'fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'color' => array('rgb' => 'F2DEDE')) )
-                                );
-                    }
+                    $this->excel->getActiveSheet()->SetCellValue('E' . $row, $data_row->total_cheques);
+                    $this->excel->getActiveSheet()->SetCellValue('F' . $row, $data_row->total_credit_card_slip);
+                    $this->excel->getActiveSheet()->SetCellValue('G' . $row, $data_row->total_sales);
+                    $this->excel->getActiveSheet()->SetCellValue('H' . $row, $data_row->total_amount);
+                    $this->excel->getActiveSheet()->SetCellValue('I' . $row, $data_row->note);
                     $row++;
                 }
 
@@ -2479,8 +2468,6 @@ class Reports extends MY_Controller
                 $this->excel->getActiveSheet()->getColumnDimension('G')->setWidth(15);
                 $this->excel->getActiveSheet()->getColumnDimension('H')->setWidth(15);
                 $this->excel->getActiveSheet()->getColumnDimension('I')->setWidth(15);
-                $this->excel->getActiveSheet()->getColumnDimension('J')->setWidth(15);
-                $this->excel->getActiveSheet()->getColumnDimension('K')->setWidth(35);
                 $this->excel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
                 $filename = 'register_report';
                 $this->load->helper('excel');
@@ -2494,7 +2481,11 @@ class Reports extends MY_Controller
 
             $this->load->library('datatables');
             $this->datatables
-                ->select("date, closed_at, CONCAT(" . $this->db->dbprefix('users') . ".first_name, ' ', " . $this->db->dbprefix('users') . ".last_name, '<br>', " . $this->db->dbprefix('users') . ".email) as user, cash_in_hand, CONCAT(total_cc_slips, ' (', total_cc_slips_submitted, ')'), CONCAT(total_cheques, ' (', total_cheques_submitted, ')'), CONCAT(total_cash, ' (', total_cash_submitted, ')'), note,total_credit_sale", FALSE)
+                ->select("date, closed_at, CONCAT(" . $this->db->dbprefix('users') . ".first_name, ' ', " . $this->db->dbprefix('users') . ".last_name, '<br>', " . $this->db->dbprefix('users') . ".email) as user, total_cheque,total_credit_card_slip,cash_in_hand, 
+                 CONCAT(COALESCE(r_1_c, 0), '_',COALESCE(r_5_c, 0), '_',COALESCE(r_10_c, 0), '_',COALESCE(r_20_c, 0), '_',COALESCE(r_25_c, 0), '_',COALESCE(r_50_c, 0), '_',COALESCE(r_100_c, 0), '_',COALESCE(r_200_c, 0), '_', COALESCE(r_500_c, 0), '_',COALESCE(r_1000_c, 0),
+                 '_',COALESCE(r_2000_c, 0)),
+                  CONCAT(COALESCE(cash_payment, 0), '_', COALESCE(credit_payment, 0), '_', COALESCE(credit_card_payment, 0), '_', COALESCE(cheque_payment, 0), '_', COALESCE(gift_payment, 0)),
+                  CONCAT(COALESCE(refund, 0), '_', COALESCE(return_amount, 0), '_', COALESCE(expense, 0)),total_sales,total_amount", FALSE)
                 ->from("pos_register")
                 ->join('users', 'users.id=pos_register.user_id', 'left');
 

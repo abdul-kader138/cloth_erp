@@ -72,3 +72,17 @@ $lang['sales_return_report']                = "Reporte de ventas retornadas";
 $lang['payments_returned']                  = "Pagos Reembolsados";
 $lang['category_code']                      = "Codigo de categoria";
 $lang['category_name']                      = "Nombre de categoria";
+
+$lang['cash_payment']                              = "Pago en efectivo";
+$lang['credit_payment']                            = "Pago de crédito";
+$lang['credit_card_payment']                       = "Pago con tarjeta de crédito";
+$lang['cheque_payment']                            = "Cheque de pago";
+$lang['gift_payment']                              = "Pago con tarjeta de regalo";
+$lang['refund']                                    = "Reembolsos";
+$lang['return']                                    = "Devoluciones";
+$lang['expense']                                   = "Gastos";
+$lang['open_amount']                  = "Cantidad de apertura";
+$lang['total_sales']                               = "Ventas totales";
+$lang['denominations']                             = "Denominaciones";
+$lang['payments_received']                         = "Pago total recibido";
+$lang['total_expense']                             = "Gasto total";

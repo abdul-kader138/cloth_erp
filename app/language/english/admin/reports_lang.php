@@ -105,3 +105,17 @@ $lang['total_product_tax']          = "Product Tax Amount";
 $lang['total_order_tax']            = "Order Tax Amount";
 $lang['refund']                     = "Refund";
 $lang['net_returns']                = "Net Returns";
+
+$lang['cash_payment']                              = "Cash Payment";
+$lang['credit_payment']                            = "Credit Payment";
+$lang['credit_card_payment']                       = "Credit Card Payment";
+$lang['cheque_payment']                            = "Cheque Payment";
+$lang['gift_payment']                              = "Gift Card Payment";
+$lang['refund']                                    = "Refunds";
+$lang['return']                                    = "Returns";
+$lang['expense']                                   = "Expenses";
+$lang['open_amount']                               = "Opening Amount";
+$lang['total_sales']                               = "Total Sales";
+$lang['denominations']                             = "Denominations";
+$lang['payments_received']                         = "Total Payment Receive";
+$lang['total_expense']                             = "Total Expense";

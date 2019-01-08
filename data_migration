@@ -19,7 +19,7 @@ ALTER TABLE `sma_pos_register` ADD `cheque_payment` DECIMAL(11,2) NULL DEFAULT '
 ALTER TABLE `sma_pos_register` ADD `gift_payment` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `refund` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `expense` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
-ALTER TABLE `sma_pos_register` ADD `return` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
+ALTER TABLE `sma_pos_register` ADD `return_amount` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `total_sales` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `current_cash_in_hand` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `grand_total` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;

@@ -829,8 +829,8 @@ class Pos extends MY_Controller
             admin_redirect("pos");
         }
 
-//        if ($this->form_validation->run() == TRUE && $this->pos_model->closeRegister($rid, $user_id, $data)) {
-        if ($this->form_validation->run() == TRUE) {
+        if ($this->form_validation->run() == TRUE && $this->pos_model->closeRegister($rid, $user_id, $data)) {
+//        if ($this->form_validation->run() == TRUE) {
             $this->session->set_flashdata('message', lang("register_closed"));
             admin_redirect("welcome");
         } else {

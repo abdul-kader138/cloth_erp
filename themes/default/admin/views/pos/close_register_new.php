@@ -24,9 +24,9 @@
         <div class="modal-body">
             <?php $attrib = array('data-toggle' => 'validator', 'role' => 'form', 'id' => 'close-register-form');
             echo admin_form_open("pos/close_register_new/" . $user_id, $attrib); ?>
-            <input type="hidden"  name="cash_in_hand_cal" id="cash_in_hand_cal">
+            <input type="hidden" name="cash_in_hand_cal" id="cash_in_hand_cal">
             <input type="hidden" name="cash_in_hand_cal" id="register_time" value="<?php echo $register_open_time; ?>">
-            <input type="hidden" name="cash_payment_1"  id="cash_payment_1">
+            <input type="hidden" name="cash_payment_1" id="cash_payment_1">
             <input type="hidden" name="credit_payment_1" id="credit_payment_1">
             <input type="hidden" name="credit_card_payment_1" id="credit_card_payment_1">
             <input type="hidden" name="cheque_payment_1" id="cheque_payment_1">
@@ -85,7 +85,6 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-
                                     <div class="form-group">
                                         <?php echo $default_currency->code . "(100)"; ?>
                                         <div class="controls">
@@ -150,14 +149,12 @@
                         </div>
                     </div>
                 </div>
-                <!--                </form>-->
             </div>
 
 
             <!-- STEP 2 -->
             <div class="jumbotron" id="step2" style="display: none">
                 <div class="container text-info">
-                    <!--                <form action="" method="post" role="form">-->
                     <div class="form-group">
                         <div class="row">
                             <p><span><button type="button"
@@ -264,15 +261,10 @@
                             </div>
                         </div>
                     </div>
-
                     <?php echo form_close(); ?>
                 </div>
             </div>
-
-
         </div>
-
-
     </div>
 </div>
 
@@ -294,10 +286,6 @@
         });
 
         $('#sched_register').click(function () {
-            $('#step1').hide();
-            $('#step2').show();
-            $('#denomination').hide();
-            $('#cash_in_hand').html($('#cash_in_hand_cal').val());
             $.post('<?php echo admin_url('pos/register_all_info'); ?>', {
                 start_date: $('#register_time').val(),
                 '<?php echo $this->security->get_csrf_token_name(); ?>': '<?php echo $this->security->get_csrf_hash(); ?>'
@@ -372,7 +360,7 @@
                     var total_register_cash = ((total_cash_amount + parseFloat(total_cash_in_hand)) - total_expense_amount);
                     $('#grand_total').html(total_register_cash.toFixed(2));
                     $('#grand_total_1').val(total_register_cash.toFixed(2));
-                    $('#current_cash_in_hand_1').val(total_cash_in_hand.toFixed(2));
+                    $('#current_cash_in_hand_1').val(total_cash_in_hand);
                 }
             });
         });
@@ -396,7 +384,4 @@
         $('#total_cash').html(total_sale);
         $('#cash_in_hand_cal').val(total_sale);
     }
-
-
-    // })(window.jQuery);
 </script>
