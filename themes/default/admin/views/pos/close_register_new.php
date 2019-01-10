@@ -179,7 +179,7 @@
                                 </tr>
                                 <tr>
                                     <td width="70%"><b><?= lang("credit_sales", "credit_sales"); ?> </b></td>
-                                    <td width="30%" id="total_sales_credit"><b>0</b></td>
+                                    <td width="30%" id="total_sales_credit">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("credit_payment", "credit_payment"); ?></td>
@@ -199,7 +199,7 @@
                                 </tr>
                                 <tr>
                                     <td width="70%"><b><?= lang("total_sales", "total_sales"); ?> </b></td>
-                                    <td width="30%" id="total_sales"><b>0</b></td>
+                                    <td width="30%" id="total_sales">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("refund", "refund"); ?></td>
@@ -221,17 +221,17 @@
                                 <tbody>
                                 <tr>
                                     <td width="70%"><b><?= lang("total_cash", "total_cash"); ?> </b></td>
-                                    <td width="30%" id="grand_total"><b>0</b></td>
+                                    <td width="30%" id="grand_total">0</td>
                                 </tr>
 
                                 <tr>
                                     <td width="70%"><b><?= lang("counted_cash", "counted_cash"); ?> </b></td>
-                                    <td width="30%" id="cash_in_hand"><b>0</b></td>
+                                    <td width="30%" id="cash_in_hand">0</td>
                                 </tr>
 
                                 <tr>
                                     <td width="70%"><b><?= lang("varience", "varience"); ?> </b></td>
-                                    <td width="30%" id="varience"><b>0</b></td>
+                                    <td width="30%" id="varience">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%">

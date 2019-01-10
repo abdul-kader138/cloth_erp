@@ -50,6 +50,13 @@ if ($this->input->post('end_date')) {
             return '';
         }
 
+        function build_anchor(x) {
+            if (x !== null) {
+                return '<a href="admin/pos/close_register_view/'+x+'"><i class="fa fa-print" style="text-align: center"></i></a>';
+
+            }
+            return '';
+        }
         function total_sub_currency(x) {
             if (x !== null) {
                 var y = x.split('_');
@@ -169,7 +176,7 @@ if ($this->input->post('end_date')) {
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
             // "aoColumns": [{"mRender": fld}, {"mRender": fld}, null, {"mRender": currencyFormat}, {"mRender": total_sub}, {"mRender": total_sub}, {"mRender": total_cash}, null,{"mRender":total_print}]
-            "aoColumns": [{"mRender": fld}, {"mRender": fld}, null,null,null, {"mRender": currencyFormat}, {"mRender": total_sub_currency}, {"mRender": total_payment_receive}, {"mRender": total_expense}, null, {"mRender": total_print}]
+            "aoColumns": [{"mRender": fld}, {"mRender": fld}, null,null,null, {"mRender": currencyFormat}, {"mRender": total_sub_currency}, {"mRender": total_payment_receive}, {"mRender": total_expense}, null, {"mRender": total_print},{"mRender": build_anchor}]
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 0, filter_default_label: "[ yyyy-mm-dd HH:mm:ss ]", filter_type: "text", data: []},
             {column_number: 1, filter_default_label: "[ yyyy-mm-dd HH:mm:ss ]", filter_type: "text", data: []},
@@ -286,11 +293,12 @@ if ($this->input->post('end_date')) {
                             <th width="10%" style="text-align: left"><?= lang('total_expense'); ?></th>
                             <th style="text-align: left"><?= lang('total_sales'); ?></th>
                             <th><?= lang('cash_in_hand'); ?></th>
+                            <th><?= lang('close_register_print'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="11" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
+                            <td colspan="12" class="dataTables_empty"><?= lang('loading_data_from_server') ?></td>
                         </tr>
                         </tbody>
                         <tfoot class="dtFilter">
@@ -305,6 +313,7 @@ if ($this->input->post('end_date')) {
                             <th width="10%"></th>
                             <th width="10%"></th>
                             <th style="text-align: left"></th>
+                            <th></th>
                             <th></th>
                         </tr>
                         </tfoot>

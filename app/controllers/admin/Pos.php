@@ -833,7 +833,9 @@ class Pos extends MY_Controller
         if ($this->form_validation->run() == TRUE && $this->pos_model->closeRegister($rid, $user_id, $data)) {
 //        if ($this->form_validation->run() == TRUE) {
             $this->session->set_flashdata('message', lang("register_closed"));
-            admin_redirect("welcome");
+
+//            admin_redirect("welcome");
+            admin_redirect("pos/view/30");
         } else {
 
             $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
@@ -1886,6 +1888,24 @@ class Pos extends MY_Controller
         if ($result !== false) echo json_encode($result);
         else  echo 0;
     }
+
+    public function close_register_view($register_id = NULL, $modal = NULL)
+    {
+        $this->sma->checkPermissions('index');
+        if ($this->input->get('id')) {
+            $register_id = $this->input->get('id');
+        }
+        $this->load->helper('pos');
+        $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
+        $this->data['message'] = $this->session->flashdata('message');
+        $inv = $this->pos_model->getRegisterData($register_id);
+        $this->data['user'] = $this->pos_model->getUserById($inv->user_id);
+        $this->data['inv'] = $inv;
+        $this->data['printer'] = $this->pos_model->getPrinterByID($this->pos_settings->printer);
+        $this->data['page_title'] = $this->lang->line("close_register");
+        $this->load->view($this->theme . 'pos/close_register_view', $this->data);
+    }
+
 
 
 }

@@ -360,3 +360,7 @@ $lang['cash_sales']                                = "Cash Sales";
 $lang['credit_sales']                              = "Credit Sales";
 
 
+$lang['open_time']                  = "Open Time";
+$lang['close_time']                 = "Close Time";
+$lang['print_date']                 = "Printing Date";
+$lang['close_register_view']        = "Close Register View";

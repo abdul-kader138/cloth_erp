@@ -300,3 +300,7 @@ $lang['total_cheque']                              = "Total Cheques";
 $lang['reg_not_authorized']                        = "No estás autorizado para cerrar este registro.";
 $lang['counted_cash']                              = "Efectivo contado";
 $lang['varience']                                  = "Variación de efectivo";
+$lang['open_time']                                 = "Tiempo de apertura";
+$lang['close_time']                                = "Tiempo de Cierre";
+$lang['print_date']                                = "Fecha de impresión";
+$lang['close_register_view']                       = "Cerrar registro ver";

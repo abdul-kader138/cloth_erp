@@ -1595,4 +1595,20 @@ class Pos_model extends CI_Model
         return false;
     }
 
+    public function getRegisterData($id)
+    {
+        $q = $this->db->get_where('pos_register', array('id' => $id, 'status' => 'close'), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+    public function getUserById($id)
+    {
+        $q = $this->db->get_where('users', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
 }

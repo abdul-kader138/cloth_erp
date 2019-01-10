@@ -2478,14 +2478,13 @@ class Reports extends MY_Controller
             redirect($_SERVER["HTTP_REFERER"]);
 
         } else {
-
             $this->load->library('datatables');
             $this->datatables
                 ->select("date, closed_at, CONCAT(" . $this->db->dbprefix('users') . ".first_name, ' ', " . $this->db->dbprefix('users') . ".last_name, '<br>', " . $this->db->dbprefix('users') . ".email) as user, total_cheque,total_credit_card_slip,cash_in_hand, 
                  CONCAT(COALESCE(r_1_c, 0), '_',COALESCE(r_5_c, 0), '_',COALESCE(r_10_c, 0), '_',COALESCE(r_20_c, 0), '_',COALESCE(r_25_c, 0), '_',COALESCE(r_50_c, 0), '_',COALESCE(r_100_c, 0), '_',COALESCE(r_200_c, 0), '_', COALESCE(r_500_c, 0), '_',COALESCE(r_1000_c, 0),
                  '_',COALESCE(r_2000_c, 0)),
                   CONCAT(COALESCE(cash_payment, 0), '_', COALESCE(credit_payment, 0), '_', COALESCE(credit_card_payment, 0), '_', COALESCE(cheque_payment, 0), '_', COALESCE(gift_payment, 0)),
-                  CONCAT(COALESCE(refund, 0), '_', COALESCE(return_amount, 0), '_', COALESCE(expense, 0)),(total_sales),total_amount", FALSE)
+                  CONCAT(COALESCE(refund, 0), '_', COALESCE(return_amount, 0), '_', COALESCE(expense, 0)),(total_sales),total_amount,pos_register.id", FALSE)
                 ->from("pos_register")
                 ->join('users', 'users.id=pos_register.user_id', 'left');
 
@@ -2495,7 +2494,6 @@ class Reports extends MY_Controller
             if ($start_date) {
                 $this->datatables->where('date BETWEEN "' . $start_date . '" and "' . $end_date . '"');
             }
-
             echo $this->datatables->generate();
 
         }
