@@ -1465,7 +1465,7 @@ class Pos_model extends CI_Model
             $user_id = $this->session->userdata('user_id');
         }
         $this->db->select('SUM( COALESCE( amount, 0 ) ) AS total', FALSE)
-            ->where('payments.date >', $date)->where('payments.paid_by','cash')->where('payments.type','received');
+            ->where('payments.date >', $date)->where('payments.paid_by','cash')->where('payments.type','received')->where('payments.payment_method IS NULL');
         $this->db->where('payments.created_by', $user_id);
 
         $q = $this->db->get('payments');
@@ -1557,7 +1557,7 @@ class Pos_model extends CI_Model
     }
 
 
-    public function getRegisterAllSales($date, $user_id = NULL)
+    public function getRegisterAllSalesCash($date, $user_id = NULL)
     {
         if (!$date) {
             $date = $this->session->userdata('register_open_time');
@@ -1567,6 +1567,25 @@ class Pos_model extends CI_Model
         }
         $this->db->select('SUM( COALESCE( grand_total, 0 ) ) AS total', FALSE)
             ->where('sales.date >', $date)->where('sales.sale_status','completed');
+        $this->db->where('sales.created_by', $user_id);
+
+        $q = $this->db->get('sales');
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return false;
+    }
+
+    public function getRegisterAllSalesCredit($date, $user_id = NULL)
+    {
+        if (!$date) {
+            $date = $this->session->userdata('register_open_time');
+        }
+        if (!$user_id) {
+            $user_id = $this->session->userdata('user_id');
+        }
+        $this->db->select('SUM( COALESCE( grand_total, 0 ) ) AS total', FALSE)
+            ->where('sales.date >', $date)->where('sales.sale_status','completed')->where('sales.payment_method','credit');
         $this->db->where('sales.created_by', $user_id);
 
         $q = $this->db->get('sales');

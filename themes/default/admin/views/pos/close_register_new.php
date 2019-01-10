@@ -1,6 +1,7 @@
 <style>
     .modal-dialog {
         width: 750px;
+        /*length: 980px;*/
     }
 </style>
 
@@ -35,6 +36,7 @@
             <input type="hidden" name="expense_1" id="expense_1">
             <input type="hidden" name="return_1" id="return_1">
             <input type="hidden" name="total_sales_1" id="total_sales_1">
+            <input type="hidden" name="total_sales_credit_1" id="total_sales_credit_1">
             <input type="hidden" name="current_cash_in_hand_1" id="current_cash_in_hand_1">
             <input type="hidden" name="grand_total_1" id="grand_total_1">
             <div class="jumbotron <?php echo $status ? 'hidden' : ''; ?>" id="step1">
@@ -117,14 +119,14 @@
                                             <?php echo form_input(array('name' => 'r_2000_c', 'class' => 'form-control', 'onblur' => 'calculateTotal();', 'id' => 'r_2000_c', 'type' => 'number')); ?>
                                         </div>
                                     </div>
-                                    <div class="clearfix"></div>
-                                    <div class="form-group">
+<!--                                    <div class="clearfix"></div>-->
+                                    <div class="form-group alert-danger">
                                         <div class="controls">
-                                            <div class="alert alert-success">
+<!--                                            <div class="alert alert-success">-->
                                                 <strong><?= lang("total_cash_in_hand", "total_cash_in_hand"); ?>:
                                                     <br> <?php echo $default_currency->code; ?>&nbsp;<span
                                                             id="total_cash"></span></strong></p>
-                                            </div>
+<!--                                            </div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -168,36 +170,48 @@
                                    style="margin-bottom: 5px;">
                                 <tbody>
                                 <tr>
+                                    <td width="70%"><?= lang("cash_in_hand", "cash_in_hand"); ?></td>
+                                    <td width="30%" id="opening_cash"><?php echo sprintf("%.1f",$cash_in_hand);?>0</td>
+                                </tr>
+                                <tr>
                                     <td width="70%"><?= lang("cash_payment", "cash_payment"); ?></td>
-                                    <td width="30%" id="cash_payment"></td>
+                                    <td width="30%" id="cash_payment">0</td>
+                                </tr>
+                                <tr>
+                                    <td width="70%"><b><?= lang("credit_sales", "credit_sales"); ?> </b></td>
+                                    <td width="30%" id="total_sales_credit"><b>0</b></td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("credit_payment", "credit_payment"); ?></td>
-                                    <td width="30%" id="credit_payment"></td>
-                                </tr>
-                                <tr>
-                                    <td width="70%"><?= lang("credit_card_payment", "credit_card_payment"); ?></td>
-                                    <td width="30%" id="credit_card_payment"></td>
+                                    <td width="30%" id="credit_payment">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("cheque_payment", "cheque_payment"); ?></td>
-                                    <td width="30%" id="cheque_payment"></td>
+                                    <td width="30%" id="cheque_payment">0</td>
+                                </tr>
+                                <tr>
+                                    <td width="70%"><?= lang("credit_card_payment", "credit_card_payment"); ?></td>
+                                    <td width="30%" id="credit_card_payment">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("gift_payment", "gift_payment"); ?></td>
-                                    <td width="30%" id="gift_payment"></td>
+                                    <td width="30%" id="gift_payment">0</td>
+                                </tr>
+                                <tr>
+                                    <td width="70%"><b><?= lang("total_sales", "total_sales"); ?> </b></td>
+                                    <td width="30%" id="total_sales"><b>0</b></td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("refund", "refund"); ?></td>
-                                    <td width="30%" id="refund"></td>
+                                    <td width="30%" id="refund">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%"> <?= lang("return", "return"); ?></td>
-                                    <td width="30%" id="return"></td>
+                                    <td width="30%" id="return">0</td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><?= lang("expense", "expense"); ?></td>
-                                    <td width="30%" id="expense"></td>
+                                    <td width="30%" id="expense">0</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -206,29 +220,31 @@
                                    style="margin-bottom: 5px;">
                                 <tbody>
                                 <tr>
-                                    <td width="70%"><b><?= lang("total_sales", "total_sales"); ?> </b></td>
-                                    <td width="30%" id="total_sales"><b></b></td>
-                                </tr>
-                                <tr>
-                                    <td width="70%"><b><?= lang("cash_in_hand", "cash_in_hand"); ?> </b></td>
-                                    <td width="30%" id="cash_in_hand"><b></b></td>
-                                </tr>
-                                <tr>
                                     <td width="70%"><b><?= lang("total_cash", "total_cash"); ?> </b></td>
-                                    <td width="30%" id="grand_total"><b></b></td>
+                                    <td width="30%" id="grand_total"><b>0</b></td>
+                                </tr>
+
+                                <tr>
+                                    <td width="70%"><b><?= lang("counted_cash", "counted_cash"); ?> </b></td>
+                                    <td width="30%" id="cash_in_hand"><b>0</b></td>
+                                </tr>
+
+                                <tr>
+                                    <td width="70%"><b><?= lang("varience", "varience"); ?> </b></td>
+                                    <td width="30%" id="varience"><b>0</b></td>
                                 </tr>
                                 <tr>
                                     <td width="70%">
                                         <b><?= lang("total_credit_card_slip", "total_credit_card_slip"); ?> </b>
                                     </td>
                                     <td width="30%"
-                                        id="total_cash"><?php echo form_input(array('name' => 'total_credit_card_slip', 'class' => 'form-control', 'id' => 'total_credit_card_slip', 'type' => 'number')); ?>
+                                        id="total_cash"><?php echo form_input(array('name' => 'total_credit_card_slip', 'class' => 'form-control', 'id' => 'total_credit_card_slip', 'value'=>'0', 'type' => 'number')); ?>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td width="70%"><b><?= lang("total_cheque", "total_cheque"); ?> </b></td>
                                     <td width="30%"
-                                        id="total_cash"><?php echo form_input(array('name' => 'total_cheque', 'class' => 'form-control', 'required' => 'required', 'id' => 'total_cheque', 'type' => 'number')); ?>
+                                        id="total_cash"><?php echo form_input(array('name' => 'total_cheque', 'class' => 'form-control', 'required' => 'required', 'id' => 'total_cheque', 'value'=>'0', 'type' => 'number')); ?>
                                     </td>
                                 </tr>
 
@@ -282,7 +298,7 @@
             $('#step1').hide();
             $('#step2').show();
             $('#denomination').hide();
-            $('#cash_in_hand').html($('#cash_in_hand_cal').val());
+            $('#cash_in_hand').html(parseFloat($('#cash_in_hand_cal').val()).toFixed(2));
         });
 
         $('#sched_register').click(function () {
@@ -306,8 +322,10 @@
                     var return_amount = parseFloat(respon.return_amount);
                     var result_expense = parseFloat(respon.result_expense);
                     var result_refund = parseFloat(respon.refund_amount);
-                    var result_all_sales = parseFloat(respon.result_all_sales);
-                    var total_cash_in_hand = $('#cash_in_hand_cal').val();
+                    var result_all_sales_cash = parseFloat(respon.result_all_sales_cash);
+                    var result_all_sales_credit = parseFloat(respon.result_all_sales_credit);
+                    var total_cash_in_hand = parseFloat($('#cash_in_hand_cal').val());
+                    var total_opening_cash = parseFloat($('#opening_cash').html());
                     var total_cash_amount = 0;
                     var total_expense_amount = 0;
                     if (total_credit_sales) {
@@ -352,15 +370,22 @@
                         $('#refund').html(result_refund.toFixed(2));
                         total_expense_amount += parseFloat(result_refund.toFixed(2));
                     }
-                    if (result_all_sales) {
-                        $('#total_sales').html(result_all_sales.toFixed(2));
-                        $('#total_sales_1').val(result_all_sales.toFixed(2));
+                    if (result_all_sales_cash) {
+                        $('#total_sales').html(result_all_sales_cash.toFixed(2));
+                        $('#total_sales_1').val(result_all_sales_cash.toFixed(2));
+                    }
+                    if (result_all_sales_credit) {
+                        $('#total_sales_credit').html(result_all_sales_credit.toFixed(2));
+                        $('#total_sales_credit_1').val(result_all_sales_credit.toFixed(2));
                     }
 
-                    var total_register_cash = ((total_cash_amount + parseFloat(total_cash_in_hand)) - total_expense_amount);
+                    var total_register_cash = ((total_cash_amount + total_opening_cash) - total_expense_amount);
+                    var total_varience = (total_register_cash - parseFloat(total_cash_in_hand));
+                    if(total_varience > 0) $('#varience').html("<span><b>"+total_varience.toFixed(2)+"</b></span>");
+                    if(total_varience < 0) $('#varience').html('<span style="color: red"><b>'+total_varience.toFixed(2)+'</b></span>');
                     $('#grand_total').html(total_register_cash.toFixed(2));
                     $('#grand_total_1').val(total_register_cash.toFixed(2));
-                    $('#current_cash_in_hand_1').val(total_cash_in_hand);
+                    $('#current_cash_in_hand_1').val(total_cash_in_hand.toFixed(2));
                 }
             });
         });

@@ -26,3 +26,5 @@ ALTER TABLE `sma_pos_register` ADD `grand_total` DECIMAL(11,2) NULL DEFAULT '0' 
 ALTER TABLE `sma_pos_register` ADD `total_credit_card_slip` int(9) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `total_cheque` int(9) NULL DEFAULT '0' AFTER `total_credit_amount`;
 ALTER TABLE `sma_pos_register` ADD `total_amount` DECIMAL(11,2) NULL DEFAULT '0' AFTER `r_1_c`;
+ALTER TABLE `sma_pos_register` ADD `total_sales_credit` DECIMAL(11,2) NULL DEFAULT '0' AFTER `total_credit_amount`;
+ALTER TABLE `sma_pos_register` CHANGE `cash_in_hand` `cash_in_hand` DECIMAL(25,2) NOT NULL;

@@ -279,10 +279,11 @@ $lang['merchant_copy']                              = "Copia Comercial";
 
 
 //closing Register
-$lang['total_cash_in_hand']                        = "Total efectivo en mano";
+$lang['total_cash_in_hand']                        = "Total de efectivo en el registro";
 $lang['denominations']                             = "Denominaciones";
 $lang['denominations_info']                        = "Denominaciones (ingrese la cantidad de efectivo en el registro)";
-
+$lang['cash_sales']                                = "Ventas en efectivo";
+$lang['credit_sales']                              = "Ventas de credito";
 $lang['cash_payment']                              = "Pago en efectivo";
 $lang['credit_payment']                            = "Pago de crédito";
 $lang['credit_card_payment']                       = "Pago con tarjeta de crédito";
@@ -297,3 +298,5 @@ $lang['total_cash']                                = "Total Cash";
 $lang['total_credit_card_slip']                    = "Total de tarjetas de crédito";
 $lang['total_cheque']                              = "Total Cheques";
 $lang['reg_not_authorized']                        = "No estás autorizado para cerrar este registro.";
+$lang['counted_cash']                              = "Efectivo contado";
+$lang['varience']                                  = "Variación de efectivo";

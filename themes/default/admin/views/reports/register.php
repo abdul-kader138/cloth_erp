@@ -174,14 +174,14 @@ if ($this->input->post('end_date')) {
             {column_number: 0, filter_default_label: "[ yyyy-mm-dd HH:mm:ss ]", filter_type: "text", data: []},
             {column_number: 1, filter_default_label: "[ yyyy-mm-dd HH:mm:ss ]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('user');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('Cheques');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('cc_slips');?>]", filter_type: "text", data: []},
-            {column_number: 5, filter_default_label: "[<?=lang('open_amount');?>]", filter_type: "text", data: []},
-            {column_number: 6, filter_default_label: "[<?=lang('denominations');?>]", filter_type: "text", data: []},
-            {column_number: 7, filter_default_label: "[<?=lang('payments_received');?>]", filter_type: "text", data: []},
-            {column_number: 8, filter_default_label: "[<?=lang('total_expense');?>]", filter_type: "text", data: []},
-            {column_number: 9, filter_default_label: "[<?=lang('total_sales');?>]", filter_type: "text", data: []},
-            {column_number: 10, filter_default_label: "[<?=lang('cash_in_hand');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('cash_in_hand');?>]", filter_type: "text", data: []},
+            {column_number: 4, filter_default_label: "[<?=lang('cash_in_hand');?>]", filter_type: "text", data: []},
+            {column_number: 5, filter_default_label: "[<?=lang('cash_in_hand');?>]", filter_type: "text", data: []},
+            {column_number: 6, filter_default_label: "[<?=lang('cc_slips');?>]", filter_type: "text", data: []},
+            {column_number: 7, filter_default_label: "[<?=lang('Cheques');?>]", filter_type: "text", data: []},
+            {column_number: 8, filter_default_label: "[<?=lang('total_cash');?>]", filter_type: "text", data: []},
+            {column_number: 9, filter_default_label: "[<?=lang('note');?>]", filter_type: "text", data: []},
+            {column_number: 10, filter_default_label: "[<?=lang('Credit_Sale');?>]", filter_type: "text", data: []},
         ], "footer");
 
         $('#form').hide();

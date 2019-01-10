@@ -86,3 +86,5 @@ $lang['total_sales']                               = "Ventas totales";
 $lang['denominations']                             = "Denominaciones";
 $lang['payments_received']                         = "Pago total recibido";
 $lang['total_expense']                             = "Gasto total";
+$lang['counted_cash']                              = "Efectivo contado";
+$lang['varience']                                  = "Variación de efectivo";

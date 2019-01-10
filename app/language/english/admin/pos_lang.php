@@ -335,7 +335,7 @@ $lang['payment_method']                            = "Payment Method";
 $lang['sale_status']                               = "Sale Status";
 
 //closing Register
-$lang['total_cash_in_hand']                        = "Total Cash In Hand";
+$lang['total_cash_in_hand']                        = "Total Cash In Register";
 $lang['denominations']                             = "Denominations";
 $lang['denominations_info']                        = "Denominations (Enter how much cash in the register)";
 
@@ -354,4 +354,9 @@ $lang['total_cash']                                = "Total Cash";
 $lang['total_credit_card_slip']                    = "Total Credit Card Slips";
 $lang['total_cheque']                              = "Total Cheques";
 $lang['reg_not_authorized']                        = "You are not authorized to close this register";
+$lang['counted_cash']                              = "Counted Cash";
+$lang['varience']                                  = "Cash Varience";
+$lang['cash_sales']                                = "Cash Sales";
+$lang['credit_sales']                              = "Credit Sales";
+
 
