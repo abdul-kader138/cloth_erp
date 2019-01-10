@@ -831,11 +831,8 @@ class Pos extends MY_Controller
         }
 
         if ($this->form_validation->run() == TRUE && $this->pos_model->closeRegister($rid, $user_id, $data)) {
-//        if ($this->form_validation->run() == TRUE) {
             $this->session->set_flashdata('message', lang("register_closed"));
-
-//            admin_redirect("welcome");
-            admin_redirect("pos/view/30");
+            admin_redirect("pos/close_register_view/".$user_register->id);
         } else {
 
             $user_register = $user_id ? $this->pos_model->registerData($user_id) : NULL;
