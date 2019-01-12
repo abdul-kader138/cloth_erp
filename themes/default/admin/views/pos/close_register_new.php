@@ -380,9 +380,9 @@
                     }
 
                     var total_register_cash = ((total_cash_amount + total_opening_cash) - total_expense_amount);
-                    var total_varience = (total_register_cash - parseFloat(total_cash_in_hand));
-                    if(total_varience > 0) $('#varience').html("<span><b>"+total_varience.toFixed(2)+"</b></span>");
-                    if(total_varience < 0) $('#varience').html('<span style="color: red"><b>'+total_varience.toFixed(2)+'</b></span>');
+                    var total_varience = (parseFloat(total_cash_in_hand) - total_register_cash);
+                    if(total_varience > 0) $('#varience').html('<span style="color: red"><b> + '+total_varience.toFixed(2)+'</b></span>');
+                    if(total_varience < 0) $('#varience').html('<span ><b>'+total_varience.toFixed(2)+'</b></span>');
                     $('#grand_total').html(total_register_cash.toFixed(2));
                     $('#grand_total_1').val(total_register_cash.toFixed(2));
                     $('#current_cash_in_hand_1').val(total_cash_in_hand.toFixed(2));

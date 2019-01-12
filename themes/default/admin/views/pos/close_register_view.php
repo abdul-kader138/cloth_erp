@@ -86,6 +86,8 @@
 
             <body>
             <?php
+            $variance=($inv->current_cash_in_hand - $inv->total_amount);
+
             } ?>
             <div id="wrapper">
                 <div id="receiptData">
@@ -199,7 +201,7 @@
                                 <td width="70%"><b><?= lang("varience", "varience"); ?> </b></td>
                                 <td>|</td>
                                 <td width="30%" id="varience"
-                                    style="text-align: right"><?php echo($inv->total_amount - $inv->current_cash_in_hand); ?></td>
+                                    style='color: <?php echo ($variance > 0) ? "red" : "" ?>; text-align: right;'><?php echo ($variance > 0) ? " + " : "" ?><?php echo sprintf("%.2f",($inv->current_cash_in_hand - $inv->total_amount ),2); ?></td>
                             </tr>
                             <tr>
                                 <td width="70%">
