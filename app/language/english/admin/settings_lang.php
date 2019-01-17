@@ -363,3 +363,9 @@ $lang['not_recommended']                 = "Not Recommended";
 $lang['data_x_categories']               = "CSV data is not belong to any category or is not formatted as per instructions.";
 $lang['sales_margin']                       = "Sales Margin";
 $lang['product_details_search']              = "Product Detail Search";
+
+$lang['file_manager']                   = "File Manager";
+$lang['file_create']                    = "Folder Create";
+$lang['file_download']                  = "Folder Download";
+$lang['file_upload']                    = "Upload";
+$lang['file_delete']                    = "File Delete";

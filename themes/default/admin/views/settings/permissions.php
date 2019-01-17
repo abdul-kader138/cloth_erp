@@ -405,6 +405,18 @@
                                             name="edit_price" <?php echo $p->edit_price ? "checked" : ''; ?>>
                                             <label for="edit_price" class="padding05"><?= lang('edit_price_on_sale') ?></label>
                                         </span>
+                                        <span>
+                                          <span style="display:inline-block;"> <input type="checkbox" value="1" id="document-file_manager" class="checkbox" name="document-file_manager" <?php echo $p->{'document-file_manager'} ? "checked" : ''; ?>>
+                                        <label for="document-file_manager" class="padding05"><?= lang('file_manager') ?></label></span>
+                                         <span style="display:inline-block;"><input type="checkbox" value="1" id="document-folder_create" class="checkbox" name="document-folder_create" <?php echo $p->{'document-folder_create'} ? "checked" : ''; ?>>
+                                        <label for="document-folder_create" class="padding05"><?= lang('file_create') ?></label></span>
+                                         <span style="display:inline-block;"><input type="checkbox" value="1" id="document-folder_download" class="checkbox" name="document-folder_download" <?php echo $p->{'document-folder_download'} ? "checked" : ''; ?>>
+                                        <label for="document-folder_download" class="padding05"><?= lang('file_download') ?></label></span>
+                                         <span style="display:inline-block;"><input type="checkbox" value="1" id="document-upload" class="checkbox" name="document-upload" <?php echo $p->{'document-upload'} ? "checked" : ''; ?>>
+                                        <label for="document-upload" class="padding05"><?= lang('file_upload') ?></label></span>
+                                         <span style="display:inline-block;"><input type="checkbox" value="1" id="document-file_delete" class="checkbox" name="document-file_delete" <?php echo $p->{'document-file_delete'} ? "checked" : ''; ?>>
+                                        <label for="document-file_delete" class="padding05"><?= lang('file_delete') ?></label></span>
+                                        </span>
                                     </td>
                                 </tr>
 

@@ -290,3 +290,9 @@ $lang['purchase_code']                          = "Purchase Code";
 $lang['envato_username']                        = "Username";
 
 $lang['adjust_quantity']                        = "Ajustar Cantidad";
+
+$lang['file_manager']                   = "Administrador de archivos";
+$lang['file_create']                    = "Crear carpeta";
+$lang['file_download']                  = "Descargar carpeta";
+$lang['file_upload']                    = "Subir";
+$lang['file_delete']                    = "Eliminar archivo";

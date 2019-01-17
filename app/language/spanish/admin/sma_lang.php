@@ -441,3 +441,5 @@ $lang['products_sale']                      = "Ventas de Productos";
 $lang['products_cost']                      = "Costos de Productos";
 $lang['profit']                                = "Beneficios";
 $lang['day_profit']                                = "Beneficios del Dia";
+$lang['file_manager']                               = "Administrador de archivos";
+$lang['document']                                 = "Documento";
