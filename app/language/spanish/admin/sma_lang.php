@@ -426,9 +426,8 @@ $lang['stock_in_hand']                              = "Inventario en Almacen";
 
 //abdul kader
 
-$lang['accounting']                                 = "Contabilidad";
-$lang['report_607']                                 = "Reporte 607";
-$lang['report_due']                                 = "Debido Informe";
+$lang['accounting']                                = "Contabilidad";
+$lang['report_607']                                = "Reporte 607";
 
 
 $lang['count_stock']                                = "Conteo de Inventario";
