@@ -1,0 +1,8 @@
+ALTER TABLE `sma_permissions` ADD `document-file_manager` TINYINT(1) NULL DEFAULT '0';
+ALTER TABLE `sma_permissions` ADD `document-folder_download` TINYINT(1) NULL DEFAULT '0';
+ALTER TABLE `sma_permissions` ADD `document-upload` TINYINT(1) NULL DEFAULT '0';
+ALTER TABLE `sma_permissions` ADD `document-file_delete` TINYINT(1) NULL DEFAULT '0';
+ALTER TABLE `sma_permissions` ADD `document-folder_create` TINYINT(1) NULL DEFAULT '0';
+
+
+

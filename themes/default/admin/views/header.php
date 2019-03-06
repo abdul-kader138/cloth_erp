@@ -534,10 +534,14 @@
                                 <ul>
                                     <li id="accounting_report_607">
                                         <a class="submenu" href="<?= admin_url('accounting/report_607'); ?>">
-                                            <i class="fa fa-th"></i><span class="text"> <?= lang('report_607'); ?></span>
+                                           <i class="fa fa-th"></i><span class="text"> <?= lang('report_607'); ?></span>
                                         </a>
                                     </li>
-
+                                    <li id="accounting_report_due">
+                                        <a class="submenu" href="<?= admin_url('accounting/report_due'); ?>">
+                                            <i class="fa fa-th"></i><span class="text"> <?= lang('report_due'); ?></span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="mm_returns">
@@ -620,6 +624,21 @@
                                 <a class="submenu" href="<?= admin_url('calendar'); ?>">
                                     <i class="fa fa-calendar"></i><span class="text"> <?= lang('calendar'); ?></span>
                                 </a>
+                            </li>
+                            <li class="mm_document">
+                                <a class="dropmenu" href="#">
+                                    <i class="fa fa-list-alt"></i>
+                                    <span class="text"> <?= lang('document'); ?> </span>
+                                    <span class="chevron closed"></span>
+                                </a>
+                                <ul>
+                                    <li id="document_file_manager">
+                                        <a class="submenu" href="<?= admin_url('document/file_manager'); ?>">
+                                            <i class="fa fa-search"></i><span
+                                                    class="text"> <?= lang('file_manager'); ?></span>
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
                             <?php if ($Owner) { ?>
                                 <li class="mm_system_settings <?= strtolower($this->router->fetch_method()) == 'sales' ? '' : 'mm_pos' ?>">
@@ -1176,6 +1195,23 @@
                                 </ul>
                             </li>
                             <?php } ?>
+                            <li class="mm_document">
+                                <a class="dropmenu" href="#">
+                                    <i class="fa fa-list-alt"></i>
+                                    <span class="text"> <?= lang('document'); ?> </span>
+                                    <span class="chevron closed"></span>
+                                </a>
+                                <ul>
+                                    <?php if ($GP['document-file_manager']) { ?>
+                                        <li id="document_file_manager">
+                                            <a class="submenu" href="<?= admin_url('document/file_manager'); ?>">
+                                                <i class="fa fa-search"></i><span
+                                                        class="text"> <?= lang('file_manager'); ?></span>
+                                            </a>
+                                        </li>
+                                    <?php } ?>
+                                </ul>
+                            </li>
 
                             <?php if ($GP['reports-quantity_alerts'] || $GP['reports-expiry_alerts'] || $GP['reports-products'] || $GP['reports-monthly_sales'] || $GP['reports-sales'] || $GP['reports-payments'] || $GP['reports-purchases'] || $GP['reports-customers'] || $GP['reports-suppliers'] || $GP['reports-expenses']) { ?>
                             <li class="mm_reports">

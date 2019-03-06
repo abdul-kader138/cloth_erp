@@ -21,17 +21,17 @@ class Accounting extends MY_Controller
 
     public function report_607($warehouse_id = null)
     {
-    $this->sma->checkPermissions();
-    $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
-    if ($this->Owner || $this->Admin || !$this->session->userdata('warehouse_id')) {
-        $this->data['warehouses'] = $this->site->getAllWarehouses();
-        $this->data['warehouse_id'] = $warehouse_id;
-        $this->data['warehouse'] = $warehouse_id ? $this->site->getWarehouseByID($warehouse_id) : null;
-    } else {
-        $this->data['warehouses'] = null;
-        $this->data['warehouse_id'] = $this->session->userdata('warehouse_id');
-        $this->data['warehouse'] = $this->session->userdata('warehouse_id') ? $this->site->getWarehouseByID($this->session->userdata('warehouse_id')) : null;
-    }
+        $this->sma->checkPermissions();
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        if ($this->Owner || $this->Admin || !$this->session->userdata('warehouse_id')) {
+            $this->data['warehouses'] = $this->site->getAllWarehouses();
+            $this->data['warehouse_id'] = $warehouse_id;
+            $this->data['warehouse'] = $warehouse_id ? $this->site->getWarehouseByID($warehouse_id) : null;
+        } else {
+            $this->data['warehouses'] = null;
+            $this->data['warehouse_id'] = $this->session->userdata('warehouse_id');
+            $this->data['warehouse'] = $this->session->userdata('warehouse_id') ? $this->site->getWarehouseByID($this->session->userdata('warehouse_id')) : null;
+        }
 
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('accounting/report_607'), 'page' => lang('accounting')), array('link' => '#', 'page' => lang('report_607')));
         $meta = array('page_title' => lang('accounting'), 'bc' => $bc);
@@ -46,22 +46,22 @@ class Accounting extends MY_Controller
             $user = $this->site->getUser();
             $warehouse_id = $user->warehouse_id;
         }
-            $this->load->library('datatables');
-            if ($warehouse_id) {
-                $this->datatables
-                    ->select("{$this->db->dbprefix('sales')}.id as id, DATE_FORMAT({$this->db->dbprefix('sales')}.date, '%Y-%m-%d %T') as date, companies.vat_no, tax_sl,tax_type, biller, {$this->db->dbprefix('sales')}.customer, round(total_tax,2), grand_total,  payment_status")
-                    ->from('sales')
-                    ->join('companies','sales.customer_id=companies.id','inner')
-                    ->where('warehouse_id', $warehouse_id);
-            } else {
-                $this->datatables
-                    ->select("{$this->db->dbprefix('sales')}.id as id, DATE_FORMAT({$this->db->dbprefix('sales')}.date, '%Y-%m-%d %T') as date, companies.vat_no, tax_sl,tax_type, biller, {$this->db->dbprefix('sales')}.customer, round(total_tax,2), grand_total,  payment_status")
-                    ->from('sales')
-                    ->join('companies','sales.customer_id=companies.id','inner');
-            }
+        $this->load->library('datatables');
+        if ($warehouse_id) {
+            $this->datatables
+                ->select("{$this->db->dbprefix('sales')}.id as id, DATE_FORMAT({$this->db->dbprefix('sales')}.date, '%Y-%m-%d %T') as date, companies.vat_no, tax_sl,tax_type, biller, {$this->db->dbprefix('sales')}.customer, round(total_tax,2), grand_total,  payment_status")
+                ->from('sales')
+                ->join('companies', 'sales.customer_id=companies.id', 'inner')
+                ->where('warehouse_id', $warehouse_id);
+        } else {
+            $this->datatables
+                ->select("{$this->db->dbprefix('sales')}.id as id, DATE_FORMAT({$this->db->dbprefix('sales')}.date, '%Y-%m-%d %T') as date, companies.vat_no, tax_sl,tax_type, biller, {$this->db->dbprefix('sales')}.customer, round(total_tax,2), grand_total,  payment_status")
+                ->from('sales')
+                ->join('companies', 'sales.customer_id=companies.id', 'inner');
+        }
 
-            //     $this->datatables->add_column("Actions", $action, "id");
-            echo $this->datatables->generate();
+        //     $this->datatables->add_column("Actions", $action, "id");
+        echo $this->datatables->generate();
 
     }
 
@@ -77,7 +77,7 @@ class Accounting extends MY_Controller
         if ($this->form_validation->run() == true) {
 
             if (!empty($_POST['val'])) {
-              if ($this->input->post('form_action') == 'combine') {
+                if ($this->input->post('form_action') == 'combine') {
 
                     $html = $this->combine_pdf($_POST['val']);
 
@@ -150,7 +150,7 @@ class Accounting extends MY_Controller
             $this->data['return_sale'] = $inv->return_id ? $this->sales_model->getInvoiceByID($inv->return_id) : NULL;
             $this->data['return_rows'] = $inv->return_id ? $this->sales_model->getAllInvoiceItems($inv->return_id) : NULL;
             $html_data = $this->load->view($this->theme . 'sales/pdf', $this->data, true);
-            if (! $this->Settings->barcode_img) {
+            if (!$this->Settings->barcode_img) {
                 $html_data = preg_replace("'\<\?xml(.*)\?\>'", '', $html_data);
             }
 
@@ -165,5 +165,54 @@ class Accounting extends MY_Controller
 
     }
 
+
+    public function report_due($warehouse_id = null)
+    {
+        $this->sma->checkPermissions();
+        $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
+        if ($this->Owner || $this->Admin || !$this->session->userdata('warehouse_id')) {
+            $this->data['warehouses'] = $this->site->getAllWarehouses();
+            $this->data['warehouse_id'] = $warehouse_id;
+            $this->data['warehouse'] = $warehouse_id ? $this->site->getWarehouseByID($warehouse_id) : null;
+        } else {
+            $this->data['warehouses'] = null;
+            $this->data['warehouse_id'] = $this->session->userdata('warehouse_id');
+            $this->data['warehouse'] = $this->session->userdata('warehouse_id') ? $this->site->getWarehouseByID($this->session->userdata('warehouse_id')) : null;
+        }
+
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('accounting/report_due'), 'page' => lang('accounting')), array('link' => '#', 'page' => lang('report_due')));
+        $meta = array('page_title' => lang('accounting'), 'bc' => $bc);
+        $this->page_construct('accounting/report_due', $meta, $this->data);
+    }
+
+    public function getDues($warehouse_id = null, $customer_id = null)
+    {
+        $this->sma->checkPermissions();
+        $si = "( SELECT sale_id, product_id, serial_no, GROUP_CONCAT(CONCAT({$this->db->dbprefix('sale_items')}.product_name, '__', {$this->db->dbprefix('sale_items')}.quantity) SEPARATOR '___') as item_nane from {$this->db->dbprefix('sale_items')} ";
+        $si .= " GROUP BY {$this->db->dbprefix('sale_items')}.sale_id ) FSI";
+
+        if ((!$this->Owner || !$this->Admin) && !$warehouse_id) {
+            $user = $this->site->getUser();
+            $warehouse_id = $user->warehouse_id;
+        }
+        $this->load->library('datatables');
+        if ($warehouse_id) {
+            $this->datatables
+                ->select("{$this->db->dbprefix('sales')}.id as id, DATEDIFF(DATE_ADD({$this->db->dbprefix('sales')}.date, INTERVAL {$this->db->dbprefix('companies')}.credit_enjoy_days DAY) ,NOW()) as dates, reference_no,tax_sl,tax_type, biller, {$this->db->dbprefix('sales')}.customer, FSI.item_nane as iname, grand_total, paid, (grand_total-paid) as balance, DATEDIFF(DATE_ADD({$this->db->dbprefix('sales')}.date, INTERVAL {$this->db->dbprefix('companies')}.credit_enjoy_days DAY) ,NOW()) as day,")
+                ->from('sales')
+                ->where('sales.payment_status', 'due')
+                ->join('companies', 'sales.customer_id=companies.id', 'inner')
+                ->join($si, 'FSI.sale_id=sales.id', 'left')
+                ->where('warehouse_id', $warehouse_id);
+        } else {
+            $this->datatables
+                ->select("{$this->db->dbprefix('sales')}.id as id, DATEDIFF(DATE_ADD({$this->db->dbprefix('sales')}.date, INTERVAL {$this->db->dbprefix('companies')}.credit_enjoy_days DAY) ,NOW()) as dates, reference_no,tax_sl,tax_type, biller, {$this->db->dbprefix('sales')}.customer, FSI.item_nane as iname, grand_total, paid, (grand_total-paid) as balance, DATEDIFF(DATE_ADD({$this->db->dbprefix('sales')}.date, INTERVAL {$this->db->dbprefix('companies')}.credit_enjoy_days DAY) ,NOW()) as day,")
+                ->from('sales')
+                ->where('sales.payment_status', 'due')
+                ->join($si, 'FSI.sale_id=sales.id', 'left')
+                ->join('companies', 'sales.customer_id=companies.id', 'inner');
+        }
+        echo $this->datatables->generate();
+    }
 
 } 

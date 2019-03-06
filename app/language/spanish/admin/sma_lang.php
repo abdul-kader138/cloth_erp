@@ -426,18 +426,21 @@ $lang['stock_in_hand']                              = "Inventario en Almacen";
 
 //abdul kader
 
-$lang['accounting']                                = "Contabilidad";
-$lang['report_607']                                = "Reporte 607";
+$lang['accounting']                                 = "Contabilidad";
+$lang['report_607']                                 = "Reporte 607";
+$lang['report_due']                                 = "Debido Informe";
 
 
 $lang['count_stock']                                = "Conteo de Inventario";
-$lang['stock_counts']                                = "Conteos de Inventario";
-$lang['product_details_search']         = "Busqueda de Detalles de Productos";
-$lang['list_returns']                                = "Lista de Devoluciones";
-$lang['add_return']                                = "Hacer Devolucion";
-$lang['returns']                                = "Devoluciones";
-$lang['today_profit']                                = "Beneficios de Hoy";
-$lang['products_sale']                      = "Ventas de Productos";
-$lang['products_cost']                      = "Costos de Productos";
-$lang['profit']                                = "Beneficios";
-$lang['day_profit']                                = "Beneficios del Dia";
+$lang['stock_counts']                               = "Conteos de Inventario";
+$lang['product_details_search']                     = "Busqueda de Detalles de Productos";
+$lang['list_returns']                               = "Lista de Devoluciones";
+$lang['add_return']                                 = "Hacer Devolucion";
+$lang['returns']                                    = "Devoluciones";
+$lang['today_profit']                               = "Beneficios de Hoy";
+$lang['products_sale']                              = "Ventas de Productos";
+$lang['products_cost']                              = "Costos de Productos";
+$lang['profit']                                     = "Beneficios";
+$lang['day_profit']                                 = "Beneficios del Dia";
+$lang['file_manager']                               = "Administrador de archivos";
+$lang['document']                                   = "Documento";

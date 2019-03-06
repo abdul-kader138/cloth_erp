@@ -141,4 +141,7 @@ $lang['additional_sl']                             = "NCF";
 $lang['authorization_number']                      = "No. Aut.";
 $lang['vat_number']                                 = "RNC cliente";
 $lang['credit']                                    = "Crédito";
+$lang['credit_enjoyed_days']                       = "Días de crédito disfrutado";
 
+$lang['product_qty']                        = "Producto (Cantidad)";
+$lang['report_due']                                 = "Debido Informe";

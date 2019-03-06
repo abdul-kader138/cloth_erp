@@ -803,6 +803,13 @@ class system_settings extends MY_Controller
                 'returns-email' => $this->input->post('returns-email'),
                 'returns-pdf' => $this->input->post('returns-pdf'),
                 'reports-tax' => $this->input->post('reports-tax'),
+
+                // a.KADER
+                'document-file_manager' => $this->input->post('document-file_manager'),
+                'document-folder_download' => $this->input->post('document-folder_download'),
+                'document-upload' => $this->input->post('document-upload'),
+                'document-file_delete' => $this->input->post('document-file_delete'),
+                'document-folder_create' => $this->input->post('document-folder_create'),
             );
 
             if (POS) {

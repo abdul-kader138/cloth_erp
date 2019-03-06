@@ -190,3 +190,6 @@ $lang['receipt_view']                             = "Receipt View";
 $lang['report_of']                                = "Report  Of";
 $lang['to']                                       = "To";
 
+$lang['product_qty']                = "Product (Qty)";
+$lang['credit_enjoyed_days']                       = "Credit Enjoyed Days";
+$lang['report_due']                                = "Due Report";

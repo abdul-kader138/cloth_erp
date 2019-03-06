@@ -639,3 +639,6 @@ $lang['insufficient_credit']                 = "Customer doesn't have sufficient
 
 $lang['accounting']                                = "Accounting";
 $lang['report_607']                                = "Report 607";
+$lang['report_due']                                = "Due Report";
+$lang['file_manager']                   = "File Manager";
+$lang['document']                       = "Document";
