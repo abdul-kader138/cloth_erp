@@ -3024,4 +3024,251 @@ class system_settings extends MY_Controller
         }
     }
 
+
+    function order_types()
+    {
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('Order_Types')));
+        $meta = array('page_title' => lang('Order_Types'), 'bc' => $bc);
+        $this->page_construct('settings/order_types', $meta, $this->data);
+    }
+
+    function getOrderTypes()
+    {
+
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("id,id as ids,name,description")
+            ->from("order_types")
+            ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('system_settings/edit_order_types/$1') . "' data-toggle='modal' data-target='#myModal' class='tip' title='" . lang("Edit") . "'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>" . lang("Delete") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('system_settings/delete_order_types/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></div>", "id");
+
+        echo $this->datatables->generate();
+    }
+
+    function add_order_types()
+    {
+
+        $this->form_validation->set_rules('name', lang("Name"), 'trim|required|is_unique[order_types.name]');
+        $this->form_validation->set_rules('description', lang("Description"), 'trim|required');
+
+        if ($this->form_validation->run() == true) {
+
+            $data = array(
+                'name' => $this->input->post('name'),
+                'description' => $this->input->post('description'),
+            );
+
+
+        } elseif ($this->input->post('add_order_types')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/order_types");
+        }
+
+        if ($this->form_validation->run() == true && $this->settings_model->add_Order_types($data)) {
+            $this->session->set_flashdata('message', lang("Info_Added_Successfully"));
+            admin_redirect("system_settings/order_types");
+        } else {
+
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'settings/add_order_types', $this->data);
+
+        }
+    }
+
+    function edit_order_types($id = NULL)
+    {
+
+        $this->form_validation->set_rules('name', lang("Name"), 'trim|required');
+        $type_details = $this->site->getOrderTypeByID($id);
+        if ($this->input->post('name') != $type_details->name) {
+            $this->form_validation->set_rules('name', lang("brand_name"), 'required|is_unique[order_types.name]');
+        }
+        $this->form_validation->set_rules('description', lang("Description"), 'trim|required');
+
+        if ($this->form_validation->run() == true) {
+
+            $data = array(
+                'name' => $this->input->post('name'),
+                'description' => $this->input->post('description'),
+            );
+
+
+        } elseif ($this->input->post('edit_order_types')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/order_types");
+        }
+
+        if ($this->form_validation->run() == true && $this->settings_model->update_Order_types($id, $data)) {
+            $this->session->set_flashdata('message', lang("Info_Updated_Successfully"));
+            admin_redirect("system_settings/order_types");
+        } else {
+
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->data['type'] = $type_details;
+            $this->load->view($this->theme . 'settings/edit_order_types', $this->data);
+
+        }
+    }
+
+    function delete_order_types($id = NULL)
+    {
+
+        if ($this->settings_model->orderHasApprover($id)) {
+            $this->sma->send_json(array('error' => 1, 'msg' => lang("Type is associated with order hierarchy.")));
+        }
+
+        if ($this->settings_model->delete_Order_types($id)) {
+            $this->sma->send_json(array('error' => 0, 'msg' => lang("Info_Deleted_Successfully")));
+        }
+    }
+
+
+    function order_status_hierarchy()
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect($_SERVER["HTTP_REFERER"]);
+        }
+
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('Order_Status_Hierarchy')));
+        $meta = array('page_title' => lang('Order_Status_Hierarchy'), 'bc' => $bc);
+        $this->page_construct('settings/order_status_hierarchy', $meta, $this->data);
+    }
+
+    function getOrderStatusHierarchy()
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect($_SERVER["HTTP_REFERER"]);
+        }
+        $edit_link= '&nbsp<a href="' . admin_url("system_settings/edit_order_status_hierarchy/$1") . '"data-toggle="modal" data-target="#myModal" class="tip" title="' .  lang("Edit") . '"><i class="fa fa-edit"></i></a>';
+        $delete_link = "&nbsp<a href='#' class='po' title='<b>" . lang("Delete") . "</b>' data-content=\"<p>"
+            . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('system_settings/delete_order_status_hierarchy/$1') . "'>"
+            . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> </a>";
+
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('approver_list')}.id as ids,{$this->db->dbprefix('order_types')}.name as names, concat({$this->db->dbprefix('users')}.first_name,' ',{$this->db->dbprefix('users')}.last_name), {$this->db->dbprefix('approver_list')}.approver_seq,{$this->db->dbprefix('approver_list')}.approver_seq_name, {$this->db->dbprefix('approver_list')}.approver_next_seq", FALSE)
+            ->from("approver_list")
+            ->join("users", 'users.id=approver_list.approver_id', 'left')
+            ->join("order_types", 'order_types.id=approver_list.category_id', 'left')
+            ->group_by('approver_list.id')
+            ->add_column("Actions", "<div class=\"text-center\">".$edit_link.$delete_link."</div>", "ids");
+
+        echo $this->datatables->generate();
+    }
+
+    function add_order_status_hierarchy()
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            die("<script type='text/javascript'>setTimeout(function(){ window.top.location.href = '" . (isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : site_url('welcome')) . "'; }, 10);</script>");
+            admin_redirect($_SERVER["HTTP_REFERER"]);
+        }
+
+
+        $this->load->helper('security');
+        $this->form_validation->set_rules('approver_id', lang("approver_id"), 'required');
+        $this->form_validation->set_rules('approver_seq', lang("approver_seq"), 'required|numeric');
+        $this->form_validation->set_rules('approver_next_seq', lang("approver_next_seq"), 'required|numeric');
+        $this->form_validation->set_rules('approver_seq_name', lang("approver_seq_name"), 'required');
+        $this->form_validation->set_rules('category_id', lang("category_id"), 'required');
+
+        if ($this->form_validation->run() == true) {
+            if($this->settings_model->checkApproverExistance($this->input->post('category_id'),$this->input->post('approver_seq'),$this->input->post('approver_next_seq'))){
+                $this->session->set_flashdata('error', 'Duplicate Data.');
+                admin_redirect("system_settings/order_status_hierarchy");
+            }
+
+            $data = array(
+                'approver_id' => $this->input->post('approver_id'),
+                'approver_seq' => $this->input->post('approver_seq'),
+                'approver_seq_name' => $this->input->post('approver_seq_name'),
+                'category_id' => $this->input->post('category_id'),
+                'approver_next_seq' => $this->input->post('approver_next_seq'),
+                'created_by' => $this->session->userdata('user_id'),
+                'created_date' => date("Y-m-d H:i:s"),
+            );
+        } elseif ($this->input->post('add_approver')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/order_status_hierarchy");
+        }
+        if ($this->form_validation->run() == true && $this->settings_model->addApprover($data)) {
+            $this->session->set_flashdata('message', lang("Info_added_Successfully"));
+            var_dump($data);
+            admin_redirect("system_settings/order_status_hierarchy");
+        } else {
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['types'] = $this->site->getAllType();
+            $this->data['users'] = $this->site->getAllUser();
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'settings/add_order_status_hierarchy', $this->data);
+        }
+    }
+
+    function edit_order_status_hierarchy($id = NULL)
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            die("<script type='text/javascript'>setTimeout(function(){ window.top.location.href = '" . (isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : site_url('welcome')) . "'; }, 10);</script>");
+            admin_redirect($_SERVER["HTTP_REFERER"]);
+        }
+        if ($this->input->get('id')) {
+            $id = $this->input->get('id');
+        }
+
+        $this->load->helper('security');
+        $this->form_validation->set_rules('approver_id', lang("approver_id"), 'required');
+        $this->form_validation->set_rules('approver_seq', lang("approver_seq"), 'required|numeric');
+        $this->form_validation->set_rules('approver_next_seq', lang("approver_next_seq"), 'required|numeric');
+        $this->form_validation->set_rules('approver_seq_name', lang("approver_seq_name"), 'required');
+        $this->form_validation->set_rules('category_id', lang("category_id"), 'required');
+
+        if ($this->form_validation->run() == true) {
+            $data = array(
+                'approver_id' => $this->input->post('approver_id'),
+                'approver_seq' => $this->input->post('approver_seq'),
+                'approver_seq_name' => $this->input->post('approver_seq_name'),
+                'category_id' => $this->input->post('category_id'),
+                'approver_next_seq' => $this->input->post('approver_next_seq'),
+                'updated_by' => $this->session->userdata('user_id'),
+                'updated_date' => date("Y-m-d H:i:s"),
+            );
+        } elseif ($this->input->post('edit_approver')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/order_status_hierarchy");
+        }
+
+        if ($this->form_validation->run() == true && $this->settings_model->updateApprover($id, $data)) {
+            $this->session->set_flashdata('message', lang("Info_Updated_Successfully"));
+            admin_redirect("system_settings/order_status_hierarchy");
+        } else {
+            $pr_details = $this->settings_model->getApproverByID($id);
+            $this->data['id'] = $id;
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['types'] = $this->site->getAllType();
+            $this->data['users'] = $this->site->getAllUser();
+            $this->data['aprrover'] = $pr_details;
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'settings/edit_order_status_hierarchy', $this->data);
+
+        }
+    }
+
+    function delete_order_status_hierarchy($id = NULL)
+    {
+        if ($this->settings_model->deleteApprover($id)) {
+            $this->sma->send_json(array('error' => 0, 'msg' => lang("Info_Deleted_Successfully")));
+
+        }
+    }
+
+
 }

@@ -745,4 +745,92 @@ class Settings_model extends CI_Model
         return FALSE;
     }
 
+
+
+    public function add_Order_types($data)
+    {
+        if ($this->db->insert("order_types", $data)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public function update_Order_types($id, $data = array())
+    {
+        if ($this->db->update("order_types", $data, array('id' => $id))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function brandHasProducts1($brand_id)
+    {
+        $q = $this->db->get_where('products', array('brand' => $brand_id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function delete_Order_types($id)
+    {
+        if ($this->db->delete("order_types", array('id' => $id))) {
+            return true;
+        }
+        return FALSE;
+    }
+
+    public function addApprover($data)
+    {
+        if ($this->db->insert("approver_list", $data)) {
+            return true;
+        }
+        return false;
+    }
+    public function updateApprover($id, $data)
+    {
+        if ($this->db->update("approver_list", $data, array('id' => $id))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function getApproverByID($id)
+    {
+        $q = $this->db->get_where("approver_list", array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function deleteApprover($id)
+    {
+        if ($this->db->delete("approver_list", array('id' => $id))) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public function orderHasApprover($id)
+    {
+        $q = $this->db->get_where("approver_list", array('category_id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function checkApproverExistance($id,$approver_seq,$approver_next_seq)
+    {
+        $q = $this->db->get_where("approver_list", array('category_id' => $id,'approver_seq'=>$approver_seq,'approver_next_seq'=>$approver_next_seq), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+
 }

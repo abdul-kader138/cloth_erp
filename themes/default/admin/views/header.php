@@ -734,6 +734,18 @@
                                                 <i class="fa fa-key"></i><span class="text"> <?= lang('group_permissions'); ?></span>
                                             </a>
                                         </li>
+
+                                        <li id="system_settings_order_types">
+                                            <a href="<?= admin_url('system_settings/order_types') ?>">
+                                                <i class="fa fa-th-list"></i><span class="text"> <?= lang('Order_Types'); ?></span>
+                                            </a>
+                                        </li>
+
+                                        <li id="system_settings_order_status_hierarchy">
+                                            <a href="<?= admin_url('system_settings/order_status_hierarchy') ?>">
+                                                <i class="fa fa-th-list"></i><span class="text"> <?= lang('Order_Status_Hierarchy'); ?></span>
+                                            </a>
+                                        </li>
                                         <li id="system_settings_backups">
                                             <a href="<?= admin_url('system_settings/backups') ?>">
                                                 <i class="fa fa-database"></i><span class="text"> <?= lang('backups'); ?></span>

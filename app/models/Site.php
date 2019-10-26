@@ -1104,6 +1104,15 @@ class Site extends CI_Model
         return FALSE;
     }
 
+
+    public function getOrderTypeByID($id) {
+        $q = $this->db->get_where('order_types', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
     public function convertToBase($unit, $value) {
         switch($unit->operator) {
             case '*':
@@ -1439,4 +1448,30 @@ class Site extends CI_Model
         return FALSE;
 
     }
+
+
+    public function getAllType()
+    {
+        $q = $this->db->get("order_types");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getAllUser()
+    {
+        $q = $this->db->get("users");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
 }

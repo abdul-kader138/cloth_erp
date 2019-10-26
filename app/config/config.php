@@ -17,7 +17,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost/wdposs';
+$config['base_url'] = 'http://localhost/cloth_erp';
 
 /*
 |--------------------------------------------------------------------------
