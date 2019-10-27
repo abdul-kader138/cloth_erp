@@ -419,6 +419,17 @@
                                         </span>
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td><?= lang("Approval"); ?></td>
+                                    <td colspan="5">
+                                        <span style="inline-block">
+                                            <input type="checkbox" value="1" class="checkbox" id="approval_sales_status_approve"
+                                                   name="approval_sales_status_approve" <?php echo $p->approval_sales_status_approve ? "checked" : ''; ?>>
+                                            <label for="approval_sales_status_approve" class="padding05"><?= lang('Sales_Status_Approval') ?></label>
+                                        </span>
+                                    </td>
+                                </tr>
+
 
                                 </tbody>
                             </table>

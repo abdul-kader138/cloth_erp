@@ -123,6 +123,8 @@
                     <div class="bold">
                         <?= lang('date'); ?>: <?= $this->sma->hrld($inv->date); ?><br>
                         <?= lang('ref'); ?>: <?= $inv->reference_no; ?><br>
+                        <?= lang('Order_Type'); ?>: <?= $order_type->name; ?><br>
+                        <?= lang('Order_Hierarchy_Status'); ?>: <?= $inv->hierarchy_status; ?><br>
                         <?php if (!empty($inv->return_sale_ref)) {
                             echo lang("return_ref").': '.$inv->return_sale_ref.'<br>';
                         } ?>

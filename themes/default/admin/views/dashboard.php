@@ -18,6 +18,35 @@ function row_status($x)
 }
 
 ?>
+
+<?php if ($Owner || $Admin || $GP['approval_sales_status_approve'] ) { ?>
+    <div class="box" style="margin-bottom: 15px;">
+        <div class="box-header">
+            <h2 class="blue"><i class="fa-fw fa fa-bar-chart-o"></i><?= lang('Waiting_For_Approval'); ?></h2>
+        </div>
+        <div class="box-content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <?php if ($Owner || $Admin || $GP['approval_sales_status_approve']) { ?>
+                                <div class="col-sm-3">
+                                    <div class="small-box padding1010 bpurple">
+                                        <h4 class="bold" style="color: #ffffff"><?= lang('Sales_Status_Approve') ?></h4>
+                                        <!--                                        <i class="fa fa-star"></i>-->
+                                        <div style="cursor: pointer;">
+                                            <a href="<?= admin_url('approval/approval_list'); ?>" style="text-align: center;font-size: 20px;"><?php echo (($total_st->total < 10 && $total_st->total > 0 ) ? '0'.$total_st->total : $total_st->total);?></a></div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
 <?php if (($Owner || $Admin) && $chatData) {
     foreach ($chatData as $month_sale) {
         $months[] = date('M-Y', strtotime($month_sale->month));
@@ -44,6 +73,8 @@ function row_status($x)
         </div>
     </div>
 <?php } ?>
+
+
 <?php if ($Owner || $Admin) { ?>
 <div class="row" style="margin-bottom: 15px;">
     <div class="col-lg-12">

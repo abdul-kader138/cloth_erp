@@ -11,10 +11,10 @@ class Sales extends MY_Controller
             $this->session->set_userdata('requested_page', $this->uri->uri_string());
             $this->sma->md('login');
         }
-        if ($this->Supplier) {
-            $this->session->set_flashdata('warning', lang('access_denied'));
-            redirect($_SERVER["HTTP_REFERER"]);
-        }
+//        if ($this->Supplier) {
+//            $this->session->set_flashdata('warning', lang('access_denied'));
+//            redirect($_SERVER["HTTP_REFERER"]);
+//        }
         $this->lang->admin_load('sales', $this->Settings->user_language);
         $this->load->library('form_validation');
         $this->load->admin_model('sales_model');
@@ -178,6 +178,7 @@ class Sales extends MY_Controller
         $this->data['updated_by'] = $inv->updated_by ? $this->site->getUser($inv->updated_by) : null;
         $this->data['warehouse'] = $this->site->getWarehouseByID($inv->warehouse_id);
         $this->data['inv'] = $inv;
+        $this->data['order_type'] = $this->site->getOrderTypeByID($inv->order_type);
         $this->data['rows'] = $this->sales_model->getAllInvoiceItems($id);
         $this->data['return_sale'] = $inv->return_id ? $this->sales_model->getInvoiceByID($inv->return_id) : NULL;
         $this->data['return_rows'] = $inv->return_id ? $this->sales_model->getAllInvoiceItems($inv->return_id) : NULL;
@@ -210,7 +211,7 @@ class Sales extends MY_Controller
         $this->data['return_rows'] = $inv->return_id ? $this->sales_model->getAllInvoiceItems($inv->return_id) : NULL;
         $this->data['paypal'] = $this->sales_model->getPaypalSettings();
         $this->data['skrill'] = $this->sales_model->getSkrillSettings();
-
+        $this->data['order_type'] = $this->site->getOrderTypeByID($inv->order_type);
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('sales'), 'page' => lang('sales')), array('link' => '#', 'page' => lang('view')));
         $meta = array('page_title' => lang('view_sales_details'), 'bc' => $bc);
         $this->page_construct('sales/view', $meta, $this->data);
@@ -239,6 +240,7 @@ class Sales extends MY_Controller
         $this->data['rows'] = $this->sales_model->getAllInvoiceItems($id);
         $this->data['return_sale'] = $inv->return_id ? $this->sales_model->getInvoiceByID($inv->return_id) : NULL;
         $this->data['return_rows'] = $inv->return_id ? $this->sales_model->getAllInvoiceItems($inv->return_id) : NULL;
+        $this->data['order_type'] = $this->site->getOrderTypeByID($inv->order_type);
         //$this->data['paypal'] = $this->sales_model->getPaypalSettings();
         //$this->data['skrill'] = $this->sales_model->getSkrillSettings();
 
@@ -418,6 +420,7 @@ class Sales extends MY_Controller
         $this->form_validation->set_rules('biller', lang("biller"), 'required');
         $this->form_validation->set_rules('sale_status', lang("sale_status"), 'required');
         $this->form_validation->set_rules('payment_status', lang("payment_status"), 'required');
+        $this->form_validation->set_rules('category_id', lang("Order_Type"), 'required');
 
         if ($this->form_validation->run() == true) {
 
@@ -561,6 +564,27 @@ class Sales extends MY_Controller
             $order_tax = $this->site->calculateOrderTax($this->input->post('order_tax'), ($total + $product_tax - $order_discount));
             $total_tax = $this->sma->formatDecimal(($product_tax + $order_tax), 4);
             $grand_total = $this->sma->formatDecimal(($total + $total_tax + $this->sma->formatDecimal($shipping) - $order_discount), 4);
+
+            $userLists = $this->site->getAllUser();
+            $approver_details = $this->site->getApproverListByCategory($this->input->post('category_id'));
+            $user_details = $this->site->getApproveCustomer($userLists, $approver_details->approver_id);
+
+//            $order_type= $this->site->getOrderTypeByID($this->input->post('category_id'));
+
+            $approve_data = array(
+                'aprrover_id' => $approver_details->approver_id,
+                'status' => 'Waiting For ' . $approver_details->approver_seq_name."(". $user_details->first_name." ".$user_details->last_name.")",
+                'approver_seq' => $approver_details->approver_seq,
+                'approver_seq_name' => $approver_details->approver_seq_name,
+                'created_by' => $this->session->userdata('user_id'),
+                'type' => 'Sales',
+                'next_approve_seq' => $approver_details->approver_next_seq,
+                'category_id' => $this->input->post('category_id'),
+                'created_date' => date("Y-m-d H:i:s")
+            );
+
+
+
             $data = array('date' => $date,
                 'tax_seq' => $tax_seq,
                 'tax_type' => $tax_type,
@@ -593,10 +617,17 @@ class Sales extends MY_Controller
                 'payment_status' => $payment_status,
                 'payment_term' => $payment_term,
                 'due_date' => $due_date,
+                'order_type' =>$this->input->post('category_id'),
+                'order_type_status'=>0,
+                'hierarchy_status' => 'Waiting For ' . $approver_details->approver_seq_name."(". $user_details->first_name." ".$user_details->last_name.")",
                 'paid' => 0,
                 'created_by' => $this->session->userdata('user_id'),
                 'hash' => hash('sha256', microtime() . mt_rand()),
             );
+
+
+
+
             if ($this->Settings->indian_gst) {
                 $data['cgst'] = $total_cgst;
                 $data['sgst'] = $total_sgst;
@@ -609,13 +640,15 @@ class Sales extends MY_Controller
                 $bill_amount=0;
                 if ($this->input->post('amount-paid')) $bill_amount= $this->sma->formatDecimal($this->input->post('amount-paid'));
                 $total_sales_amount = $this->sales_model->getAllSalesFroCustomer($customer_id);
-                $total_payments_amount = $this->sales_model->getAllPaymentsFroCustomer($customer_id);
-                $total_amount = ($total_payments_amount->pay_val + $customer_details->customer_credit_limit)+$bill_amount;
-                $sales_amount = ($total_sales_amount[0]->grand_total + $grand_total);
-                if ($total_amount <= $sales_amount) {
-                    $this->session->set_flashdata('error', lang("insufficient_credit"));
-                    redirect($_SERVER["HTTP_REFERER"]);
-                }
+
+//                credit sales check
+//                $total_payments_amount = $this->sales_model->getAllPaymentsFroCustomer($customer_id);
+//                $total_amount = ($total_payments_amount->pay_val + $customer_details->customer_credit_limit)+$bill_amount;
+//                $sales_amount = ($total_sales_amount[0]->grand_total + $grand_total);
+//                if ($total_amount <= $sales_amount) {
+//                    $this->session->set_flashdata('error', lang("insufficient_credit"));
+//                    redirect($_SERVER["HTTP_REFERER"]);
+//                }
             }
 
             if ($payment_status == 'partial' || $payment_status == 'paid') {
@@ -683,10 +716,12 @@ class Sales extends MY_Controller
                 $data['attachment'] = $photo;
             }
 
+            $si_return=array();
+
             // $this->sma->print_arrays($data, $products, $payment);
         }
 
-        if ($this->form_validation->run() == true && $this->sales_model->addSale($data, $products, $payment)) {
+        if ($this->form_validation->run() == true && $this->sales_model->addSale($data, $products, $payment,$si_return,$approve_data)) {
             $this->session->set_userdata('remove_slls', 1);
             if ($quote_id) {
                 $this->db->update('quotes', array('status' => 'completed'), array('id' => $quote_id));
@@ -772,6 +807,7 @@ class Sales extends MY_Controller
             $this->data['billers'] = $this->site->getAllCompanies('biller');
             $this->data['warehouses'] = $this->site->getAllWarehouses();
             $this->data['tax_rates'] = $this->site->getAllTaxRates();
+            $this->data['types'] = $this->site->getAllTypeByHierarchy();
             //$this->data['currencies'] = $this->sales_model->getAllCurrencies();
             $this->data['slnumber'] = ''; //$this->site->getReference('so');
             $this->data['payment_ref'] = ''; //$this->site->getReference('pay');

@@ -810,6 +810,8 @@ class system_settings extends MY_Controller
                 'document-upload' => $this->input->post('document-upload'),
                 'document-file_delete' => $this->input->post('document-file_delete'),
                 'document-folder_create' => $this->input->post('document-folder_create'),
+
+                'approval_sales_status_approve' => $this->input->post('approval_sales_status_approve'),
             );
 
             if (POS) {
@@ -3264,6 +3266,11 @@ class system_settings extends MY_Controller
 
     function delete_order_status_hierarchy($id = NULL)
     {
+        $pr_details = $this->settings_model->getApproverByID($id);
+        if ($this->settings_model->hierarchyHasSales($pr_details->category_id)) {
+            $this->sma->send_json(array('error' => 1, 'msg' => lang("Hierarchy is associated with sales.")));
+        }
+
         if ($this->settings_model->deleteApprover($id)) {
             $this->sma->send_json(array('error' => 0, 'msg' => lang("Info_Deleted_Successfully")));
 

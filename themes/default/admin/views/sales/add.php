@@ -340,9 +340,14 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <?= lang("biller_additional_info", "biller_additional_info"); ?>
-                                            <?php $sst = array('None' => lang('none'),'PROOF' => lang('proof'),'FINAL CONSUMER' => lang('final_consumer'), 'CREDIT FISCAL' => lang('credit_fiscal'),'CREDIT NOTE' => lang('credit_note'),'SPECIAL REGIME' => lang('special_regime'),'GOVERNMENTAL' => lang('governmental'));
-                                            echo form_dropdown('tax_type', $sst, '', 'class="form-control input-tip" required="required" id="tax_type"'); ?>
+                                            <?= lang("Order_Type", "Order_Type"); ?>
+                                            <?php
+                                            $wh1[''] = '';
+                                            foreach ($types as $type) {
+                                                $wh1[$type->id] = $type->name;
+                                            }
+                                            echo form_dropdown('category_id', $wh1, (isset($_POST['category_id']) ? $_POST['category_id'] : ""), 'id="category_id" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("Type") . '" required="required" style="width:100%;" ');
+                                            ?>
                                         </div>
                                     </div>
                                 </div>

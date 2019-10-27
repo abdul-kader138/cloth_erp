@@ -10,10 +10,6 @@ class Transfers extends MY_Controller
             $this->session->set_userdata('requested_page', $this->uri->uri_string());
             $this->sma->md('login');
         }
-        if ($this->Customer || $this->Supplier) {
-            $this->session->set_flashdata('warning', lang('access_denied'));
-            redirect($_SERVER["HTTP_REFERER"]);
-        }
         $this->lang->admin_load('transfers', $this->Settings->user_language);
         $this->load->library('form_validation');
         $this->load->admin_model('transfers_model');

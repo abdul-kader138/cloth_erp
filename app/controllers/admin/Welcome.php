@@ -12,9 +12,9 @@ class Welcome extends MY_Controller
             admin_redirect('login');
         }
 
-        if ($this->Customer || $this->Supplier) {
-            redirect('/');
-        }
+//        if ($this->Customer || $this->Supplier) {
+//            redirect('/');
+//        }
 
         $this->load->library('form_validation');
         $this->load->admin_model('db_model');
@@ -37,6 +37,7 @@ class Welcome extends MY_Controller
         $this->data['chatData'] = $this->db_model->getChartData();
         $this->data['stock'] = $this->db_model->getStockValue();
         $this->data['bs'] = $this->db_model->getBestSeller();
+        $this->data['total_st'] = $this->db_model->getTotalSTApproval($this->session->userdata('user_id'));
         $lmsdate = date('Y-m-d', strtotime('first day of last month')) . ' 00:00:00';
         $lmedate = date('Y-m-d', strtotime('last day of last month')) . ' 23:59:59';
         $this->data['lmbs'] = $this->db_model->getBestSeller($lmsdate, $lmedate);

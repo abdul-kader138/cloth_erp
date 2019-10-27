@@ -253,9 +253,11 @@ class Sma
                 return false;
             }
             return true;
-        } elseif ($this->Customer || $this->Supplier) {
-            return false;
-        } else {
+        }
+//        elseif ($this->Customer || $this->Supplier) {
+//            return false;
+//        }
+        else {
             if (!$module) {
                 $module = $this->m;
             }

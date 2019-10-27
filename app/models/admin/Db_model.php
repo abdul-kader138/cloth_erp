@@ -168,4 +168,17 @@ class Db_model extends CI_Model
         return FALSE;
     }
 
+
+    public function getTotalSTApproval($id = NULL)
+    {
+        $this->db->select('count(id) as total', FALSE)
+            ->where('aprrover_id ', $id)
+            ->where('approve_status ', 0);
+        $q = $this->db->get_where('approve_details',array('type'=>'Sales'));
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
 }

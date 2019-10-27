@@ -29,7 +29,9 @@
                             }
                         } ?>
                         <?= lang("sale_status"); ?>: <?= lang($inv->sale_status); ?><br>
-                        <?= lang("payment_status"); ?>: <?= lang($inv->payment_status); ?>
+                        <?= lang("payment_status"); ?>: <?= lang($inv->payment_status); ?><br>
+                        <?= lang("Order_Type"); ?>: <?= $order_type->name; ?>
+                        <?= lang("Order_Hierarchy_Status"); ?>: <?= $inv->hierarchy_status; ?>
                     </p>
                     </div>
                     <div class="col-xs-7 text-right order_barcodes">

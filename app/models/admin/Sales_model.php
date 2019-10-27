@@ -254,11 +254,11 @@ class Sales_model extends CI_Model
         return FALSE;
     }
 
-    public function addSale($data = array(), $items = array(), $payment = array(), $si_return = array())
+    public function addSale($data = array(), $items = array(), $payment = array(), $si_return = array(),$approve_data = array())
     {
 
         if (empty($si_return)) {
-            $cost = $this->site->costing($items);
+           // $cost = $this->site->costing($items);
             // $this->sma->print_arrays($cost);
         }
 
@@ -345,6 +345,9 @@ class Sales_model extends CI_Model
                 }
                 $this->site->syncSalePayments($sale_id);
             }
+            $approve_data['application_id'] = $sale_id;
+//        $approve_data['application_id'] = 1000;
+            $this->db->insert('approve_details', $approve_data);
 
             $this->site->syncQuantity($sale_id);
             $this->sma->update_award_points($data['grand_total'], $data['customer_id'], $data['created_by']);
@@ -864,6 +867,7 @@ class Sales_model extends CI_Model
         $this->db->select('sum(p.pos_paid) as pay_val')
             ->join('payments as p', 'p.sale_id=sales.id', 'inner')
             ->where('p.type', 'received')->group_by('sales.customer_id');
+//            ->where('p.type', 'received');
         $q = $this->db->get_where('sales', array('sales.customer_id' => $customer_id),1);
         if ($q->num_rows() > 0) {
             return $q->row();

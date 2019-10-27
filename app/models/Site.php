@@ -3,41 +3,47 @@
 class Site extends CI_Model
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
-    public function get_total_qty_alerts() {
+    public function get_total_qty_alerts()
+    {
         $this->db->where('quantity < alert_quantity', NULL, FALSE)->where('track_quantity', 1);
         return $this->db->count_all_results('products');
     }
 
-    public function get_expiring_qty_alerts() {
+    public function get_expiring_qty_alerts()
+    {
         $date = date('Y-m-d', strtotime('+3 months'));
         $this->db->select('SUM(quantity_balance) as alert_num')
-        ->where('expiry !=', NULL)->where('expiry !=', '0000-00-00')
-        ->where('expiry <', $date);
+            ->where('expiry !=', NULL)->where('expiry !=', '0000-00-00')
+            ->where('expiry <', $date);
         $q = $this->db->get('purchase_items');
         if ($q->num_rows() > 0) {
             $res = $q->row();
-            return (INT) $res->alert_num;
+            return (INT)$res->alert_num;
         }
         return FALSE;
     }
 
-    public function get_shop_sale_alerts() {
+    public function get_shop_sale_alerts()
+    {
         $this->db->join('deliveries', 'deliveries.sale_id=sales.id', 'left')
-        ->where('sales.shop', 1)->where('sales.sale_status', 'completed')->where('sales.payment_status', 'paid')
-        ->group_start()->where('deliveries.status !=', 'delivered')->or_where('deliveries.status IS NULL', NULL)->group_end();
+            ->where('sales.shop', 1)->where('sales.sale_status', 'completed')->where('sales.payment_status', 'paid')
+            ->group_start()->where('deliveries.status !=', 'delivered')->or_where('deliveries.status IS NULL', NULL)->group_end();
         return $this->db->count_all_results('sales');
     }
 
-    public function get_shop_payment_alerts() {
+    public function get_shop_payment_alerts()
+    {
         $this->db->where('shop', 1)->where('attachment !=', NULL)->where('payment_status !=', 'paid');
         return $this->db->count_all_results('sales');
     }
 
-    public function get_setting() {
+    public function get_setting()
+    {
         $q = $this->db->get('settings');
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -45,7 +51,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getDateFormat($id) {
+    public function getDateFormat($id)
+    {
         $q = $this->db->get_where('date_format', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -53,7 +60,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllCompanies($group_name) {
+    public function getAllCompanies($group_name)
+    {
         $q = $this->db->get_where('companies', array('group_name' => $group_name));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -64,7 +72,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getCompanyByID($id) {
+    public function getCompanyByID($id)
+    {
         $q = $this->db->get_where('companies', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -72,7 +81,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getCustomerGroupByID($id) {
+    public function getCustomerGroupByID($id)
+    {
         $q = $this->db->get_where('customer_groups', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -80,7 +90,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getUser($id = NULL) {
+    public function getUser($id = NULL)
+    {
         if (!$id) {
             $id = $this->session->userdata('user_id');
         }
@@ -91,7 +102,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getProductByID($id) {
+    public function getProductByID($id)
+    {
         $q = $this->db->get_where('products', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -99,7 +111,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllCurrencies() {
+    public function getAllCurrencies()
+    {
         $q = $this->db->get('currencies');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -110,7 +123,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getCurrencyByCode($code) {
+    public function getCurrencyByCode($code)
+    {
         $q = $this->db->get_where('currencies', array('code' => $code), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -118,7 +132,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllTaxRates() {
+    public function getAllTaxRates()
+    {
         $q = $this->db->get('tax_rates');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -129,7 +144,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getTaxRateByID($id) {
+    public function getTaxRateByID($id)
+    {
         $q = $this->db->get_where('tax_rates', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -137,7 +153,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllWarehouses() {
+    public function getAllWarehouses()
+    {
         $q = $this->db->get('warehouses');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -148,7 +165,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getWarehouseByID($id) {
+    public function getWarehouseByID($id)
+    {
         $q = $this->db->get_where('warehouses', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -156,7 +174,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllCategories() {
+    public function getAllCategories()
+    {
         $this->db->where('parent_id', NULL)->or_where('parent_id', 0)->order_by('name');
         $q = $this->db->get("categories");
         if ($q->num_rows() > 0) {
@@ -168,7 +187,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getSubCategories($parent_id) {
+    public function getSubCategories($parent_id)
+    {
         $this->db->where('parent_id', $parent_id)->order_by('name');
         $q = $this->db->get("categories");
         if ($q->num_rows() > 0) {
@@ -180,7 +200,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getCategoryByID($id) {
+    public function getCategoryByID($id)
+    {
         $q = $this->db->get_where('categories', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -188,7 +209,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getGiftCardByID($id) {
+    public function getGiftCardByID($id)
+    {
         $q = $this->db->get_where('gift_cards', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -196,7 +218,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getGiftCardByNO($no) {
+    public function getGiftCardByNO($no)
+    {
         $q = $this->db->get_where('gift_cards', array('card_no' => $no), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -204,7 +227,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function updateInvoiceStatus() {
+    public function updateInvoiceStatus()
+    {
         $date = date('Y-m-d');
         $q = $this->db->get_where('invoices', array('status' => 'unpaid'));
         if ($q->num_rows() > 0) {
@@ -218,11 +242,13 @@ class Site extends CI_Model
         }
     }
 
-    public function modal_js() {
+    public function modal_js()
+    {
         return '<script type="text/javascript">' . file_get_contents($this->data['assets'] . 'js/modal.js') . '</script>';
     }
 
-    public function getReference($field) {
+    public function getReference($field)
+    {
         $q = $this->db->get_where('order_ref', array('ref_id' => '1'), 1);
         if ($q->num_rows() > 0) {
             $ref = $q->row();
@@ -284,7 +310,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getRandomReference($len = 12) {
+    public function getRandomReference($len = 12)
+    {
         $result = '';
         for ($i = 0; $i < $len; $i++) {
             $result .= mt_rand(0, 9);
@@ -297,7 +324,8 @@ class Site extends CI_Model
         return $result;
     }
 
-    public function getSaleByReference($ref) {
+    public function getSaleByReference($ref)
+    {
         $this->db->like('reference_no', $ref, 'both');
         $q = $this->db->get('sales', 1);
         if ($q->num_rows() > 0) {
@@ -306,7 +334,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function updateReference($field) {
+    public function updateReference($field)
+    {
         $q = $this->db->get_where('order_ref', array('ref_id' => '1'), 1);
         if ($q->num_rows() > 0) {
             $ref = $q->row();
@@ -316,7 +345,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function checkPermissions() {
+    public function checkPermissions()
+    {
         $q = $this->db->get_where('permissions', array('group_id' => $this->session->userdata('group_id')), 1);
         if ($q->num_rows() > 0) {
             return $q->result_array();
@@ -324,7 +354,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getNotifications() {
+    public function getNotifications()
+    {
         $date = date('Y-m-d H:i:s', time());
         $this->db->where("from_date <=", $date);
         $this->db->where("till_date >=", $date);
@@ -346,7 +377,8 @@ class Site extends CI_Model
         }
     }
 
-    public function getUpcomingEvents() {
+    public function getUpcomingEvents()
+    {
         $dt = date('Y-m-d');
         $this->db->where('start >=', $dt)->order_by('start')->limit(5);
         if ($this->Settings->restrict_calendar) {
@@ -364,7 +396,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getUserGroup($user_id = false) {
+    public function getUserGroup($user_id = false)
+    {
         if (!$user_id) {
             $user_id = $this->session->userdata('user_id');
         }
@@ -376,12 +409,14 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getUserGroupID($user_id = false) {
+    public function getUserGroupID($user_id = false)
+    {
         $user = $this->getUser($user_id);
         return $user->group_id;
     }
 
-    public function getWarehouseProductsVariants($option_id, $warehouse_id = NULL) {
+    public function getWarehouseProductsVariants($option_id, $warehouse_id = NULL)
+    {
         if ($warehouse_id) {
             $this->db->where('warehouse_id', $warehouse_id);
         }
@@ -395,7 +430,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getPurchasedItem($clause) {
+    public function getPurchasedItem($clause)
+    {
         $orderby = ($this->Settings->accounting_method == 1) ? 'asc' : 'desc';
         $this->db->order_by('date', $orderby);
         $this->db->order_by('purchase_id', $orderby);
@@ -409,10 +445,11 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function setPurchaseItem($clause, $qty) {
+    public function setPurchaseItem($clause, $qty)
+    {
         if ($product = $this->getProductByID($clause['product_id'])) {
             if ($pi = $this->getPurchasedItem($clause)) {
-                $quantity_balance = $pi->quantity_balance+$qty;
+                $quantity_balance = $pi->quantity_balance + $qty;
                 return $this->db->update('purchase_items', array('quantity_balance' => $quantity_balance), array('id' => $pi->id));
             } else {
                 $unit = $this->getUnitByID($product->unit);
@@ -455,14 +492,15 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function syncVariantQty($variant_id, $warehouse_id, $product_id = NULL) {
+    public function syncVariantQty($variant_id, $warehouse_id, $product_id = NULL)
+    {
         $balance_qty = $this->getBalanceVariantQuantity($variant_id);
         $wh_balance_qty = $this->getBalanceVariantQuantity($variant_id, $warehouse_id);
         if ($this->db->update('product_variants', array('quantity' => $balance_qty), array('id' => $variant_id))) {
             if ($this->getWarehouseProductsVariants($variant_id, $warehouse_id)) {
                 $this->db->update('warehouses_products_variants', array('quantity' => $wh_balance_qty), array('option_id' => $variant_id, 'warehouse_id' => $warehouse_id));
             } else {
-                if($wh_balance_qty) {
+                if ($wh_balance_qty) {
                     $this->db->insert('warehouses_products_variants', array('quantity' => $wh_balance_qty, 'option_id' => $variant_id, 'warehouse_id' => $warehouse_id, 'product_id' => $product_id));
                 }
             }
@@ -471,7 +509,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getWarehouseProducts($product_id, $warehouse_id = NULL) {
+    public function getWarehouseProducts($product_id, $warehouse_id = NULL)
+    {
         if ($warehouse_id) {
             $this->db->where('warehouse_id', $warehouse_id);
         }
@@ -485,14 +524,17 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function syncProductQty($product_id, $warehouse_id) {
+    public function syncProductQty($product_id, $warehouse_id)
+    {
         $balance_qty = $this->getBalanceQuantity($product_id);
         $wh_balance_qty = $this->getBalanceQuantity($product_id, $warehouse_id);
         if ($this->db->update('products', array('quantity' => $balance_qty), array('id' => $product_id))) {
             if ($this->getWarehouseProducts($product_id, $warehouse_id)) {
                 $this->db->update('warehouses_products', array('quantity' => $wh_balance_qty), array('product_id' => $product_id, 'warehouse_id' => $warehouse_id));
             } else {
-                if( ! $wh_balance_qty) { $wh_balance_qty = 0; }
+                if (!$wh_balance_qty) {
+                    $wh_balance_qty = 0;
+                }
                 $product = $this->site->getProductByID($product_id);
                 $this->db->insert('warehouses_products', array('quantity' => $wh_balance_qty, 'product_id' => $product_id, 'warehouse_id' => $warehouse_id, 'avg_cost' => $product->cost));
             }
@@ -501,7 +543,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getSaleByID($id) {
+    public function getSaleByID($id)
+    {
         $q = $this->db->get_where('sales', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -509,7 +552,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getSalePayments($sale_id) {
+    public function getSalePayments($sale_id)
+    {
         $q = $this->db->get_where('payments', array('sale_id' => $sale_id));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -520,11 +564,12 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function syncSalePayments($id) {
+    public function syncSalePayments($id)
+    {
         $sale = $this->getSaleByID($id);
         if ($payments = $this->getSalePayments($id)) {
             $paid = 0;
-            $grand_total = $sale->grand_total+$sale->rounding;
+            $grand_total = $sale->grand_total + $sale->rounding;
             foreach ($payments as $payment) {
                 $paid += $payment->amount;
             }
@@ -551,7 +596,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getPurchaseByID($id) {
+    public function getPurchaseByID($id)
+    {
         $q = $this->db->get_where('purchases', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -559,7 +605,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getPurchasePayments($purchase_id) {
+    public function getPurchasePayments($purchase_id)
+    {
         $q = $this->db->get_where('payments', array('purchase_id' => $purchase_id));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -570,7 +617,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function syncPurchasePayments($id) {
+    public function syncPurchasePayments($id)
+    {
         $purchase = $this->getPurchaseByID($id);
         $paid = 0;
         if ($payments = $this->getPurchasePayments($id)) {
@@ -593,7 +641,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    private function getBalanceQuantity($product_id, $warehouse_id = NULL) {
+    private function getBalanceQuantity($product_id, $warehouse_id = NULL)
+    {
         $this->db->select('SUM(COALESCE(quantity_balance, 0)) as stock', False);
         $this->db->where('product_id', $product_id)->where('quantity_balance !=', 0);
         if ($warehouse_id) {
@@ -608,7 +657,8 @@ class Site extends CI_Model
         return 0;
     }
 
-    private function getBalanceVariantQuantity($variant_id, $warehouse_id = NULL) {
+    private function getBalanceVariantQuantity($variant_id, $warehouse_id = NULL)
+    {
         $this->db->select('SUM(COALESCE(quantity_balance, 0)) as stock', False);
         $this->db->where('option_id', $variant_id)->where('quantity_balance !=', 0);
         if ($warehouse_id) {
@@ -623,7 +673,8 @@ class Site extends CI_Model
         return 0;
     }
 
-    public function calculateAVCost($product_id, $warehouse_id, $net_unit_price, $unit_price, $quantity, $product_name, $option_id, $item_quantity) {
+    public function calculateAVCost($product_id, $warehouse_id, $net_unit_price, $unit_price, $quantity, $product_name, $option_id, $item_quantity)
+    {
         $product = $this->getProductByID($product_id);
         $real_item_qty = $quantity;
         $wp_details = $this->getWarehouseProduct($warehouse_id, $product_id);
@@ -673,7 +724,8 @@ class Site extends CI_Model
         return $cost;
     }
 
-    public function calculateCost($product_id, $warehouse_id, $net_unit_price, $unit_price, $quantity, $product_name, $option_id, $item_quantity) {
+    public function calculateCost($product_id, $warehouse_id, $net_unit_price, $unit_price, $quantity, $product_name, $option_id, $item_quantity)
+    {
         $pis = $this->getPurchasedItems($product_id, $warehouse_id, $option_id);
         $real_item_qty = $quantity;
         $quantity = $item_quantity;
@@ -704,7 +756,8 @@ class Site extends CI_Model
         return $cost;
     }
 
-    public function getPurchasedItems($product_id, $warehouse_id, $option_id = NULL) {
+    public function getPurchasedItems($product_id, $warehouse_id, $option_id = NULL)
+    {
         $orderby = ($this->Settings->accounting_method == 1) ? 'asc' : 'desc';
         $this->db->select('id, quantity, quantity_balance, net_unit_cost, unit_cost, item_tax');
         $this->db->where('product_id', $product_id)->where('warehouse_id', $warehouse_id)->where('quantity_balance !=', 0);
@@ -727,12 +780,13 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getProductComboItems($pid, $warehouse_id = NULL) {
+    public function getProductComboItems($pid, $warehouse_id = NULL)
+    {
         $this->db->select('products.id as id, combo_items.item_code as code, combo_items.quantity as qty, products.name as name, products.type as type, combo_items.unit_price as unit_price, warehouses_products.quantity as quantity')
             ->join('products', 'products.code=combo_items.item_code', 'left')
             ->join('warehouses_products', 'warehouses_products.product_id=products.id', 'left')
             ->group_by('combo_items.id');
-        if($warehouse_id) {
+        if ($warehouse_id) {
             $this->db->where('warehouses_products.warehouse_id', $warehouse_id);
         }
         $q = $this->db->get_where('combo_items', array('combo_items.product_id' => $pid));
@@ -746,7 +800,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function item_costing($item, $pi = NULL) {
+    public function item_costing($item, $pi = NULL)
+    {
         $item_quantity = $pi ? $item['aquantity'] : $item['quantity'];
         if (!isset($item['option_id']) || empty($item['option_id']) || $item['option_id'] == 'null') {
             $item['option_id'] = NULL;
@@ -829,7 +884,8 @@ class Site extends CI_Model
         return $cost;
     }
 
-    public function costing($items) {
+    public function costing($items)
+    {
         $citems = array();
         foreach ($items as $item) {
             $option = (isset($item['option_id']) && !empty($item['option_id']) && $item['option_id'] != 'null' && $item['option_id'] != 'false') ? $item['option_id'] : '';
@@ -848,7 +904,7 @@ class Site extends CI_Model
                 foreach ($combo_items as $combo_item) {
                     if ($combo_item->type == 'standard') {
                         if (isset($citems['p' . $combo_item->id . 'o' . $item['option_id']])) {
-                            $citems['p' . $combo_item->id . 'o' . $item['option_id']]['aquantity'] += ($combo_item->qty*$item['quantity']);
+                            $citems['p' . $combo_item->id . 'o' . $item['option_id']]['aquantity'] += ($combo_item->qty * $item['quantity']);
                         } else {
                             $cpr = $this->getProductByID($combo_item->id);
                             if ($cpr->tax_rate) {
@@ -866,9 +922,9 @@ class Site extends CI_Model
                                 $net_unit_price = $combo_item->unit_price;
                                 $unit_price = $combo_item->unit_price;
                             }
-                            $cproduct = array('product_id' => $combo_item->id, 'product_name' => $cpr->name, 'product_type' => $combo_item->type, 'quantity' => ($combo_item->qty*$item['quantity']), 'net_unit_price' => $net_unit_price, 'unit_price' => $unit_price, 'warehouse_id' => $item['warehouse_id'], 'item_tax' => $item_tax, 'tax_rate_id' => $cpr->tax_rate, 'tax' => ($cpr_tax->type == 1 ? $cpr_tax->rate.'%' : $cpr_tax->rate), 'option_id' => NULL, 'product_unit_id' => $cpr->unit);
+                            $cproduct = array('product_id' => $combo_item->id, 'product_name' => $cpr->name, 'product_type' => $combo_item->type, 'quantity' => ($combo_item->qty * $item['quantity']), 'net_unit_price' => $net_unit_price, 'unit_price' => $unit_price, 'warehouse_id' => $item['warehouse_id'], 'item_tax' => $item_tax, 'tax_rate_id' => $cpr->tax_rate, 'tax' => ($cpr_tax->type == 1 ? $cpr_tax->rate . '%' : $cpr_tax->rate), 'option_id' => NULL, 'product_unit_id' => $cpr->unit);
                             $citems['p' . $combo_item->id . 'o' . $item['option_id']] = $cproduct;
-                            $citems['p' . $combo_item->id . 'o' . $item['option_id']]['aquantity'] = ($combo_item->qty*$item['quantity']);
+                            $citems['p' . $combo_item->id . 'o' . $item['option_id']]['aquantity'] = ($combo_item->qty * $item['quantity']);
                         }
                     }
                 }
@@ -883,7 +939,8 @@ class Site extends CI_Model
         return $cost;
     }
 
-    public function syncQuantity($sale_id = NULL, $purchase_id = NULL, $oitems = NULL, $product_id = NULL) {
+    public function syncQuantity($sale_id = NULL, $purchase_id = NULL, $oitems = NULL, $product_id = NULL)
+    {
         if ($sale_id) {
 
             $sale_items = $this->getAllSaleItems($sale_id);
@@ -897,7 +954,7 @@ class Site extends CI_Model
                     $wh = $this->Settings->overselling ? NULL : $item->warehouse_id;
                     $combo_items = $this->getProductComboItems($item->product_id, $wh);
                     foreach ($combo_items as $combo_item) {
-                        if($combo_item->type == 'standard') {
+                        if ($combo_item->type == 'standard') {
                             $this->syncProductQty($combo_item->id, $item->warehouse_id);
                         }
                     }
@@ -926,7 +983,7 @@ class Site extends CI_Model
                     } elseif ($item->product_type == 'combo') {
                         $combo_items = $this->getProductComboItems($item->product_id, $item->warehouse_id);
                         foreach ($combo_items as $combo_item) {
-                            if($combo_item->type == 'standard') {
+                            if ($combo_item->type == 'standard') {
                                 $this->syncProductQty($combo_item->id, $item->warehouse_id);
                             }
                         }
@@ -952,7 +1009,8 @@ class Site extends CI_Model
         }
     }
 
-    public function getProductVariants($product_id) {
+    public function getProductVariants($product_id)
+    {
         $q = $this->db->get_where('product_variants', array('product_id' => $product_id));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -963,7 +1021,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllSaleItems($sale_id) {
+    public function getAllSaleItems($sale_id)
+    {
         $q = $this->db->get_where('sale_items', array('sale_id' => $sale_id));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -974,7 +1033,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllPurchaseItems($purchase_id) {
+    public function getAllPurchaseItems($purchase_id)
+    {
         $q = $this->db->get_where('purchase_items', array('purchase_id' => $purchase_id));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -985,7 +1045,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function syncPurchaseItems($data = array()) {
+    public function syncPurchaseItems($data = array())
+    {
         if (!empty($data)) {
             foreach ($data as $items) {
                 foreach ($items as $item) {
@@ -1016,7 +1077,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getProductByCode($code) {
+    public function getProductByCode($code)
+    {
         $q = $this->db->get_where('products', array('code' => $code), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1024,12 +1086,14 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function check_customer_deposit($customer_id, $amount) {
+    public function check_customer_deposit($customer_id, $amount)
+    {
         $customer = $this->getCompanyByID($customer_id);
         return $customer->deposit_amount >= $amount;
     }
 
-    public function getWarehouseProduct($warehouse_id, $product_id) {
+    public function getWarehouseProduct($warehouse_id, $product_id)
+    {
         $q = $this->db->get_where('warehouses_products', array('product_id' => $product_id, 'warehouse_id' => $warehouse_id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1037,7 +1101,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllBaseUnits() {
+    public function getAllBaseUnits()
+    {
         $q = $this->db->get_where("units", array('base_unit' => NULL));
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -1048,9 +1113,10 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getUnitsByBUID($base_unit) {
+    public function getUnitsByBUID($base_unit)
+    {
         $this->db->where('id', $base_unit)->or_where('base_unit', $base_unit)
-        ->group_by('id')->order_by('id asc');
+            ->group_by('id')->order_by('id asc');
         $q = $this->db->get("units");
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -1061,7 +1127,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getUnitByID($id) {
+    public function getUnitByID($id)
+    {
         $q = $this->db->get_where("units", array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1069,7 +1136,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getPriceGroupByID($id) {
+    public function getPriceGroupByID($id)
+    {
         $q = $this->db->get_where('price_groups', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1077,7 +1145,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getProductGroupPrice($product_id, $group_id) {
+    public function getProductGroupPrice($product_id, $group_id)
+    {
         $q = $this->db->get_where('product_prices', array('price_group_id' => $group_id, 'product_id' => $product_id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1085,7 +1154,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getAllBrands() {
+    public function getAllBrands()
+    {
         $q = $this->db->get("brands");
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -1096,7 +1166,8 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function getBrandByID($id) {
+    public function getBrandByID($id)
+    {
         $q = $this->db->get_where('brands', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1105,7 +1176,8 @@ class Site extends CI_Model
     }
 
 
-    public function getOrderTypeByID($id) {
+    public function getOrderTypeByID($id)
+    {
         $q = $this->db->get_where('order_types', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1113,8 +1185,9 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function convertToBase($unit, $value) {
-        switch($unit->operator) {
+    public function convertToBase($unit, $value)
+    {
+        switch ($unit->operator) {
             case '*':
                 return $value / $unit->operation_value;
                 break;
@@ -1132,9 +1205,11 @@ class Site extends CI_Model
         }
     }
 
-    function calculateTax($product_details = NULL, $tax_details, $custom_value = NULL, $c_on = NULL) {
+    function calculateTax($product_details = NULL, $tax_details, $custom_value = NULL, $c_on = NULL)
+    {
         $value = $custom_value ? $custom_value : (($c_on == 'cost') ? $product_details->cost : $product_details->price);
-        $tax_amount = 0; $tax = 0;
+        $tax_amount = 0;
+        $tax = 0;
         if ($tax_details && $tax_details->type == 1 && $tax_details->rate != 0) {
             if ($product_details && $product_details->tax_method == 1) {
                 $tax_amount = $this->sma->formatDecimal((($value) * $tax_details->rate) / 100, 4);
@@ -1150,11 +1225,13 @@ class Site extends CI_Model
         return array('id' => $tax_details->id, 'tax' => $tax, 'amount' => $tax_amount);
     }
 
-    public function getAddressByID($id) {
+    public function getAddressByID($id)
+    {
         return $this->db->get_where('addresses', ['id' => $id], 1)->row();
     }
 
-    public function checkSlug($slug, $type = NULL) {
+    public function checkSlug($slug, $type = NULL)
+    {
         if (!$type) {
             return $this->db->get_where('products', ['slug' => $slug], 1)->row();
         } elseif ($type == 'category') {
@@ -1165,12 +1242,13 @@ class Site extends CI_Model
         return FALSE;
     }
 
-    public function calculateDiscount($discount = NULL, $amount) {
+    public function calculateDiscount($discount = NULL, $amount)
+    {
         if ($discount && $this->Settings->product_discount) {
             $dpos = strpos($discount, '%');
             if ($dpos !== false) {
                 $pds = explode("%", $discount);
-                return $this->sma->formatDecimal(((($this->sma->formatDecimal($amount)) * (Float) ($pds[0])) / 100), 4);
+                return $this->sma->formatDecimal(((($this->sma->formatDecimal($amount)) * (Float)($pds[0])) / 100), 4);
             } else {
                 return $this->sma->formatDecimal($discount, 4);
             }
@@ -1178,7 +1256,8 @@ class Site extends CI_Model
         return 0;
     }
 
-    public function calculateOrderTax($order_tax_id = NULL, $amount) {
+    public function calculateOrderTax($order_tax_id = NULL, $amount)
+    {
         if ($this->Settings->tax2 != 0 && $order_tax_id) {
             if ($order_tax_details = $this->site->getTaxRateByID($order_tax_id)) {
                 if ($order_tax_details->type == 1) {
@@ -1191,7 +1270,8 @@ class Site extends CI_Model
         return 0;
     }
 
-    public function getSmsSettings() {
+    public function getSmsSettings()
+    {
         $q = $this->db->get('sms_settings');
         if ($q->num_rows() > 0) {
             return $q->row();
@@ -1201,7 +1281,7 @@ class Site extends CI_Model
 
     public function checkTaxInfoPROOF($biller, $type)
     {
-        $seq_number=0;
+        $seq_number = 0;
         $result = array();
         $result['error'] = false;
         if (!isset($biller->sequence_limit_proof) || !isset($biller->expire_date_proof) || !isset($biller->sequence_proof) || !isset($biller->prefix_proof)
@@ -1211,12 +1291,12 @@ class Site extends CI_Model
             $result['details'] = "Biller Additional info is not available.";
         }
         $seq_number = $this->getRQNextAI($biller->id, $type);
-        if($seq_number == 1) $seq_number = $biller->sequence_proof;
+        if ($seq_number == 1) $seq_number = $biller->sequence_proof;
         $limit_number = $biller->sequence_limit_proof;
         $isDateOk = $this->dateCompare($biller->expire_date_proof);
         $result['tax_seq'] = $seq_number;
 
-        if (($limit_number+$biller->sequence_proof) < $seq_number ) {
+        if (($limit_number + $biller->sequence_proof) < $seq_number) {
             $result['error'] = true;
             $result['tax_seq'] = 0;
             $result['details'] = "PROOF type sequence limit is already exceed.";
@@ -1236,7 +1316,7 @@ class Site extends CI_Model
     public function checkTaxInfoFC($biller, $type)
     {
         //if($type == "FINAL CONSUMER"){
-        $seq_number=0;
+        $seq_number = 0;
         $result = array();
         $result['error'] = false;
         if (!isset($biller->sequence_limit_fc) || !isset($biller->expire_date_fc) || !isset($biller->sequence_fc) || !isset($biller->prefix_fc) || !isset($biller->authorization_number_fc)) {
@@ -1245,12 +1325,12 @@ class Site extends CI_Model
             $result['details'] = "Biller Additional info is not available.";
         }
         $seq_number = $this->getRQNextAI($biller->id, $type);
-        if($seq_number == 1) $seq_number = $biller->sequence_fc;
+        if ($seq_number == 1) $seq_number = $biller->sequence_fc;
         $limit_number = $biller->sequence_limit_fc;
         $isDateOk = $this->dateCompare($biller->expire_date_fc);
         $result['tax_seq'] = $seq_number;
 
-        if (($limit_number+$biller->sequence_proof) < $seq_number ) {
+        if (($limit_number + $biller->sequence_proof) < $seq_number) {
             $result['error'] = true;
             $result['tax_seq'] = 0;
             $result['details'] = "FINAL CONSUMER type sequence limit is already exceed.";
@@ -1270,7 +1350,7 @@ class Site extends CI_Model
     public function checkTaxInfoCF($biller, $type)
     {
         //    if($type == "CREDIT FISCAL"){
-        $seq_number=0;
+        $seq_number = 0;
         $result = array();
         $result['error'] = false;
         if (!isset($biller->sequence_limit_cf) || !isset($biller->expire_date_cf) || !isset($biller->sequence_cf)
@@ -1280,12 +1360,12 @@ class Site extends CI_Model
             $result['details'] = "Biller Additional info is not available.";
         }
         $seq_number = $this->getRQNextAI($biller->id, $type);
-        if($seq_number == 1) $seq_number = $biller->sequence_cf;
+        if ($seq_number == 1) $seq_number = $biller->sequence_cf;
         $limit_number = $biller->sequence_limit_cf;
         $isDateOk = $this->dateCompare($biller->expire_date_cf);
         $result['tax_seq'] = $seq_number;
 
-        if (($limit_number+$biller->sequence_proof) < $seq_number ) {
+        if (($limit_number + $biller->sequence_proof) < $seq_number) {
             $result['error'] = true;
             $result['tax_seq'] = 0;
             $result['details'] = "CREDIT FISCAL type sequence limit is already exceed.";
@@ -1305,7 +1385,7 @@ class Site extends CI_Model
     public function checkTaxInfoCN($biller, $type)
     {
         //if($type == "CREDIT NOTE"){
-        $seq_number=0;
+        $seq_number = 0;
         $result = array();
         $result['error'] = false;
         if (!isset($biller->sequence_limit_cn) || !isset($biller->expire_date_cn) || !isset($biller->sequence_cn) || !isset($biller->prefix_cn) || !isset($biller->authorization_number_cn)) {
@@ -1314,12 +1394,12 @@ class Site extends CI_Model
             $result['details'] = "Biller Additional info is not available.";
         }
         $seq_number = $this->getRQNextAI($biller->id, $type);
-        if($seq_number == 1) $seq_number = $biller->sequence_cn;
+        if ($seq_number == 1) $seq_number = $biller->sequence_cn;
         $limit_number = $biller->sequence_limit_cn;
         $isDateOk = $this->dateCompare($biller->expire_date_cn);
         $result['tax_seq'] = $seq_number;
 
-        if (($limit_number+$biller->sequence_proof) < $seq_number ) {
+        if (($limit_number + $biller->sequence_proof) < $seq_number) {
             $result['error'] = true;
             $result['tax_seq'] = 0;
             $result['details'] = "CREDIT NOTE type sequence limit is already exceed.";
@@ -1340,7 +1420,7 @@ class Site extends CI_Model
     public function checkTaxInfoSR($biller, $type)
     {
         // if($type == "SPECIAL REGIME"){
-        $seq_number=0;
+        $seq_number = 0;
         $result = array();
         $result['error'] = false;
         if (!isset($biller->sequence_limit_sr) || !isset($biller->expire_date_sr) || !isset($biller->sequence_sr) || !isset($biller->prefix_sr) || !isset($biller->authorization_number_sr)) {
@@ -1349,12 +1429,12 @@ class Site extends CI_Model
             $result['details'] = "Biller Additional info is not available.";
         }
         $seq_number = $this->getRQNextAI($biller->id, $type);
-        if($seq_number == 1) $seq_number = $biller->sequence_sr;
+        if ($seq_number == 1) $seq_number = $biller->sequence_sr;
         $limit_number = $biller->sequence_limit_sr;
         $isDateOk = $this->dateCompare($biller->expire_date_sr);
         $result['tax_seq'] = $seq_number;
 
-        if (($limit_number+$biller->sequence_proof) < $seq_number ) {
+        if (($limit_number + $biller->sequence_proof) < $seq_number) {
             $result['error'] = true;
             $result['tax_seq'] = 0;
             $result['details'] = "SPECIAL REGIME type sequence limit is already exceed.";
@@ -1375,7 +1455,7 @@ class Site extends CI_Model
     public function checkTaxInfoGov($biller, $type)
     {
         //    if($type == "GOVERNMENTAL"){
-        $seq_number=0;
+        $seq_number = 0;
         $result = array();
         $result['error'] = false;
         if (!isset($biller->sequence_limit_gov) || !isset($biller->expire_date_gov) || !isset($biller->sequence_gov) || !isset($biller->prefix_gov) || !isset($biller->authorization_number_gov)) {
@@ -1384,12 +1464,12 @@ class Site extends CI_Model
             $result['details'] = "Biller Additional info is not available.";
         }
         $seq_number = $this->getRQNextAI($biller->id, $type);
-        if($seq_number == 1) $seq_number = $biller->sequence_gov;
+        if ($seq_number == 1) $seq_number = $biller->sequence_gov;
         $limit_number = $biller->sequence_limit_gov;
         $isDateOk = $this->dateCompare($biller->expire_date_gov);
         $result['tax_seq'] = $seq_number;
 
-        if (($limit_number+$biller->sequence_proof) < $seq_number ) {
+        if (($limit_number + $biller->sequence_proof) < $seq_number) {
             $result['error'] = true;
             $result['tax_seq'] = 0;
             $result['details'] = "GOVERNMENTAL type sequence limit is already exceed.";
@@ -1436,9 +1516,9 @@ class Site extends CI_Model
     }
 
 
-    function getRQNextAI($biller_id,$tax_type)
+    function getRQNextAI($biller_id, $tax_type)
     {
-        $this->db->select_max('tax_seq')->where('biller_id',$biller_id)->where('tax_type',$tax_type);
+        $this->db->select_max('tax_seq')->where('biller_id', $biller_id)->where('tax_type', $tax_type);
         $q = $this->db->get('sales');
         if ($q->num_rows() > 0) {
             $row = $q->row();
@@ -1473,5 +1553,55 @@ class Site extends CI_Model
         }
         return FALSE;
     }
+
+    public function getApproverListByCategory($category_id)
+    {
+        $q = $this->db->get_where('approver_list', array('category_id' => $category_id, 'approver_seq' => 1), 1);
+        $this->db->order_by('approver_seq', 'asc');
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    function getApproveCustomer($userList, $approveId)
+    {
+        $userDetails = null;
+        foreach ($userList as $user) {
+            if ($approveId == $user->id) {
+                $userDetails = $user;
+                break;
+            }
+        }
+        return $userDetails;
+    }
+
+    public function getAllTypeByHierarchy()
+    {
+        $this->db->select('order_types.id, order_types.name,approver_list.status')
+        ->join('approver_list', 'approver_list.category_id=order_types.id', 'inner');
+        $this->db->where('approver_list.approver_next_seq', 0);
+        $q = $this->db->get('order_types');
+//        $this->db->where('approver_list.approver_next_sequence', 0);
+
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getInvoiceByID($id)
+    {
+        $q = $this->db->get_where('sales', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
 
 }

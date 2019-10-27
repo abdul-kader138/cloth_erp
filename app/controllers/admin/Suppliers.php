@@ -11,10 +11,10 @@ class Suppliers extends MY_Controller
             $this->session->set_userdata('requested_page', $this->uri->uri_string());
             $this->sma->md('login');
         }
-        if ($this->Customer || $this->Supplier) {
-            $this->session->set_flashdata('warning', lang('access_denied'));
-            redirect($_SERVER["HTTP_REFERER"]);
-        }
+//        if ($this->Customer || $this->Supplier) {
+//            $this->session->set_flashdata('warning', lang('access_denied'));
+//            redirect($_SERVER["HTTP_REFERER"]);
+//        }
         $this->lang->admin_load('suppliers', $this->Settings->user_language);
         $this->load->library('form_validation');
         $this->load->admin_model('companies_model');
@@ -190,6 +190,7 @@ class Suppliers extends MY_Controller
                 'gender' => $this->input->post('gender'),
                 'company_id' => $company->id,
                 'company' => $company->company,
+                'view_right' => 1,
                 'group_id' => 3
             );
             $this->load->library('ion_auth');

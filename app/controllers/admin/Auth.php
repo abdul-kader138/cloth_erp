@@ -54,7 +54,7 @@ class Auth extends MY_Controller
             ->from("users")
             ->join('groups', 'users.group_id=groups.id', 'left')
             ->group_by('users.id')
-            ->where('company_id', NULL)
+//            ->where('company_id', NULL)
             ->edit_column('active', '$1__$2', 'active, id')
             ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('auth/profile/$1') . "' class='tip' title='" . lang("edit_user") . "'><i class=\"fa fa-edit\"></i></a></div>", "id");
 
@@ -211,16 +211,17 @@ class Auth extends MY_Controller
                         admin_redirect('auth/logout');
                     }
                 }
-                if ($this->ion_auth->in_group('customer') || $this->ion_auth->in_group('supplier')) {
-                    if(file_exists(APPPATH.'controllers'.DIRECTORY_SEPARATOR.'shop'.DIRECTORY_SEPARATOR.'Shop.php')) {
-                        $this->session->set_flashdata('message', $this->ion_auth->messages());
-                        redirect(base_url());
-                    } else {
-                        admin_redirect('auth/logout/1');
-                    }
-                }
+//                if ($this->ion_auth->in_group('customer') || $this->ion_auth->in_group('supplier')) {
+//                    if(file_exists(APPPATH.'controllers'.DIRECTORY_SEPARATOR.'shop'.DIRECTORY_SEPARATOR.'Shop.php')) {
+//                        $this->session->set_flashdata('message', $this->ion_auth->messages());
+//                        redirect(base_url());
+//                    } else {
+//                        admin_redirect('auth/logout/1');
+//                    }
+//                }
                 $this->session->set_flashdata('message', $this->ion_auth->messages());
-                $referrer = ($this->session->userdata('requested_page') && $this->session->userdata('requested_page') != 'admin') ? $this->session->userdata('requested_page') : 'welcome';
+                $referrer = 'welcome';
+//                $referrer = ($this->session->userdata('requested_page') && $this->session->userdata('requested_page') != 'admin') ? $this->session->userdata('requested_page') : 'welcome';
                 admin_redirect($referrer);
             } else {
                 $this->session->set_flashdata('error', $this->ion_auth->errors());
@@ -274,11 +275,11 @@ class Auth extends MY_Controller
                 'placeholder' => lang('password'),
             );
             $this->data['allow_reg'] = $this->Settings->allow_reg;
-            if ($m == 'db') {
-                $this->data['message'] = lang('db_restored');
-            } elseif ($m) {
-                $this->data['error'] = lang('we_are_sorry_as_this_sction_is_still_under_development.');
-            }
+//                       if ($m == 'db') {
+//                $this->data['message'] = lang('db_restored');
+//            } elseif ($m) {
+//                $this->data['error'] = lang('we_are_sorry_as_this_sction_is_still_under_development.');
+//            }
 
             $this->load->view($this->theme . 'auth/login', $this->data);
         }
