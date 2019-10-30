@@ -823,9 +823,9 @@ class Settings_model extends CI_Model
         return FALSE;
     }
 
-    public function checkApproverExistance($id,$approver_seq,$approver_next_seq)
+    public function checkApproverExistance($id,$approver_seq)
     {
-        $q = $this->db->get_where("approver_list", array('category_id' => $id,'approver_seq'=>$approver_seq,'approver_next_seq'=>$approver_next_seq), 1);
+        $q = $this->db->get_where("approver_list", array('category_id' => $id,'approver_seq'=>$approver_seq), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
         }

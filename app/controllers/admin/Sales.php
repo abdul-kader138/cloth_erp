@@ -47,7 +47,7 @@ class Sales extends MY_Controller
         $this->page_construct('sales/index', $meta, $this->data);
     }
 
-    public function getSales($warehouse_id = null,$customer_id=null)
+    public function getSales($warehouse_id = null, $customer_id = null)
     {
         $this->sma->checkPermissions('index');
 
@@ -66,12 +66,12 @@ class Sales extends MY_Controller
         $pdf_link = anchor('admin/sales/pdf/$1', '<i class="fa fa-file-pdf-o"></i> ' . lang('download_pdf'));
         $return_link = anchor('admin/sales/return_sale/$1', '<i class="fa fa-angle-double-left"></i> ' . lang('return_sale'));
         $delete_link = "<a href='#' class='po' title='<b>" . lang("delete_sale") . "</b>' data-content=\"<p>"
-        . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('sales/delete/$1') . "'>"
-        . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> "
-        . lang('delete_sale') . "</a>";
+            . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('sales/delete/$1') . "'>"
+            . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> "
+            . lang('delete_sale') . "</a>";
         $action = '<div class="text-center"><div class="btn-group text-left">'
-        . '<button type="button" class="btn btn-default btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">'
-        . lang('actions') . ' <span class="caret"></span></button>
+            . '<button type="button" class="btn btn-default btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">'
+            . lang('actions') . ' <span class="caret"></span></button>
         <ul class="dropdown-menu pull-right" role="menu">
             <li>' . $detail_link . '</li>
             <li>' . $duplicate_link . '</li>
@@ -88,7 +88,7 @@ class Sales extends MY_Controller
     </div></div>';
         //$action = '<div class="text-center">' . $detail_link . ' ' . $edit_link . ' ' . $email_link . ' ' . $delete_link . '</div>';
 
-        if(!$customer_id){
+        if (!$customer_id) {
             $this->load->library('datatables');
             if ($warehouse_id) {
                 $this->datatables
@@ -121,7 +121,7 @@ class Sales extends MY_Controller
             }
             $this->datatables->add_column("Actions", $action, "id");
             echo $this->datatables->generate();
-        }else{
+        } else {
             $this->load->library('datatables');
             if ($warehouse_id) {
                 $this->datatables
@@ -246,7 +246,7 @@ class Sales extends MY_Controller
 
         $name = lang("sale") . "_" . str_replace('/', '_', $inv->reference_no) . ".pdf";
         $html = $this->load->view($this->theme . 'sales/pdf', $this->data, true);
-        if (! $this->Settings->barcode_img) {
+        if (!$this->Settings->barcode_img) {
             $html = preg_replace("'\<\?xml(.*)\?\>'", '', $html);
         }
 
@@ -281,7 +281,7 @@ class Sales extends MY_Controller
             $this->data['return_sale'] = $inv->return_id ? $this->sales_model->getInvoiceByID($inv->return_id) : NULL;
             $this->data['return_rows'] = $inv->return_id ? $this->sales_model->getAllInvoiceItems($inv->return_id) : NULL;
             $html_data = $this->load->view($this->theme . 'sales/pdf', $this->data, true);
-            if (! $this->Settings->barcode_img) {
+            if (!$this->Settings->barcode_img) {
                 $html_data = preg_replace("'\<\?xml(.*)\?\>'", '', $html_data);
             }
 
@@ -332,8 +332,8 @@ class Sales extends MY_Controller
             $parse_data = array(
                 'reference_number' => $inv->reference_no,
                 'contact_person' => $customer->name,
-                'company' => $customer->company && $customer->company != '-' ? '('.$customer->company.')' : '',
-                'order_link' => $inv->shop ? shop_url('orders/'.$inv->id.'/'.($this->loggedIn ? '' : $inv->hash)) : base_url(),
+                'company' => $customer->company && $customer->company != '-' ? '(' . $customer->company . ')' : '',
+                'order_link' => $inv->shop ? shop_url('orders/' . $inv->id . '/' . ($this->loggedIn ? '' : $inv->hash)) : base_url(),
                 'site_link' => base_url(),
                 'site_name' => $this->Settings->site_name,
                 'logo' => '<img src="' . base_url() . 'assets/uploads/logos/' . $biller->logo . '" alt="' . ($biller->company != '-' ? $biller->company : $biller->name) . '"/>',
@@ -421,6 +421,7 @@ class Sales extends MY_Controller
         $this->form_validation->set_rules('sale_status', lang("sale_status"), 'required');
         $this->form_validation->set_rules('payment_status', lang("payment_status"), 'required');
         $this->form_validation->set_rules('category_id', lang("Order_Type"), 'required');
+        $this->form_validation->set_rules('ddate', lang("Delivery_Date"), 'required');
 
         if ($this->form_validation->run() == true) {
 
@@ -430,6 +431,7 @@ class Sales extends MY_Controller
             } else {
                 $date = date('Y-m-d H:i:s');
             }
+            $ddate = $this->sma->fld(trim($this->input->post('ddate')));
             $warehouse_id = $this->input->post('warehouse');
             $customer_id = $this->input->post('customer');
             $biller_id = $this->input->post('biller');
@@ -465,9 +467,9 @@ class Sales extends MY_Controller
             $tax_seq = $seq_details['tax_seq'];
             $tax_prefix = $seq_details['tax_prefix'];
             $tax_security = $seq_details['tax_security'];
-            $tax_sl = $tax_prefix."-".sprintf("%08s",$tax_seq);
-            $tax_seq_limit=$seq_details['tax_seq_limit'];
-            $tax_expire_date=$seq_details['expire_date'];
+            $tax_sl = $tax_prefix . "-" . sprintf("%08s", $tax_seq);
+            $tax_seq_limit = $seq_details['tax_seq_limit'];
+            $tax_expire_date = $seq_details['expire_date'];
 
             $total = 0;
             $product_tax = 0;
@@ -565,24 +567,7 @@ class Sales extends MY_Controller
             $total_tax = $this->sma->formatDecimal(($product_tax + $order_tax), 4);
             $grand_total = $this->sma->formatDecimal(($total + $total_tax + $this->sma->formatDecimal($shipping) - $order_discount), 4);
 
-            $userLists = $this->site->getAllUser();
-            $approver_details = $this->site->getApproverListByCategory($this->input->post('category_id'));
-            $user_details = $this->site->getApproveCustomer($userLists, $approver_details->approver_id);
-
-//            $order_type= $this->site->getOrderTypeByID($this->input->post('category_id'));
-
-            $approve_data = array(
-                'aprrover_id' => $approver_details->approver_id,
-                'status' => 'Waiting For ' . $approver_details->approver_seq_name."(". $user_details->first_name." ".$user_details->last_name.")",
-                'approver_seq' => $approver_details->approver_seq,
-                'approver_seq_name' => $approver_details->approver_seq_name,
-                'created_by' => $this->session->userdata('user_id'),
-                'type' => 'Sales',
-                'next_approve_seq' => $approver_details->approver_next_seq,
-                'category_id' => $this->input->post('category_id'),
-                'created_date' => date("Y-m-d H:i:s")
-            );
-
+            $user_details = $this->getAllApprovalList($this->input->post('category_id'));
 
 
             $data = array('date' => $date,
@@ -617,15 +602,14 @@ class Sales extends MY_Controller
                 'payment_status' => $payment_status,
                 'payment_term' => $payment_term,
                 'due_date' => $due_date,
-                'order_type' =>$this->input->post('category_id'),
-                'order_type_status'=>0,
-                'hierarchy_status' => 'Waiting For ' . $approver_details->approver_seq_name."(". $user_details->first_name." ".$user_details->last_name.")",
+                'order_type' => $this->input->post('category_id'),
+                'order_type_status' => 0,
+                'hierarchy_status' => '',
+                'delivery_date' => $ddate,
                 'paid' => 0,
                 'created_by' => $this->session->userdata('user_id'),
                 'hash' => hash('sha256', microtime() . mt_rand()),
             );
-
-
 
 
             if ($this->Settings->indian_gst) {
@@ -636,9 +620,9 @@ class Sales extends MY_Controller
 
 
             // Credit Sale implement
-            if ($payment_term = 'due' || $payment_term = 'partial' ||$payment_term = 'pending'){
-                $bill_amount=0;
-                if ($this->input->post('amount-paid')) $bill_amount= $this->sma->formatDecimal($this->input->post('amount-paid'));
+            if ($payment_term = 'due' || $payment_term = 'partial' || $payment_term = 'pending') {
+                $bill_amount = 0;
+                if ($this->input->post('amount-paid')) $bill_amount = $this->sma->formatDecimal($this->input->post('amount-paid'));
                 $total_sales_amount = $this->sales_model->getAllSalesFroCustomer($customer_id);
 
 //                credit sales check
@@ -653,7 +637,7 @@ class Sales extends MY_Controller
 
             if ($payment_status == 'partial' || $payment_status == 'paid') {
                 if ($this->input->post('paid_by') == 'deposit') {
-                    if ( ! $this->site->check_customer_deposit($customer_id, $this->input->post('amount-paid'))) {
+                    if (!$this->site->check_customer_deposit($customer_id, $this->input->post('amount-paid'))) {
                         $this->session->set_flashdata('error', lang("amount_greater_than_deposit"));
                         redirect($_SERVER["HTTP_REFERER"]);
                     }
@@ -716,12 +700,12 @@ class Sales extends MY_Controller
                 $data['attachment'] = $photo;
             }
 
-            $si_return=array();
+            $si_return = array();
 
             // $this->sma->print_arrays($data, $products, $payment);
         }
 
-        if ($this->form_validation->run() == true && $this->sales_model->addSale($data, $products, $payment,$si_return,$approve_data)) {
+        if ($this->form_validation->run() == true && $this->sales_model->addSale($data, $products, $payment, $si_return, $user_details)) {
             $this->session->set_userdata('remove_slls', 1);
             if ($quote_id) {
                 $this->db->update('quotes', array('status' => 'completed'), array('id' => $quote_id));
@@ -796,7 +780,7 @@ class Sales extends MY_Controller
                     $ri = $this->Settings->item_addition ? $row->id : $c;
 
                     $pr[$ri] = array('id' => $c, 'item_id' => $row->id, 'label' => $row->name . " (" . $row->code . ")",
-                            'row' => $row, 'combo_items' => $combo_items, 'tax_rate' => $tax_rate, 'units' => $units, 'options' => $options);
+                        'row' => $row, 'combo_items' => $combo_items, 'tax_rate' => $tax_rate, 'units' => $units, 'options' => $options);
                     $c++;
                 }
                 $this->data['quote_items'] = json_encode($pr);
@@ -987,20 +971,18 @@ class Sales extends MY_Controller
             );
 
             // Credit Sale implement
-            if ($payment_term = 'due' || $payment_term = 'partial' ||$payment_term = 'pending'){
-                $bill_amount=0;
-                if ($this->input->post('amount-paid')) $bill_amount= $this->sma->formatDecimal($this->input->post('amount-paid'));
+            if ($payment_term = 'due' || $payment_term = 'partial' || $payment_term = 'pending') {
+                $bill_amount = 0;
+                if ($this->input->post('amount-paid')) $bill_amount = $this->sma->formatDecimal($this->input->post('amount-paid'));
                 $total_sales_amount = $this->sales_model->getAllSalesFroCustomer($customer_id);
                 $total_payments_amount = $this->sales_model->getAllPaymentsFroCustomer($customer_id);
-                $total_amount = ($total_payments_amount->pay_val + $customer_details->customer_credit_limit)+$bill_amount;
+                $total_amount = ($total_payments_amount->pay_val + $customer_details->customer_credit_limit) + $bill_amount;
                 $sales_amount = ($total_sales_amount[0]->grand_total + $grand_total);
                 if ($total_amount <= $sales_amount) {
                     $this->session->set_flashdata('error', lang("insufficient_credit"));
                     redirect($_SERVER["HTTP_REFERER"]);
                 }
             }
-
-
 
 
             if ($this->Settings->indian_gst) {
@@ -1039,7 +1021,7 @@ class Sales extends MY_Controller
 
             $this->data['inv'] = $this->sales_model->getInvoiceByID($id);
             if ($this->Settings->disable_editing) {
-                if ($this->data['inv']->date <= date('Y-m-d', strtotime('-'.$this->Settings->disable_editing.' days'))) {
+                if ($this->data['inv']->date <= date('Y-m-d', strtotime('-' . $this->Settings->disable_editing . ' days'))) {
                     $this->session->set_flashdata('error', sprintf(lang("sale_x_edited_older_than_x_days"), $this->Settings->disable_editing));
                     redirect($_SERVER["HTTP_REFERER"]);
                 }
@@ -1174,12 +1156,12 @@ class Sales extends MY_Controller
                 $item_option = isset($_POST['product_option'][$r]) && $_POST['product_option'][$r] != 'false' && $_POST['product_option'][$r] != 'null' ? $_POST['product_option'][$r] : null;
                 $real_unit_price = $this->sma->formatDecimal($_POST['real_unit_price'][$r]);
                 $unit_price = $this->sma->formatDecimal($_POST['unit_price'][$r]);
-                $item_unit_quantity = (0-$_POST['quantity'][$r]);
+                $item_unit_quantity = (0 - $_POST['quantity'][$r]);
                 $item_serial = isset($_POST['serial'][$r]) ? $_POST['serial'][$r] : '';
                 $item_tax_rate = isset($_POST['product_tax'][$r]) ? $_POST['product_tax'][$r] : null;
                 $item_discount = isset($_POST['product_discount'][$r]) ? $_POST['product_discount'][$r] : null;
                 $item_unit = $_POST['product_unit'][$r];
-                $item_quantity = (0-$_POST['product_base_quantity'][$r]);
+                $item_quantity = (0 - $_POST['product_base_quantity'][$r]);
 
                 if (isset($item_code) && isset($real_unit_price) && isset($unit_price) && isset($item_quantity)) {
                     $product_details = $item_type != 'manual' ? $this->sales_model->getProductByCode($item_code) : null;
@@ -1242,9 +1224,9 @@ class Sales extends MY_Controller
                         'sale_id' => $id,
                         'product_id' => $item_id,
                         'option_id' => $item_option,
-                        'quantity' => (0-$item_quantity),
+                        'quantity' => (0 - $item_quantity),
                         'warehouse_id' => $sale->warehouse_id,
-                        );
+                    );
 
                     $products[] = ($product + $gst_data);
                     $total += $this->sma->formatDecimal(($item_net_price * $item_unit_quantity), 4);
@@ -1298,7 +1280,7 @@ class Sales extends MY_Controller
                 $payment = array(
                     'date' => $date,
                     'reference_no' => $pay_ref,
-                    'amount' => (0-$this->input->post('amount-paid')),
+                    'amount' => (0 - $this->input->post('amount-paid')),
                     'paid_by' => $this->input->post('paid_by'),
                     'cheque_no' => $this->input->post('cheque_no'),
                     'cc_no' => $this->input->post('pcc_no'),
@@ -1347,7 +1329,7 @@ class Sales extends MY_Controller
                 redirect($_SERVER["HTTP_REFERER"]);
             }
             if ($this->Settings->disable_editing) {
-                if ($this->data['inv']->date <= date('Y-m-d', strtotime('-'.$this->Settings->disable_editing.' days'))) {
+                if ($this->data['inv']->date <= date('Y-m-d', strtotime('-' . $this->Settings->disable_editing . ' days'))) {
                     $this->session->set_flashdata('error', sprintf(lang("sale_x_edited_older_than_x_days"), $this->Settings->disable_editing));
                     redirect($_SERVER["HTTP_REFERER"]);
                 }
@@ -1425,6 +1407,7 @@ class Sales extends MY_Controller
 
         if ($this->sales_model->deleteSale($id)) {
             if ($this->input->is_ajax_request()) {
+                $this->sales_model->deleteApproverDetails($id);
                 $this->sma->send_json(array('error' => 0, 'msg' => lang("sale_deleted")));
             }
             $this->session->set_flashdata('message', lang('sale_deleted'));
@@ -1541,12 +1524,12 @@ class Sales extends MY_Controller
         $edit_link = anchor('admin/sales/edit_delivery/$1', '<i class="fa fa-edit"></i> ' . lang('edit_delivery'), 'data-toggle="modal" data-target="#myModal"');
         $pdf_link = anchor('admin/sales/pdf_delivery/$1', '<i class="fa fa-file-pdf-o"></i> ' . lang('download_pdf'));
         $delete_link = "<a href='#' class='po' title='<b>" . lang("delete_delivery") . "</b>' data-content=\"<p>"
-        . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('sales/delete_delivery/$1') . "'>"
-        . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> "
-        . lang('delete_delivery') . "</a>";
+            . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('sales/delete_delivery/$1') . "'>"
+            . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> "
+            . lang('delete_delivery') . "</a>";
         $action = '<div class="text-center"><div class="btn-group text-left">'
-        . '<button type="button" class="btn btn-default btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">'
-        . lang('actions') . ' <span class="caret"></span></button>
+            . '<button type="button" class="btn btn-default btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">'
+            . lang('actions') . ' <span class="caret"></span></button>
     <ul class="dropdown-menu pull-right" role="menu">
         <li>' . $detail_link . '</li>
         <li>' . $edit_link . '</li>
@@ -1585,7 +1568,7 @@ class Sales extends MY_Controller
 
         $name = lang("delivery") . "_" . str_replace('/', '_', $deli->do_reference_no) . ".pdf";
         $html = $this->load->view($this->theme . 'sales/pdf_delivery', $this->data, true);
-        if (! $this->Settings->barcode_img) {
+        if (!$this->Settings->barcode_img) {
             $html = preg_replace("'\<\?xml(.*)\?\>'", '', $html);
         }
         if ($view) {
@@ -1660,7 +1643,7 @@ class Sales extends MY_Controller
                     'received_by' => $this->input->post('received_by'),
                     'note' => $this->sma->clear_tags($this->input->post('note')),
                     'created_by' => $this->session->userdata('user_id'),
-                    );
+                );
                 if ($_FILES['document']['size'] > 0) {
                     $this->load->library('upload');
                     $config['upload_path'] = $this->digital_upload_path;
@@ -1877,25 +1860,25 @@ class Sales extends MY_Controller
         $inv = $this->sales_model->getInvoiceByID($payment->sale_id);
         $this->data['biller'] = $this->site->getCompanyByID($inv->biller_id);
         $customer = $this->site->getCompanyByID($inv->customer_id);
-        if ( ! $customer->email) {
+        if (!$customer->email) {
             $this->sma->send_json(array('msg' => lang("update_customer_email")));
         }
         $this->data['inv'] = $inv;
         $this->data['payment'] = $payment;
-        $this->data['customer'] =$customer;
+        $this->data['customer'] = $customer;
         $this->data['page_title'] = lang("payment_note");
         $html = $this->load->view($this->theme . 'sales/payment_note', $this->data, TRUE);
 
-        $html = str_replace(array('<i class="fa fa-2x">&times;</i>', 'modal-', '<p>&nbsp;</p>', '<p style="border-bottom: 1px solid #666;">&nbsp;</p>', '<p>'.lang("stamp_sign").'</p>'), '', $html);
+        $html = str_replace(array('<i class="fa fa-2x">&times;</i>', 'modal-', '<p>&nbsp;</p>', '<p style="border-bottom: 1px solid #666;">&nbsp;</p>', '<p>' . lang("stamp_sign") . '</p>'), '', $html);
         $html = preg_replace("/<img[^>]+\>/i", '', $html);
         // $html = '<div style="border:1px solid #DDD; padding:10px; margin:10px 0;">'.$html.'</div>';
 
         $this->load->library('parser');
         $parse_data = array(
-            'stylesheet' => '<link href="'.$this->data['assets'].'styles/helpers/bootstrap.min.css" rel="stylesheet"/>',
-            'name' => $customer->company && $customer->company != '-' ? $customer->company :  $customer->name,
+            'stylesheet' => '<link href="' . $this->data['assets'] . 'styles/helpers/bootstrap.min.css" rel="stylesheet"/>',
+            'name' => $customer->company && $customer->company != '-' ? $customer->company : $customer->name,
             'email' => $customer->email,
-            'heading' => lang('payment_note').'<hr>',
+            'heading' => lang('payment_note') . '<hr>',
             'msg' => $html,
             'site_link' => base_url(),
             'site_name' => $this->Settings->site_name,
@@ -1933,7 +1916,7 @@ class Sales extends MY_Controller
             $sale = $this->sales_model->getInvoiceByID($this->input->post('sale_id'));
             if ($this->input->post('paid_by') == 'deposit') {
                 $customer_id = $sale->customer_id;
-                if ( ! $this->site->check_customer_deposit($customer_id, $this->input->post('amount-paid'))) {
+                if (!$this->site->check_customer_deposit($customer_id, $this->input->post('amount-paid'))) {
                     $this->session->set_flashdata('error', lang("amount_greater_than_deposit"));
                     redirect($_SERVER["HTTP_REFERER"]);
                 }
@@ -1959,7 +1942,7 @@ class Sales extends MY_Controller
                 'cc_type' => $this->input->post('pcc_type'),
                 'note' => $this->input->post('note'),
                 'created_by' => $this->session->userdata('user_id'),
-                'payment_method'=>$sale->payment_method,
+                'payment_method' => $sale->payment_method,
                 'type' => 'received',
             );
 
@@ -2029,8 +2012,8 @@ class Sales extends MY_Controller
             if ($this->input->post('paid_by') == 'deposit') {
                 $sale = $this->sales_model->getInvoiceByID($this->input->post('sale_id'));
                 $customer_id = $sale->customer_id;
-                $amount = $this->input->post('amount-paid')-$payment->amount;
-                if ( ! $this->site->check_customer_deposit($customer_id, $amount)) {
+                $amount = $this->input->post('amount-paid') - $payment->amount;
+                if (!$this->site->check_customer_deposit($customer_id, $amount)) {
                     $this->session->set_flashdata('error', lang("amount_greater_than_deposit"));
                     redirect($_SERVER["HTTP_REFERER"]);
                 }
@@ -2198,7 +2181,7 @@ class Sales extends MY_Controller
                 $units = $this->site->getUnitsByBUID($row->base_unit);
                 $tax_rate = $this->site->getTaxRateByID($row->tax_rate);
 
-                $pr[] = array('id' => sha1($c.$r), 'item_id' => $row->id, 'label' => $row->name . " (" . $row->code . ")", 'category' => $row->category_id,
+                $pr[] = array('id' => sha1($c . $r), 'item_id' => $row->id, 'label' => $row->name . " (" . $row->code . ")", 'category' => $row->category_id,
                     'row' => $row, 'combo_items' => $combo_items, 'tax_rate' => $tax_rate, 'units' => $units, 'options' => $options);
                 $r++;
             }
@@ -2257,7 +2240,7 @@ class Sales extends MY_Controller
                 'date' => date('Y-m-d H:i:s'),
                 'created_by' => $this->session->userdata('user_id'),
             );
-            $card_data['balance'] = ($this->input->post('amount')+$card->balance);
+            $card_data['balance'] = ($this->input->post('amount') + $card->balance);
             // $card_data['value'] = ($this->input->post('amount')+$card->value);
             if ($this->input->post('expiry')) {
                 $card_data['expiry'] = $this->sma->fld(trim($this->input->post('expiry')));
@@ -2528,7 +2511,7 @@ class Sales extends MY_Controller
             $due_date = $payment_term ? date('Y-m-d', strtotime('+' . $payment_term . ' days')) : null;
             $shipping = $this->input->post('shipping') ? $this->input->post('shipping') : 0;
             $customer_details = $this->site->getCompanyByID($customer_id);
-            $customer = $customer_details->company != '-'  ? $customer_details->company : $customer_details->name;
+            $customer = $customer_details->company != '-' ? $customer_details->company : $customer_details->name;
             $biller_details = $this->site->getCompanyByID($biller_id);
             $biller = $biller_details->company != '-' ? $biller_details->company : $biller_details->name;
             $note = $this->sma->clear_tags($this->input->post('note'));
@@ -2649,7 +2632,7 @@ class Sales extends MY_Controller
                                     'real_unit_price' => $this->sma->formatDecimal(($item_net_price + $item_tax + $pr_discount), 4),
                                 );
 
-                                $products[] = ($product+$gst_data);
+                                $products[] = ($product + $gst_data);
                                 $total += $this->sma->formatDecimal(($item_net_price * $item_quantity), 4);
                             }
 
@@ -2788,7 +2771,7 @@ class Sales extends MY_Controller
                 $this->data['returned'] = TRUE;
             }
             $this->data['modal_js'] = $this->site->modal_js();
-            $this->load->view($this->theme.'sales/update_status', $this->data);
+            $this->load->view($this->theme . 'sales/update_status', $this->data);
 
         }
     }
@@ -2796,29 +2779,28 @@ class Sales extends MY_Controller
     public function packaging($id)
     {
 
-            $sale = $this->sales_model->getInvoiceByID($id);
-            $this->data['returned'] = FALSE;
-            if ($sale->sale_status == 'returned' || $sale->return_id) {
-                $this->data['returned'] = TRUE;
-            }
-            $this->data['warehouse'] = $this->site->getWarehouseByID($sale->warehouse_id);
-            $items = $this->sales_model->getAllInvoiceItems($sale->id);
-            foreach ($items as $item) {
-                $packaging[] = array(
-                    'name' => $item->product_code.' - '.$item->product_name,
-                    'quantity' => $item->quantity.' '.$item->product_unit_code,
-                    'rack' => $this->sales_model->getItemRack($item->product_id, $sale->warehouse_id),
-                    );
-            }
-            $this->data['packaging'] = $packaging;
-            $this->data['sale'] = $sale;
+        $sale = $this->sales_model->getInvoiceByID($id);
+        $this->data['returned'] = FALSE;
+        if ($sale->sale_status == 'returned' || $sale->return_id) {
+            $this->data['returned'] = TRUE;
+        }
+        $this->data['warehouse'] = $this->site->getWarehouseByID($sale->warehouse_id);
+        $items = $this->sales_model->getAllInvoiceItems($sale->id);
+        foreach ($items as $item) {
+            $packaging[] = array(
+                'name' => $item->product_code . ' - ' . $item->product_name,
+                'quantity' => $item->quantity . ' ' . $item->product_unit_code,
+                'rack' => $this->sales_model->getItemRack($item->product_id, $sale->warehouse_id),
+            );
+        }
+        $this->data['packaging'] = $packaging;
+        $this->data['sale'] = $sale;
 
-            $this->load->view($this->theme.'sales/packaging', $this->data);
+        $this->load->view($this->theme . 'sales/packaging', $this->data);
 
     }
-    
-    
-    
+
+
     //    Day End Report
 
     public function day_end_report()
@@ -2864,7 +2846,7 @@ class Sales extends MY_Controller
 
     public function day_end_receipt_view($id = null)
     {
-       // $this->sma->checkPermissions('index', true);
+        // $this->sma->checkPermissions('index', true);
 
         if ($this->input->get('start_date')) {
             $start_date_new = $this->input->get('start_date');
@@ -2898,22 +2880,55 @@ class Sales extends MY_Controller
         $result->return = number_format($return_result->paid, 2);
         $result->credit_sales_paid = $credit_sale_result->paid;
         $result->credit_sales = $credit_sale_result->total;
-        $result->total=($result->cash+$result->credit+$result->debit+$result->cheque+$result->amex+$result->visa+$result->mc+$result->gift+$result->deposit+$result->credit_sales_paid);
-        $result->dues=(number_format($result->grand_total,2) - number_format($result->total,2));
-        $result->s_date=substr($start_date_new,0,11);
-        $result->e_date=substr($end_date_new,0,11);
-        $this->data['result']=$result;
+        $result->total = ($result->cash + $result->credit + $result->debit + $result->cheque + $result->amex + $result->visa + $result->mc + $result->gift + $result->deposit + $result->credit_sales_paid);
+        $result->dues = (number_format($result->grand_total, 2) - number_format($result->total, 2));
+        $result->s_date = substr($start_date_new, 0, 11);
+        $result->e_date = substr($end_date_new, 0, 11);
+        $this->data['result'] = $result;
         $this->load->view($this->theme . 'sales/day_end_receipt_view', $this->data);
     }
 
 
-    public function getSalesHistory($id = null){
+    public function getSalesHistory($id = null)
+    {
         $customer_details = $this->site->getCompanyByID($id);
         $total_sales_amount = $this->sales_model->getAllSalesFroCustomer($id);
         $total_payments_amount = $this->sales_model->getAllPaymentsFroPosCustomer($id);
         $total_amount = $total_sales_amount[0]->paid;
         $sales_amount = $total_sales_amount[0]->grand_total;
-        $rows=array("sales_amount"=>$sales_amount,"credit_limit"=>$customer_details->customer_credit_limit,"paid"=>$total_amount,"customer"=>$customer_details->name);
+        $rows = array("sales_amount" => $sales_amount, "credit_limit" => $customer_details->customer_credit_limit, "paid" => $total_amount, "customer" => $customer_details->name);
         $this->sma->send_json($rows);
+    }
+
+
+    public function getAllApprovalList($category_id)
+    {
+        $approver_details = $this->site->getAllApproverListByCategory($category_id);
+
+
+//            $order_type= $this->site->getOrderTypeByID($this->input->post('category_id'));
+        $allAppoverList = array();
+
+        foreach ($approver_details as $approver_detail) {
+//            $user_details = $this->sales_model->getUserByIds($approver_detail->approver_id);
+            $allAppoverList = array(
+                'aprrover_id' => $approver_detail->approver_id,
+//                'status' => 'Waiting For ' . $approver_detail->approver_seq_name . "(" . $user_details->first_name . " " . $user_details->last_name . ")",
+                'status' => 'Waiting For ' . $approver_detail->approver_seq_name . ' approval',
+                'approver_seq' => $approver_detail->approver_seq,
+                'approver_seq_name' => $approver_detail->approver_seq_name,
+                'created_by' => $this->session->userdata('user_id'),
+                'updated_by' => $this->session->userdata('user_id'),
+                'type' => 'Sales',
+                'next_approve_seq' => $approver_detail->approver_next_seq,
+                'category_id' => $category_id,
+                'approve_status' => 'Has Not Started',
+                'updated_date' => date("Y-m-d H:i:s"),
+                'created_date' => date("Y-m-d H:i:s")
+            );
+            $allAppoverLists[] = $allAppoverList;
+        }
+
+        return $allAppoverLists;
     }
 }

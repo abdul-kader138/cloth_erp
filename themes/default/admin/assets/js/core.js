@@ -1143,6 +1143,9 @@ $(document).ready(function() {
         $('#myModal').modal({remote: site.base_url + 'sales/modal_view/' + $(this).closest('tr').attr('id')});
         $('#myModal').modal('show');
     });
+
+
+
     $('#clearLS').click(function(event) {
         bootbox.confirm(lang.r_u_sure, function(result) {
         if(result == true) {
@@ -1250,5 +1253,26 @@ $(document).on('click', '.row_approve_status', function (e) {
     $('#myModal').modal('show');
     return false;
 });
+
+$(document).on('click', '.sales_modal_open', function (e) {
+    e.preventDefault;
+    var id = $(this).attr('id');
+    $('#myModal').modal({remote: site.base_url + 'sales/modal_view/' + id});
+    $('#myModal').modal('show');
+    return false;
+});
+
+$(document).on('click', '.task_modal_open', function (e) {
+    e.preventDefault;
+    var id = $(this).attr('id');
+    $('#myModal').modal({remote: site.base_url + 'approval/update_status/' + id});
+    $('#myModal').modal('show');
+    return false;
+});
+
+
+
+
+
 $(window).bind("resize", widthFunctions);
 $(window).load(widthFunctions);

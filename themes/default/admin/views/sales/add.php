@@ -488,11 +488,20 @@
 
                             </div>
                         </div>
+
+
                         <?php 
                         } else {
                             echo form_hidden('payment_status', 'pending');
                         }
                         ?>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <?= lang("Delivery_Date", "Delivery_Date"); ?>
+                                <?php echo form_input('ddate', (isset($_POST['ddate']) ? $_POST['ddate'] : ""), 'class="form-control input-tip date" id="dldate" required="required"'); ?>
+                            </div>
+                        </div>
                         <div class="clearfix"></div>
 
                         <div id="payments" style="display: none;">

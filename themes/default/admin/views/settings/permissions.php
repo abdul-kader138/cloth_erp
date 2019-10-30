@@ -427,6 +427,13 @@
                                                    name="approval_sales_status_approve" <?php echo $p->approval_sales_status_approve ? "checked" : ''; ?>>
                                             <label for="approval_sales_status_approve" class="padding05"><?= lang('Sales_Status_Approval') ?></label>
                                         </span>
+                                        <span style="inline-block">
+                                            <input type="checkbox" value="1" class="checkbox" id="sales_type_status_view"
+                                                   name="sales_type_status_view" <?php echo $p->{'sales_type_status_view'} ? "checked" : ''; ?>>
+                                            <label for="bulk_actions" class="padding05"><?= lang('Sales_Type_Status_View') ?></label>
+                                        </span>
+
+
                                     </td>
                                 </tr>
 

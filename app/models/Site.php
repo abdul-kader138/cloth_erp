@@ -1580,7 +1580,6 @@ class Site extends CI_Model
     {
         $this->db->select('order_types.id, order_types.name,approver_list.status')
         ->join('approver_list', 'approver_list.category_id=order_types.id', 'inner');
-        $this->db->where('approver_list.approver_next_seq', 0);
         $q = $this->db->get('order_types');
 //        $this->db->where('approver_list.approver_next_sequence', 0);
 
@@ -1599,6 +1598,20 @@ class Site extends CI_Model
         $q = $this->db->get_where('sales', array('id' => $id), 1);
         if ($q->num_rows() > 0) {
             return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getAllApproverListByCategory($category_id)
+    {
+        $q = $this->db->get_where('approver_list', array('category_id' => $category_id,'is_active'=>'Active'));
+        $this->db->order_by('approver_seq', 'asc');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+
+            return $data;
         }
         return FALSE;
     }

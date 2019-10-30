@@ -14,13 +14,21 @@
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null,null, null,null,null,{"bSortable": false}]
+            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null,null, null,null,{"mRender": statusView},{"bSortable": false}]
         }).fnSetFilteringDelay().dtFilter([
             {column_number: 1, filter_default_label: "[<?=lang('Order_Type');?>]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('Approver_name');?>]", filter_type: "text", data: []},
             {column_number: 4, filter_default_label: "[<?=lang('Hierarchy_Type');?>]", filter_type: "text", data: []},
         ], "footer");
     });
+
+
+    function statusView(x){
+        if(x =='Active') return '<span class="label label-success">Active</span>';
+        if(x =='Inactive') return '<span class="label label-danger">Inactive</span>';
+        return "";
+
+    }
 
 </script>
 <div class="box">
@@ -62,7 +70,7 @@
                             <th  class="col-sm-3"><?= lang("Approver_Name"); ?></th>
                             <th  class="col-sm-1"><?= lang("Hierarchy_SL"); ?></th>
                             <th  class="col-sm-2"><?= lang("Hierarchy_Type"); ?></th>
-                            <th  class="col-sm-1"><?= lang("Next_Hierarchy_SL"); ?></th>
+                            <th  class="col-sm-1"><?= lang("Status"); ?></th>
                             <th  class="col-sm-1"><?= lang("actions"); ?></th>
                         </tr>
                         </thead>

@@ -27,6 +27,9 @@ class Welcome extends MY_Controller
             admin_redirect('sync');
         }
 
+
+
+
         $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
         $this->data['sales'] = $this->db_model->getLatestSales();
         $this->data['quotes'] = $this->db_model->getLastestQuotes();
@@ -36,11 +39,42 @@ class Welcome extends MY_Controller
         $this->data['suppliers'] = $this->db_model->getLatestSuppliers();
         $this->data['chatData'] = $this->db_model->getChartData();
         $this->data['stock'] = $this->db_model->getStockValue();
+        $getAllSales = $this->db_model->getAllPendingSales();
+        $this->data['getAllSales'] = $this->getAllSalesStep($getAllSales);
         $this->data['bs'] = $this->db_model->getBestSeller();
         $this->data['total_st'] = $this->db_model->getTotalSTApproval($this->session->userdata('user_id'));
         $lmsdate = date('Y-m-d', strtotime('first day of last month')) . ' 00:00:00';
         $lmedate = date('Y-m-d', strtotime('last day of last month')) . ' 23:59:59';
         $this->data['lmbs'] = $this->db_model->getBestSeller($lmsdate, $lmedate);
+
+
+        $this->load->library('pagination');
+        $configs = array();
+        $configs['base_url'] = admin_url("welcome/index");
+        $configs['total_rows'] = $this->data['getAllSales'];
+        $configs['per_page'] = 5;
+        $configs['uri_segment'] = 3;
+        $configs['use_page_numbers'] = TRUE;
+        $configs['num_links'] = 5;
+        $configs['full_tag_open'] = '<div class="pagination">';
+        $configs['full_tag_close'] = '</div>';
+        $configs['first_tag_open'] = '<span class="first">';
+        $configs['first_tag_close'] = '</span>';
+        $configs['first_link'] = '';
+        $configs['last_tag_open'] = '<span class="last">';
+        $configs['last_tag_close'] = '</span>';
+        $configs['last_link'] = '';
+        $configs['prev_tag_open'] = '<span class="prev">';
+        $configs['prev_tag_close'] = '</span>';
+        $configs['prev_link'] = '';
+        $configs['next_tag_open'] = '<span class="next">';
+        $configs['next_tag_close'] = '</span>';
+        $configs['next_link'] = '';
+        $configs['cur_tag_open'] = '<span class="current">';
+        $configs['cur_tag_close'] = '</span>';
+//        $this->pagination->initialize($configs);
+//        $this->data['pagination'] = $this->pagination->create_links();
+
         $bc = array(array('link' => '#', 'page' => lang('dashboard')));
         $meta = array('page_title' => lang('dashboard'), 'bc' => $bc);
         $this->page_construct('dashboard', $meta, $this->data);
@@ -139,18 +173,75 @@ class Welcome extends MY_Controller
 
     function download($file)
     {
-        if (file_exists('./files/'.$file)) {
+        if (file_exists('./files/' . $file)) {
             $this->load->helper('download');
-            force_download('./files/'.$file, NULL);
+            force_download('./files/' . $file, NULL);
             exit();
         }
         $this->session->set_flashdata('error', lang('file_x_exist'));
         redirect($_SERVER["HTTP_REFERER"]);
     }
 
-    public function slug() {
+    public function slug()
+    {
         echo $this->sma->slug($this->input->get('title', TRUE), $this->input->get('type', TRUE));
         exit();
+    }
+
+    public function getAllSalesStep($salesInfo)
+    {
+        $salesStatus = array();
+
+        foreach ($salesInfo as $item) {
+            $salesStatusStep = array();
+            $getSlatesOrderStep = $this->db_model->getSalesStep($item->order_type);
+            if ($getSlatesOrderStep) {
+                foreach ($getSlatesOrderStep as $lst) {
+                    $details = $this->db_model->getSalesStatus($item->id, $lst->approver_seq_name);
+                    if ($details) {
+                        $c_Status = "bubble";
+                        $c_Status1 = "bubble";
+                        if ($details->c_status == 'Completed') {
+                            $c_Status = "completed";
+                            $c_Status1 = "bubble";
+                        }
+                        if ($details->c_status == 'Has Not Started') {
+                            $c_Status = "bubble";
+                            $c_Status1 = "bubble";
+                        }
+                        if ($details->c_status == 'Processing') {
+                            $c_Status = "active";
+                            $c_Status1 = "bubble";
+                        }
+
+                        if ($details->c_status == 'Jump Over') {
+                            $c_Status = "info";
+                            $c_Status1 = "bubble";
+                        }
+
+                            $salesStatusStep[] = array(
+                                'step' => $lst->approver_seq_name,
+                                'id' => $details->ids,
+                                'f_name' => $details->first_name,
+                                'l_name' => $details->last_name,
+                                'application_id' => $details->application_id,
+                                'aprrover_id' => $details->aprrover_id,
+                                'user_id' => $this->session->userdata('user_id'),
+                                'updated_date' => $details->updated_date,
+                                'status2' => $details->c_status,
+                                'status' => strtolower($c_Status),
+                                'c_status' => $details->status,
+                                'status1' => strtolower($c_Status1));
+                        }
+
+
+                }
+            }
+            $salesStatus[$item->reference_no] = $salesStatusStep;
+        }
+
+        return $salesStatus;
+
     }
 
 }

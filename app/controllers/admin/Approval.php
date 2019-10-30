@@ -39,9 +39,9 @@ class Approval extends MY_Controller
 
         $data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
-        $this->data['id'] = "Sales Status Approve";
+        $this->data['id'] = "Type Approval";
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('Approval')));
-        $meta = array('page_title' => lang("Sales_Status_Approve"), 'bc' => $bc);
+        $meta = array('page_title' => lang("Type_Approval"), 'bc' => $bc);
         $this->page_construct('approval/approval_list', $meta, $this->data);
     }
 
@@ -73,8 +73,8 @@ class Approval extends MY_Controller
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
         $this->load->library('datatables');
         $this->datatables
-            ->select($this->db->dbprefix('approve_details') . ".application_id as id, " . $this->db->dbprefix('sales') . ".customer as cnam," . $this->db->dbprefix('sales') . ".reference_no,". $this->db->dbprefix('sales') . ".total," . $this->db->dbprefix('approve_details') . ".approver_seq_name as ref,"
-                . $this->db->dbprefix('order_types') . ".name as oname," . $this->db->dbprefix('approve_details') . ".id as approves_id,". $this->db->dbprefix('approve_details') . ".status as nam," . $this->db->dbprefix('approve_details') . ".created_date")
+            ->select($this->db->dbprefix('approve_details') . ".application_id as id, " . $this->db->dbprefix('sales') . ".biller as bnam," . $this->db->dbprefix('sales') . ".reference_no,". $this->db->dbprefix('sales') . ".delivery_date," . $this->db->dbprefix('approve_details') . ".approver_seq_name as ref,"
+                . $this->db->dbprefix('order_types') . ".name as oname," . $this->db->dbprefix('approve_details') . ".id as approves_id,". $this->db->dbprefix('approve_details') . ".approve_status as nam," . $this->db->dbprefix('approve_details') . ".created_date")
             ->from("approve_details")
             ->join('order_types', 'order_types.id=approve_details.category_id', 'left')
             ->join('sales', 'approve_details.application_id=sales.id', 'left')
@@ -96,88 +96,78 @@ class Approval extends MY_Controller
             $ids = $this->input->post('id');
         }
         $info = $this->approval_model->getApproval($id);
+
+        if($info->aprrover_id != $this->session->userdata('user_id')) {
+            $this->session->set_flashdata('error', 'Unauthorized Access');
+            admin_redirect('welcome');
+        }
         if ($this->form_validation->run() == true) {
             $status = $this->input->post('status');
             $note = $this->sma->clear_tags($this->input->post('note'));
         } elseif ($this->input->post('update')) {
             $this->session->set_flashdata('error', validation_errors());
-            redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'sales');
+            admin_redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'welcome');
         }
 
         if ($this->form_validation->run() == true) {
-            $approve_details_new = null;
             $approve_details_previous = null;
-            $info_new = null;
 
             if ($this->input->post('status') == 'Completed') {
                 //        if ($this->form_validation->run() == true && $this->sales_model->updateStatus($id, $status, $note)) {
-                $getNextApproval = $this->getNextApproval($info->next_approve_seq, $info->created_by, $info->created_date, $info->application_id,$info->category_id);
                 // update current approval details
                 $previous_approve_data = array(
-                    'approve_status' => 1,
+                    'approve_status' => 'Completed',
                     'updated_by' => $this->session->userdata('user_id'),
-                    'status' => 'Approved',
+                    'comments' => $note,
+                    'status' => '1',
                     'updated_date' => date("Y-m-d H:i:s")
                 );
                 // update requisition
-                $info_update = array(
-                    'updated_by' => $this->session->userdata('user_id'),
-                    'updated_date' => date("Y-m-d H:i:s")
-
-                );
-                // close requisition
-                $info_close = array(
-                    'updated_by' => $this->session->userdata('user_id'),
-                    'status' => 'Approved',
-                    'approved' => 1,
-                    'updated_date' => date("Y-m-d H:i:s")
-
-                );
                 $approve_details_previous = $previous_approve_data;        // update
-                if ($getNextApproval) {
-                    // if fount next level
-                    $approve_details_new = $getNextApproval['approve_data']; // insert
-                    $info_update['status'] = $getNextApproval['status'];
-                    $info_update['next_approve_seq'] = $approve_details_new['next_approve_seq'];
-                    $info_new = array(
-                        'hierarchy_status'=>$getNextApproval['status'],
-                        'order_type_status'=>0
-                    );                                       // update
-
-                } else {
-                    // if not fount next level
-                    $approve_details_new = null;
-                    $info_close['next_approve_seq'] = 0;
-                    $info_close['status'] = 'Approved';
-                    $info_new = array(
-                        'hierarchy_status'=>'Approved',
-                        'order_type_status'=>1
-                    );
-                }
             }
-            if ($this->input->post('status') == 'Rejected') {
+
+            if ($this->input->post('status') == 'Processing') {
+                //        if ($this->form_validation->run() == true && $this->sales_model->updateStatus($id, $status, $note)) {
+                // update current approval details
                 $previous_approve_data = array(
-                    'approve_status' => 1,
-                    'next_approve_seq' => 0,
+                    'approve_status' => 'Processing',
                     'updated_by' => $this->session->userdata('user_id'),
-                    'status' => 'Rejected',
+                    'comments' => $note,
+                    'status' => '0',
+                    'updated_date' => date("Y-m-d H:i:s")
+                );
+                // update requisition
+
+            }
+
+            if ($this->input->post('status') == 'Jump Over') {
+                $previous_approve_data = array(
+                    'approve_status' => 'Jump Over',
+                    'updated_by' => $this->session->userdata('user_id'),
+                    'status' => '0',
+                    'comments' => $note,
                     'updated_date' => date("Y-m-d H:i:s")
                 );
 
-                $info_data = array(
-                    'next_approve_seq' => 0,
+            }
+            if ($this->input->post('status') == 'Has Not Started') {
+                $previous_approve_data = array(
+                    'approve_status' => 'Has Not Started',
+                    'comments' => $note,
                     'updated_by' => $this->session->userdata('user_id'),
-                    'status' => 'Rejected',
-                    'approved' => 1,
+                    'status' => '0',
                     'updated_date' => date("Y-m-d H:i:s")
                 );
+
             }
+
+            $approve_details_previous = $previous_approve_data;        // update
         }
 
-        if ($this->input->post('status') == 'Completed') {
-            if ($this->form_validation->run() == true && $this->approval_model->updateStatus($approve_details_new, $approve_details_previous, $info_new, $id, $info->application_id)) {
+//        if ($this->input->post('status') == 'Completed') {
+            if ($this->form_validation->run() == true && $this->approval_model->updateStatus($approve_details_previous,$id,$info->application_id)) {
                 $this->session->set_flashdata('message', lang('status_updated'));
-                redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'approval/approval_list/');
+                admin_redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'approval/approval_list/');
             } else {
                 $this->data['approve'] = $info;
                 $this->data['id'] = $id;
@@ -186,19 +176,20 @@ class Approval extends MY_Controller
                 $this->load->view($this->theme . 'approval/update_status', $this->data);
 
             }
-        } else {
-            if ($this->form_validation->run() == true && $this->approval_model->updateStatusReject($previous_approve_data, $info_data, $id, $info->application_id, $info->table_name)) {
-                $this->session->set_flashdata('message', lang('status_updated'));
-                redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'approval/approval_list/' . $info->table_name);
-            } else {
-                $this->data['approve'] = $info;
-                $this->data['inv'] =  $this->site->getInvoiceByID($info->application_id);
-                $this->data['id'] = $id;
-                $this->data['modal_js'] = $this->site->modal_js();
-                $this->load->view($this->theme . 'approval/update_status', $this->data);
-
-            }
-        }
+//        }
+//        else {
+//            if ($this->form_validation->run() == true && $this->approval_model->updateStatusReject($previous_approve_data, $info_data, $id, $info->application_id, $info->table_name)) {
+//                $this->session->set_flashdata('message', lang('status_updated'));
+//                redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'approval/approval_list/' . $info->table_name);
+//            } else {
+//                $this->data['approve'] = $info;
+//                $this->data['inv'] =  $this->site->getInvoiceByID($info->application_id);
+//                $this->data['id'] = $id;
+//                $this->data['modal_js'] = $this->site->modal_js();
+//                $this->load->view($this->theme . 'approval/update_status', $this->data);
+//
+//            }
+//        }
     }
 
 

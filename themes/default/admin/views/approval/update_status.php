@@ -12,23 +12,19 @@
             <p><?= lang('enter_info'); ?></p>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <?= lang('Order_Status_Approval_Details'); ?>
+                    <?= lang('Type_Approval'); ?>
                 </div>
                 <div class="panel-body">
                     <table class="table table-condensed table-striped table-borderless" style="margin-bottom:0;">
                         <tbody>
 
                         <tr>
-                            <td><?= lang('Customer'); ?>:</td>
-                            <td><?= $inv->customer; ?></td>
+                            <td><?= lang('Delivery_Date'); ?>:</td>
+                            <td><?= $inv->delivery_date; ?></td>
                         </tr>
                         <tr>
                             <td><?= lang('Sales_Reference'); ?>:</td>
                             <td><?=$inv->reference_no; ?></td>
-                        </tr>
-                        <tr>
-                            <td><?= lang('Sales_Amount'); ?>:</td>
-                            <td><?=($inv->total); ?></td>
                         </tr>
                         <tr>
                             <td><?= lang('Order_Hierarchy_Type'); ?>:</td>
@@ -36,11 +32,7 @@
                         </tr>
                         <tr>
                             <td><?= lang('Status'); ?>:</td>
-                            <td><?= $approve->status; ?></td>
-                        </tr>
-                        <tr>
-                            <td><?= lang('Created_date'); ?>:</td>
-                            <td><strong><?= $approve->created_date ?></strong></td>
+                            <td><?= $approve->approve_status; ?></td>
                         </tr>
                         </tbody>
                     </table>
@@ -52,9 +44,14 @@
                 <div class="form-group">
                     <?= lang('status', 'status'); ?>
                     <?php
-                    $opts = array('Completed' => lang('Completed'),'Rejected' => lang('Rejected'));
+                    $opts = array('Has Not Started' => lang('Has_Not_Started'),'Processing' => lang('Processing'),'Completed' => lang('Completed'),'Jump Over' => lang('Jump_Over'));
                     ?>
-                    <?= form_dropdown('status', $opts, (isset($_POST['status']) ? $_POST['status'] : ""), 'class="form-control" id="status" required="required" style="width:100%;"'); ?>
+                    <?= form_dropdown('status', $opts, (isset($_POST['status']) ? $_POST['status'] : $approve->approve_status), 'class="form-control" id="status" required="required" style="width:100%;"'); ?>
+                </div>
+
+                <div class="form-group">
+                    <?= lang("note", "note"); ?>
+                    <?php echo form_textarea('note', (isset($_POST['note']) ? $_POST['note'] : $this->sma->decode_html($approve->comments)), 'class="form-control" id="note"'); ?>
                 </div>
 
             <?php } ?>

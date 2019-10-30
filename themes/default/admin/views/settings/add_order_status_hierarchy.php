@@ -46,17 +46,18 @@
                     <?= form_input($att, set_value('approver_seq'), 'class="form-control" id="approver_seq" required="required"'); ?>
                 </div>
 
+
                 <div class="form-group">
                     <?= lang('Hierarchy_Type', 'Hierarchy_Type'); ?>
                     <?= form_input('approver_seq_name', set_value('approver_seq_name'), 'class="form-control" id="approver_seq_name" required="required"'); ?>
                 </div>
-
                 <div class="form-group">
-                    <?php $att1 = array('name' => 'approver_next_seq', 'type' => 'number'); ?>
-                    <?= lang('Next_Hierarchy_SL', 'Next_Hierarchy_SL'); ?>
-                    <?= form_input($att1, set_value('approver_next_seq'), 'class="form-control" id="approver_next_seq" required="required"'); ?>
+                    <?= lang('status', 'status'); ?>
+                    <?php
+                    $opts = array('Active' => lang('Active'),'Inactive' => lang('Inactive'));
+                    ?>
+                    <?= form_dropdown('is_active', $opts, (isset($_POST['is_active']) ? $_POST['is_active'] : ""), 'class="form-control" id="is_active" required="required" style="width:100%;"'); ?>
                 </div>
-
             </div>
             <div class="modal-footer">
                 <?php echo form_submit('add_approver', lang('Add_Hierarchy'), 'class="btn btn-primary"'); ?>

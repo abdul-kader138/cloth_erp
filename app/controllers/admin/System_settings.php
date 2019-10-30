@@ -812,6 +812,7 @@ class system_settings extends MY_Controller
                 'document-folder_create' => $this->input->post('document-folder_create'),
 
                 'approval_sales_status_approve' => $this->input->post('approval_sales_status_approve'),
+                'sales_type_status_view' => $this->input->post('sales_type_status_view'),
             );
 
             if (POS) {
@@ -3155,7 +3156,7 @@ class system_settings extends MY_Controller
 
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('approver_list')}.id as ids,{$this->db->dbprefix('order_types')}.name as names, concat({$this->db->dbprefix('users')}.first_name,' ',{$this->db->dbprefix('users')}.last_name), {$this->db->dbprefix('approver_list')}.approver_seq,{$this->db->dbprefix('approver_list')}.approver_seq_name, {$this->db->dbprefix('approver_list')}.approver_next_seq", FALSE)
+            ->select("{$this->db->dbprefix('approver_list')}.id as ids,{$this->db->dbprefix('order_types')}.name as names, concat({$this->db->dbprefix('users')}.first_name,' ',{$this->db->dbprefix('users')}.last_name), {$this->db->dbprefix('approver_list')}.approver_seq,{$this->db->dbprefix('approver_list')}.approver_seq_name, {$this->db->dbprefix('approver_list')}.is_active", FALSE)
             ->from("approver_list")
             ->join("users", 'users.id=approver_list.approver_id', 'left')
             ->join("order_types", 'order_types.id=approver_list.category_id', 'left')
@@ -3178,12 +3179,12 @@ class system_settings extends MY_Controller
         $this->load->helper('security');
         $this->form_validation->set_rules('approver_id', lang("approver_id"), 'required');
         $this->form_validation->set_rules('approver_seq', lang("approver_seq"), 'required|numeric');
-        $this->form_validation->set_rules('approver_next_seq', lang("approver_next_seq"), 'required|numeric');
         $this->form_validation->set_rules('approver_seq_name', lang("approver_seq_name"), 'required');
         $this->form_validation->set_rules('category_id', lang("category_id"), 'required');
+        $this->form_validation->set_rules('is_active', lang("is_active"), 'required');
 
         if ($this->form_validation->run() == true) {
-            if($this->settings_model->checkApproverExistance($this->input->post('category_id'),$this->input->post('approver_seq'),$this->input->post('approver_next_seq'))){
+            if($this->settings_model->checkApproverExistance($this->input->post('category_id'),$this->input->post('approver_seq'))){
                 $this->session->set_flashdata('error', 'Duplicate Data.');
                 admin_redirect("system_settings/order_status_hierarchy");
             }
@@ -3193,7 +3194,7 @@ class system_settings extends MY_Controller
                 'approver_seq' => $this->input->post('approver_seq'),
                 'approver_seq_name' => $this->input->post('approver_seq_name'),
                 'category_id' => $this->input->post('category_id'),
-                'approver_next_seq' => $this->input->post('approver_next_seq'),
+                'is_active' => $this->input->post('is_active'),
                 'created_by' => $this->session->userdata('user_id'),
                 'created_date' => date("Y-m-d H:i:s"),
             );
@@ -3226,10 +3227,15 @@ class system_settings extends MY_Controller
             $id = $this->input->get('id');
         }
 
+        $pg_details = $this->settings_model->getPriceGroupByID($id);
+        if ($this->input->post('name') != $pg_details->name) {
+            $this->form_validation->set_rules('name', lang("group_name"), 'required|is_unique[price_groups.name]');
+        }
+
         $this->load->helper('security');
         $this->form_validation->set_rules('approver_id', lang("approver_id"), 'required');
         $this->form_validation->set_rules('approver_seq', lang("approver_seq"), 'required|numeric');
-        $this->form_validation->set_rules('approver_next_seq', lang("approver_next_seq"), 'required|numeric');
+        $this->form_validation->set_rules('is_active', lang("is_active"), 'required');
         $this->form_validation->set_rules('approver_seq_name', lang("approver_seq_name"), 'required');
         $this->form_validation->set_rules('category_id', lang("category_id"), 'required');
 
@@ -3239,7 +3245,7 @@ class system_settings extends MY_Controller
                 'approver_seq' => $this->input->post('approver_seq'),
                 'approver_seq_name' => $this->input->post('approver_seq_name'),
                 'category_id' => $this->input->post('category_id'),
-                'approver_next_seq' => $this->input->post('approver_next_seq'),
+                'is_active' => $this->input->post('is_active'),
                 'updated_by' => $this->session->userdata('user_id'),
                 'updated_date' => date("Y-m-d H:i:s"),
             );

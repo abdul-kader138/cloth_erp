@@ -38,9 +38,9 @@
             }, null, null, null, null, null, null, null]
             // }, null, null,null,null,null]
         }).fnSetFilteringDelay().dtFilter([
-            {column_number: 1, filter_default_label: "[<?=lang('Customer');?>]", filter_type: "text", data: []},
+            {column_number: 1, filter_default_label: "[<?=lang('Biller');?>]", filter_type: "text", data: []},
             {column_number: 2, filter_default_label: "[<?=lang('Sales_Ref');?>]", filter_type: "text", data: []},
-            {column_number: 3, filter_default_label: "[<?=lang('Sales_Amount');?>]", filter_type: "text", data: []},
+            {column_number: 3, filter_default_label: "[<?=lang('Delivery_Date');?>]", filter_type: "text", data: []},
             {
                 column_number: 4,
                 filter_default_label: "[<?=lang('Order_Approve_Status');?>]",
@@ -64,7 +64,7 @@
 <?php echo form_open('approval/approval_actions', 'id="action-form"'); ?>
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-user"></i><?= lang('Waiting_For_Order_Status_Approval'); ?></h2>
+        <h2 class="blue"><i class="fa-fw fa fa-user"></i><?= lang('Type_Approval'); ?></h2>
 
         <div class="box-icon">
             <ul class="btn-tasks">
@@ -93,10 +93,10 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
-                            <th><?php echo lang('Customer'); ?></th>
+                            <th><?php echo lang('Biller'); ?></th>
                             <th><?php echo lang('Sales_Ref'); ?></th>
-                            <th><?php echo lang('Sales_Amount'); ?></th>
-                            <th style="width:15%"><?php echo lang('Order_Approve_Status'); ?></th>
+                            <th><?php echo lang('Delivery_Date'); ?></th>
+                            <th style="width:15%"><?php echo lang('Type_Status'); ?></th>
                             <th style="width:15%"><?php echo lang('Order_type'); ?></th>
                             <th><?php echo lang('Status'); ?></th>
                             <th><?php echo lang('Created_Date'); ?></th>
