@@ -609,6 +609,10 @@ class Auth extends MY_Controller
                         'company' => $this->input->post('company'),
                         'phone' => $this->input->post('phone'),
                         'gender' => $this->input->post('gender'),
+                        'view_right' => $this->input->post('view_right'),
+                        'edit_right' => $this->input->post('edit_right'),
+                        'group_id' => $this->input->post('group'),
+                        'allow_discount' => $this->input->post('allow_discount'),
                     );
                 } else {
                     $data = array(

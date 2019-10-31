@@ -174,7 +174,7 @@ class Db_model extends CI_Model
         $this->db->select('count(id) as total', FALSE)
             ->where('aprrover_id ', $id)
             ->where('status', 0);
-        $q = $this->db->get_where('approve_details',array('type'=>'Sales'));
+        $q = $this->db->get_where('approve_details', array('type' => 'Sales'));
         if ($q->num_rows() > 0) {
             return $q->row();
         }
@@ -184,7 +184,15 @@ class Db_model extends CI_Model
 
     public function getAllPendingSales()
     {
-        $q = $this->db->get_where('sales', array('order_type_status' => 0));
+
+        $this->db
+            ->select("sales.id as id,sales.order_type,sales.reference_no")
+            ->from('sales')
+            ->join('approve_details', 'sales.id=approve_details.application_id', 'left');
+        if (!$this->Owner && !$this->Admin) $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
+        $this->db->where('approve_details.approve_status !=', 'Completed');
+        $this->db->group_by('sales.id');
+        $q = $this->db->get();
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
                 $data[] = $row;
@@ -194,7 +202,7 @@ class Db_model extends CI_Model
         return FALSE;
     }
 
-    public function getSalesStatus($id = NULL,$type = NULL)
+    public function getSalesStatus($id = NULL, $type = NULL)
     {
         $this->db
             ->select("approve_details.id as ids,approve_details.aprrover_id, approve_details.approver_seq_name as step,approve_details.approve_status as c_status,approve_details.updated_by,approve_details.updated_date,users.first_name,users.last_name,approve_details.application_id,approve_details.status")
@@ -202,14 +210,15 @@ class Db_model extends CI_Model
             ->join('users', 'approve_details.aprrover_id = users.id', 'inner')
             ->where('approve_details.application_id', $id)
             ->where('approve_details.approver_seq_name', $type);
-        $q =  $q = $this->db->get();
+        $q = $this->db->get();
         if ($q->num_rows() > 0) {
             return $q->row();
         }
         return FALSE;
     }
 
-    public function getSalesStep($id = NULL){
+    public function getSalesStep($id = NULL)
+    {
         $this->db->order_by('approver_seq', 'asc');
 //        $this->db->where('is_active', 'active');
         $q = $this->db->get_where("approver_list", array('category_id' => $id));
@@ -221,6 +230,38 @@ class Db_model extends CI_Model
         }
     }
 
+    public function getTotalPendingTask()
+    {
+        $this->db->select('id,application_id', FALSE);
+        $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
+        $this->db->where('approve_details.status', 0);
+        $this->db->group_by('approve_details.application_id');
+        $q = $this->db->get('approve_details');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return count($data);
+        }
+        return FALSE;
+
+    }
+
+    public function getTotalCompleteTask()
+    {
+        $this->db->select('application_id as total', FALSE);
+        $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
+        $this->db->where('approve_details.status', '1');
+        $this->db->group_by('approve_details.application_id');
+        $q = $this->db->get('approve_details');
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return count($data);
+        }
+        return FALSE;
+    }
 
 
 }

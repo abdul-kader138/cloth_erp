@@ -2914,7 +2914,7 @@ class Sales extends MY_Controller
             $allAppoverList = array(
                 'aprrover_id' => $approver_detail->approver_id,
 //                'status' => 'Waiting For ' . $approver_detail->approver_seq_name . "(" . $user_details->first_name . " " . $user_details->last_name . ")",
-                'status' => 'Waiting For ' . $approver_detail->approver_seq_name . ' approval',
+                'status' => 0,
                 'approver_seq' => $approver_detail->approver_seq,
                 'approver_seq_name' => $approver_detail->approver_seq_name,
                 'created_by' => $this->session->userdata('user_id'),

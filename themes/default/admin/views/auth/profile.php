@@ -144,15 +144,15 @@
                                                                             echo form_dropdown('status', $opt, (isset($_POST['status']) ? $_POST['status'] : $user->active), 'id="status" required="required" class="form-control input-tip select" style="width:100%;"');
                                                                             ?>
                                                                         </div>
-                                                                        <?php if (!$this->ion_auth->in_group('customer', $id) && !$this->ion_auth->in_group('supplier', $id)) { ?>
+<!--                                                                        --><?php //if (!$this->ion_auth->in_group('customer', $id) && !$this->ion_auth->in_group('supplier', $id)) { ?>
                                                                         <div class="form-group">
                                                                             <?= lang("group", "group"); ?>
                                                                             <?php
                                                                             $gp[""] = "";
                                                                             foreach ($groups as $group) {
-                                                                                if ($group['name'] != 'customer' && $group['name'] != 'supplier') {
+//                                                                                if ($group['name'] != 'customer' && $group['name'] != 'supplier') {
                                                                                     $gp[$group['id']] = $group['name'];
-                                                                                }
+//                                                                                }
                                                                             }
                                                                             echo form_dropdown('group', $gp, (isset($_POST['group']) ? $_POST['group'] : $user->group_id), 'id="group" data-placeholder="' . $this->lang->line("select") . ' ' . $this->lang->line("group") . '" required="required" class="form-control input-tip select" style="width:100%;"');
                                                                             ?>
@@ -198,7 +198,7 @@
                                                                                 <?= lang("allow_discount", "allow_discount"); ?>
                                                                                 <?= form_dropdown('allow_discount', $opts, (isset($_POST['allow_discount']) ? $_POST['allow_discount'] : $user->allow_discount), 'id="allow_discount" class="form-control select" style="width:100%;"'); ?>
                                                                             </div>
-                                                                            <?php } ?>
+<!--                                                                            --><?php //} ?>
                                                                         </div>
                                                                     </div>
                                                                 </div>

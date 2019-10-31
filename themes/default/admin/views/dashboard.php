@@ -27,7 +27,47 @@ function row_status($x)
 }
 
 ?>
+<div class="row" style="margin-bottom: 5px;">
 
+    <div class="col-sm-12">
+
+        <div class="col-sm-4">
+            <div class="small-box padding1010 bdarkGreen">
+                <h2 class="bold" style="color: white"><?= lang('Total_Type') ?></h2>
+                <i class="icon fa fa-heart"></i>
+
+                <h1 class="bold">&nbsp;&nbsp;</h1>
+
+                <p class="bold">
+                <h1 style="text-align: center;color: white;"><?= ($total_pTask+$total_cTask) ?></h1></p>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="small-box padding1010" style="background-color: #428BCA">
+                <h2 class="bold" style="color: white"><?= lang('Total_Pending_Type') ?></h2>
+                <i class="icon fa fa-star"></i>
+
+                <h1 class="bold">&nbsp;&nbsp;</h1>
+
+                <p class="bold">
+                <h1 style="text-align: center;color: white;"><?= $total_pTask ? $total_pTask : 0 ?></h1></p>
+
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="small-box padding1010 " style="background-color: #ffc582">
+                <h2 class="bold" style="color: white"><?= lang('Total_Complete_Type') ?></h2>
+                <i class="icon fa fa-plus-circle"></i>
+
+                <h1 class="bold">&nbsp;&nbsp;</h1>
+
+                <p class="bold">
+                <h1 style="text-align: center;color: white;"><?= $total_cTask ? $total_cTask : 0 ?></h1></p>
+            </div>
+
+        </div>
+    </div>
+</div>
 <?php if ($Owner || $Admin || $GP['approval_sales_status_approve']) { ?>
     <div class="box" style="margin-bottom: 15px;">
         <div class="box-header">
