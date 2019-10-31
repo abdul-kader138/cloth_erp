@@ -64,7 +64,6 @@ function row_status($x)
                 <p class="bold">
                 <h1 style="text-align: center;color: white;"><?= $total_cTask ? $total_cTask : 0 ?></h1></p>
             </div>
-
         </div>
     </div>
 </div>
