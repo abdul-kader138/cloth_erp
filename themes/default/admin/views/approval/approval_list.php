@@ -64,7 +64,7 @@
 <?php echo form_open('approval/approval_actions', 'id="action-form"'); ?>
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa-fw fa fa-user"></i><?= lang('Type_Approval'); ?></h2>
+        <h2 class="blue"><i class="fa-fw fa fa-user"></i><?= lang('Task_Approval'); ?></h2>
 
         <div class="box-icon">
             <ul class="btn-tasks">
@@ -96,7 +96,7 @@
                             <th><?php echo lang('Biller'); ?></th>
                             <th><?php echo lang('Sales_Ref'); ?></th>
                             <th><?php echo lang('Delivery_Date'); ?></th>
-                            <th style="width:15%"><?php echo lang('Type_Status'); ?></th>
+                            <th style="width:15%"><?php echo lang('Task_Status'); ?></th>
                             <th style="width:15%"><?php echo lang('Order_type'); ?></th>
                             <th><?php echo lang('Status'); ?></th>
                             <th><?php echo lang('Created_Date'); ?></th>

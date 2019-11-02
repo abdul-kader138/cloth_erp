@@ -12,7 +12,7 @@
             <p><?= lang('enter_info'); ?></p>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <?= lang('Type_Approval'); ?>
+                    <?= lang('Task_Approval'); ?>
                 </div>
                 <div class="panel-body">
                     <table class="table table-condensed table-striped table-borderless" style="margin-bottom:0;">

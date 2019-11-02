@@ -112,6 +112,14 @@
             $(window).unbind('beforeunload');
             $('form.edit-so-form').submit();
         });
+
+        <?='$("#extras-con").slideUp();'?>
+        $('#extras').on('ifChecked', function () {
+            $('#extras-con').slideDown();
+        });
+        $('#extras').on('ifUnchecked', function () {
+            $('#extras-con').slideUp();
+        });
     });
 </script>
 
@@ -260,9 +268,9 @@
                                         <tr>
                                             <th class="col-md-4"><?= lang('product') . ' (' . lang('code') .' - '.lang('name') . ')'; ?></th>
                                             <?php
-                                            if ($Settings->product_serial) {
-                                                echo '<th class="col-md-2">' . lang("serial_no") . '</th>';
-                                            }
+//                                            if ($Settings->product_serial) {
+                                                echo '<th class="col-md-2">' . lang("Item_Image") . '</th>';
+//                                            }
                                             ?>
                                             <th class="col-md-1"><?= lang("net_unit_price"); ?></th>
                                             <th class="col-md-1"><?= lang("quantity"); ?></th>
@@ -348,6 +356,46 @@
                             </div>
                         </div>
                         <?= form_hidden('payment_status', $inv->payment_status); ?>
+
+                        <div class="col-md-12">
+                            <div class="col-md-4">
+
+                                <div class="form-group">
+                                    <input name="cf" type="checkbox" class="checkbox" id="extras"
+                                           value="" <?= (isset($_POST['cf1']) || isset($_POST['cf1']) || isset($_POST['cf3'])) ? 'checked="checked"' : '' ?>/>
+                                    <label for="extras" class="padding05"><?= lang('Custom_Fields') ?></label>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row" id="extras-con" style="display: none;">
+
+                                <div class="col-md-4">
+                                    <div class="form-group all">
+                                        <?= lang('Custom_Field_1', 'cf1') ?>
+                                        <?= form_input('cf1', (isset($_POST['cf1']) ? $_POST['cf1'] : $inv->scf1), 'class="form-control tip" id="cf1"') ?>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group all">
+                                        <?= lang('Custom_Field_2', 'cf2') ?>
+                                        <?= form_input('cf2', (isset($_POST['cf2']) ? $_POST['cf2'] : $inv->scf2), 'class="form-control tip" id="cf2"') ?>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group all">
+                                        <?= lang('Custom_Field_3', 'cf3') ?>
+                                        <?= form_input('cf3', (isset($_POST['cf3']) ? $_POST['cf3'] : $inv->scf3), 'class="form-control tip" id="cf3"') ?>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
                         <div class="clearfix"></div>
 
                         <input type="hidden" name="total_items" value="" id="total_items" required="required"/>

@@ -33,7 +33,7 @@ function row_status($x)
 
         <div class="col-sm-4">
             <div class="small-box padding1010 bdarkGreen">
-                <h2 class="bold" style="color: white"><?= lang('Total_Type') ?></h2>
+                <h2 class="bold" style="color: white"><?= lang('Total_Task') ?></h2>
                 <i class="icon fa fa-heart"></i>
 
                 <h1 class="bold">&nbsp;&nbsp;</h1>
@@ -44,7 +44,7 @@ function row_status($x)
         </div>
         <div class="col-sm-4">
             <div class="small-box padding1010" style="background-color: #428BCA">
-                <h2 class="bold" style="color: white"><?= lang('Total_Pending_Type') ?></h2>
+                <h2 class="bold" style="color: white"><?= lang('Total_Pending_Task') ?></h2>
                 <i class="icon fa fa-star"></i>
 
                 <h1 class="bold">&nbsp;&nbsp;</h1>
@@ -56,7 +56,7 @@ function row_status($x)
         </div>
         <div class="col-sm-4">
             <div class="small-box padding1010 " style="background-color: #ffc582">
-                <h2 class="bold" style="color: white"><?= lang('Total_Complete_Type') ?></h2>
+                <h2 class="bold" style="color: white"><?= lang('Total_Complete_Task') ?></h2>
                 <i class="icon fa fa-plus-circle"></i>
 
                 <h1 class="bold">&nbsp;&nbsp;</h1>
@@ -80,7 +80,7 @@ function row_status($x)
                             <?php if ($Owner || $Admin || $GP['approval_sales_status_approve']) { ?>
                                 <div class="col-sm-3">
                                     <div class="small-box padding1010 bpurple">
-                                        <h4 class="bold" style="color: #ffffff"><?= lang('Type_Approval') ?></h4>
+                                        <h4 class="bold" style="color: #ffffff"><?= lang('Task_Approval') ?></h4>
                                         <!--                                        <i class="fa fa-star"></i>-->
                                         <div style="cursor: pointer;">
                                             <a href="<?= admin_url('approval/approval_list'); ?>"
@@ -105,7 +105,7 @@ function row_status($x)
             <div class="box">
                 <div class="box-header">
                     <h2 class="blue"><i class="fa fa-th"></i><span
-                                class="break"></span><?= lang('Type_Approval_Status') ?></h2>
+                                class="break"></span><?= lang('Task_Approval_Status') ?></h2>
                 </div>
                 <div class="box-content" style="text-align: center;height: 500px;overflow:auto;">
                     <?php

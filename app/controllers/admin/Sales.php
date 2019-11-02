@@ -19,6 +19,7 @@ class Sales extends MY_Controller
         $this->load->library('form_validation');
         $this->load->admin_model('sales_model');
         $this->digital_upload_path = 'files/';
+        $this->item_images_upload_path = 'assets/uploads/sales/items/image';
         $this->upload_path = 'assets/uploads/';
         $this->thumbs_path = 'assets/uploads/thumbs/';
         $this->image_types = 'gif|jpg|jpeg|png|tif';
@@ -527,6 +528,37 @@ class Sales extends MY_Controller
                     $product_tax += $pr_item_tax;
                     $subtotal = (($item_net_price * $item_unit_quantity) + $pr_item_tax);
                     $unit = $this->site->getUnitByID($item_unit);
+                    $filename = "";
+                    if ($_FILES['serial']['size'][$r] > 0) {
+                        // Define new $_FILES array - $_FILES['file']
+                        $_FILES['file']['name'] = $_FILES['serial']['name'][$r];
+                        $_FILES['file']['type'] = $_FILES['serial']['type'][$r];
+                        $_FILES['file']['tmp_name'] = $_FILES['serial']['tmp_name'][$r];
+                        $_FILES['file']['error'] = $_FILES['serial']['error'][$r];
+                        $_FILES['file']['size'] = $_FILES['serial']['size'][$r];
+
+
+                        // Set preference
+                        $config['upload_path'] = $this->item_images_upload_path;
+                        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                        $config['max_size'] = '1024'; // max_size in kb
+                        $config['file_name'] = $_FILES['serial']['name'][$r];
+                        $config['overwrite'] = false;
+                        $config['encrypt_name'] = true;
+
+                        //Load upload library
+                        $this->load->library('upload', $config);
+
+                        // File upload
+                        if (!$this->upload->do_upload('file')) {
+                            $error = $this->upload->display_errors();
+                            $this->session->set_flashdata('error', $error);
+                            admin_redirect($_SERVER["HTTP_REFERER"]);
+                        }
+                        $uploadData = $this->upload->data();
+                        $filename = $uploadData['file_name'];
+                    }
+
 
                     $product = array(
                         'product_id' => $item_id,
@@ -549,6 +581,7 @@ class Sales extends MY_Controller
                         'subtotal' => $this->sma->formatDecimal($subtotal),
                         'serial_no' => $item_serial,
                         'real_unit_price' => $real_unit_price,
+                        'item_image' => $filename,
                     );
 
                     $products[] = ($product + $gst_data);
@@ -606,6 +639,9 @@ class Sales extends MY_Controller
                 'order_type_status' => 0,
                 'hierarchy_status' => '',
                 'delivery_date' => $ddate,
+                'scf1' => $this->input->post('cf1'),
+                'scf2' => $this->input->post('cf2'),
+                'scf3' => $this->input->post('cf3'),
                 'paid' => 0,
                 'created_by' => $this->session->userdata('user_id'),
                 'hash' => hash('sha256', microtime() . mt_rand()),
@@ -857,6 +893,7 @@ class Sales extends MY_Controller
             $i = isset($_POST['product_code']) ? sizeof($_POST['product_code']) : 0;
 
             for ($r = 0; $r < $i; $r++) {
+                $item_info = $this->sales_model->getItemByID($_POST['product_id'][$r]);
                 $item_id = $_POST['product_id'][$r];
                 $item_type = $_POST['product_type'][$r];
                 $item_code = $_POST['product_code'][$r];
@@ -903,6 +940,37 @@ class Sales extends MY_Controller
                     $subtotal = (($item_net_price * $item_unit_quantity) + $pr_item_tax);
                     $unit = $this->site->getUnitByID($item_unit);
 
+                    $filename = $item_info->item_image;
+                    if ($_FILES['serial']['size'][$r] > 0) {
+                        // Define new $_FILES array - $_FILES['file']
+                        $_FILES['file']['name'] = $_FILES['serial']['name'][$r];
+                        $_FILES['file']['type'] = $_FILES['serial']['type'][$r];
+                        $_FILES['file']['tmp_name'] = $_FILES['serial']['tmp_name'][$r];
+                        $_FILES['file']['error'] = $_FILES['serial']['error'][$r];
+                        $_FILES['file']['size'] = $_FILES['serial']['size'][$r];
+
+
+                        // Set preference
+                        $config['upload_path'] = $this->item_images_upload_path;
+                        $config['allowed_types'] = 'jpg|jpeg|png|gif';
+                        $config['max_size'] = '1024'; // max_size in kb
+                        $config['file_name'] = $_FILES['serial']['name'][$r];
+                        $config['overwrite'] = false;
+                        $config['encrypt_name'] = true;
+
+                        //Load upload library
+                        $this->load->library('upload', $config);
+
+                        // File upload
+                        if (!$this->upload->do_upload('file')) {
+                            $error = $this->upload->display_errors();
+                            $this->session->set_flashdata('error', $error);
+                            admin_redirect($_SERVER["HTTP_REFERER"]);
+                        }
+                        $uploadData = $this->upload->data();
+                        $filename = $uploadData['file_name'];
+                    }
+
                     $product = array(
                         'product_id' => $item_id,
                         'product_code' => $item_code,
@@ -922,7 +990,8 @@ class Sales extends MY_Controller
                         'discount' => $item_discount,
                         'item_discount' => $pr_item_discount,
                         'subtotal' => $this->sma->formatDecimal($subtotal),
-                        'serial_no' => $item_serial,
+//                        'serial_no' => $item_serial,
+                        'item_image' => $filename,
                         'real_unit_price' => $real_unit_price,
                     );
 
@@ -966,6 +1035,9 @@ class Sales extends MY_Controller
                 'payment_status' => $payment_status,
                 'payment_term' => $payment_term,
                 'due_date' => $due_date,
+                'scf1' => $this->input->post('cf1'),
+                'scf2' => $this->input->post('cf2'),
+                'scf3' => $this->input->post('cf3'),
                 'updated_by' => $this->session->userdata('user_id'),
                 'updated_at' => date('Y-m-d H:i:s'),
             );

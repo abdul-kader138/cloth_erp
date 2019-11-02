@@ -140,6 +140,7 @@
                     <tr>
                         <th><?= lang("no."); ?></th>
                         <th><?= lang("description"); ?></th>
+                        <th class="col-sm-1"><?= lang("Item_Image"); ?></th>
                         <?php if ($Settings->indian_gst) { ?>
                             <th><?= lang("hsn_code"); ?></th>
                         <?php } ?>
@@ -171,6 +172,11 @@
                                 <?= $row->details ? '<br>' . $row->details : ''; ?>
                                 <?= $row->serial_no ? '<br>' . $row->serial_no : ''; ?>
                             </td>
+                            <?php if ($row->item_image) { ?>
+                                <td style="width: 80px; text-align:center; vertical-align:middle;"><a target="_blank" href="<?php echo base_url('assets/uploads/sales/items/image/'.$row->item_image) ?>" download="<?php echo $row->item_image ?>">
+                                   <i class="fa fa-download"></i> </a></td>
+                            <?php }else{ ?>
+                            <td></td> <?php } ?>
                             <?php if ($Settings->indian_gst) { ?>
                             <td style="width: 80px; text-align:center; vertical-align:middle;"><?= $row->hsn_code; ?></td>
                             <?php } ?>
@@ -224,7 +230,7 @@
                     </tbody>
                     <tfoot>
                     <?php
-                    $col = $Settings->indian_gst ? 5 : 4;
+                    $col = $Settings->indian_gst ? 6 : 5;
                     if ($Settings->product_discount && $inv->product_discount != 0) {
                         $col++;
                     }
