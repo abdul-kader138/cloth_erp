@@ -73,8 +73,8 @@ class Approval extends MY_Controller
         $this->data['error'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('error');
         $this->load->library('datatables');
         $this->datatables
-            ->select($this->db->dbprefix('approve_details') . ".application_id as id, " . $this->db->dbprefix('sales') . ".biller as bnam," . $this->db->dbprefix('sales') . ".reference_no,". $this->db->dbprefix('sales') . ".delivery_date," . $this->db->dbprefix('approve_details') . ".approver_seq_name as ref,"
-                . $this->db->dbprefix('order_types') . ".name as oname," . $this->db->dbprefix('approve_details') . ".id as approves_id,". $this->db->dbprefix('approve_details') . ".approve_status as nam," . $this->db->dbprefix('approve_details') . ".created_date")
+            ->select($this->db->dbprefix('approve_details') . ".application_id as id, " . $this->db->dbprefix('sales') . ".biller as bnam," . $this->db->dbprefix('sales') . ".reference_no," . $this->db->dbprefix('sales') . ".delivery_date," . $this->db->dbprefix('approve_details') . ".approver_seq_name as ref,"
+                . $this->db->dbprefix('order_types') . ".name as oname," . $this->db->dbprefix('approve_details') . ".id as approves_id," . $this->db->dbprefix('approve_details') . ".approve_status as nam," . $this->db->dbprefix('approve_details') . ".created_date")
             ->from("approve_details")
             ->join('order_types', 'order_types.id=approve_details.category_id', 'left')
             ->join('sales', 'approve_details.application_id=sales.id', 'left')
@@ -97,9 +97,11 @@ class Approval extends MY_Controller
         }
         $info = $this->approval_model->getApproval($id);
 
-        if($info->aprrover_id != $this->session->userdata('user_id')) {
-            $this->session->set_flashdata('error', 'Unauthorized Access');
-            admin_redirect('welcome');
+        if (!$this->Owner && !$this->Admin) {
+            if ($info->aprrover_id != $this->session->userdata('user_id')) {
+                $this->session->set_flashdata('error', 'Unauthorized Access');
+                admin_redirect('welcome');
+            }
         }
         if ($this->form_validation->run() == true) {
             $status = $this->input->post('status');
@@ -165,17 +167,17 @@ class Approval extends MY_Controller
         }
 
 //        if ($this->input->post('status') == 'Completed') {
-            if ($this->form_validation->run() == true && $this->approval_model->updateStatus($approve_details_previous,$id,$info->application_id)) {
-                $this->session->set_flashdata('message', lang('status_updated'));
-                admin_redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'approval/approval_list/');
-            } else {
-                $this->data['approve'] = $info;
-                $this->data['id'] = $id;
-                $this->data['inv'] =  $this->site->getInvoiceByID($info->application_id);
-                $this->data['modal_js'] = $this->site->modal_js();
-                $this->load->view($this->theme . 'approval/update_status', $this->data);
+        if ($this->form_validation->run() == true && $this->approval_model->updateStatus($approve_details_previous, $id, $info->application_id)) {
+            $this->session->set_flashdata('message', lang('status_updated'));
+            admin_redirect(isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : 'approval/approval_list/');
+        } else {
+            $this->data['approve'] = $info;
+            $this->data['id'] = $id;
+            $this->data['inv'] = $this->site->getInvoiceByID($info->application_id);
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'approval/update_status', $this->data);
 
-            }
+        }
 //        }
 //        else {
 //            if ($this->form_validation->run() == true && $this->approval_model->updateStatusReject($previous_approve_data, $info_data, $id, $info->application_id, $info->table_name)) {
@@ -193,15 +195,15 @@ class Approval extends MY_Controller
     }
 
 
-    function getNextApproval($next_id, $created_by, $created_date, $application_id,$category_id)
+    function getNextApproval($next_id, $created_by, $created_date, $application_id, $category_id)
     {
         $userLists = $this->site->getAllUser();
-        $info_details = $this->approval_model->getNextApprovals($next_id,$category_id);
+        $info_details = $this->approval_model->getNextApprovals($next_id, $category_id);
         $user_details = $this->getApproveCustomer($userLists, $info_details->approver_id);
         $details = array();
         $approve_data = array(
             'aprrover_id' => $info_details->approver_id,
-            'status' => 'Waiting For ' . $info_details->approver_seq_name."(". $user_details->first_name." ".$user_details->last_name.")",
+            'status' => 'Waiting For ' . $info_details->approver_seq_name . "(" . $user_details->first_name . " " . $user_details->last_name . ")",
             'approver_seq' => $info_details->approver_seq,
             'approver_seq_name' => $info_details->approver_seq_name,
             'created_by' => $created_by,
@@ -215,7 +217,7 @@ class Approval extends MY_Controller
 
         if ($info_details && $user_details) {
             $details['approve_data'] = $approve_data;
-            $details['status'] = 'Waiting For ' . $info_details->approver_seq_name."(". $user_details->first_name." ".$user_details->last_name.")";
+            $details['status'] = 'Waiting For ' . $info_details->approver_seq_name . "(" . $user_details->first_name . " " . $user_details->last_name . ")";
             return $details;
         };
         return false;
@@ -248,26 +250,26 @@ class Approval extends MY_Controller
         if ($this->form_validation->run() == true) {
             if (!empty($_POST['val'])) {
                 if ($this->input->post('form_action') == 'chuk_approval') {
-                    $previous_approve_data=array();
-                    $query_info_close=array();
+                    $previous_approve_data = array();
+                    $query_info_close = array();
                     foreach ($_POST['val'] as $id) {
                         $info = $this->approval_model->getApprovalBluk($id);
-                        $getNextApproval = $this->getNextApproval($info->next_approve_seq, $info->table_name, $info->created_by, $info->created_date, $info->application_id,$info->category_id);
+                        $getNextApproval = $this->getNextApproval($info->next_approve_seq, $info->table_name, $info->created_by, $info->created_date, $info->application_id, $info->category_id);
 
-                        $previous_approve_data[]="update ".$this->db->dbprefix('approve_details')." set updated_by=".$this->session->userdata('user_id').", updated_date='".date("Y-m-d H:i:s").
-                            "', approve_status=1, status='approved' where id=".(int)$info->id."; ";
+                        $previous_approve_data[] = "update " . $this->db->dbprefix('approve_details') . " set updated_by=" . $this->session->userdata('user_id') . ", updated_date='" . date("Y-m-d H:i:s") .
+                            "', approve_status=1, status='approved' where id=" . (int)$info->id . "; ";
 
                         $approve_details_previous[] = $previous_approve_data;       // update
                         if ($getNextApproval) {
                             $approve_details_new[] = $getNextApproval['approve_data']; // insert
-                            $status= $getNextApproval['status'];
-                            $seq = (($approve_details_new['next_approve_seq']) ? $approve_details_new['next_approve_seq'] :0);
-                            $query_info_close[]="update ".$this->db->dbprefix($info->table_name)." set updated_by=".$this->session->userdata('user_id').", updated_date='".date("Y-m-d H:i:s").
-                                "', status='".$status."', next_approve_seq=".$seq." where id=".(int)$info->application_id."; ";
+                            $status = $getNextApproval['status'];
+                            $seq = (($approve_details_new['next_approve_seq']) ? $approve_details_new['next_approve_seq'] : 0);
+                            $query_info_close[] = "update " . $this->db->dbprefix($info->table_name) . " set updated_by=" . $this->session->userdata('user_id') . ", updated_date='" . date("Y-m-d H:i:s") .
+                                "', status='" . $status . "', next_approve_seq=" . $seq . " where id=" . (int)$info->application_id . "; ";
 
                         } else {
-                            $query_info_close[]="update ".$this->db->dbprefix($info->table_name)." set updated_by=".$this->session->userdata('user_id').", updated_date='".date("Y-m-d H:i:s").
-                                "', approved=1, status='approved', next_approve_seq=0 where id=".(int)$info->application_id."; ";
+                            $query_info_close[] = "update " . $this->db->dbprefix($info->table_name) . " set updated_by=" . $this->session->userdata('user_id') . ", updated_date='" . date("Y-m-d H:i:s") .
+                                "', approved=1, status='approved', next_approve_seq=0 where id=" . (int)$info->application_id . "; ";
                         }
                     }
                 }
@@ -276,7 +278,7 @@ class Approval extends MY_Controller
                 redirect($_SERVER["HTTP_REFERER"]);
             }
         }
-        if ($this->form_validation->run() == true && $this->approval_model->updateStatusChunk($approve_details_new, $previous_approve_data, $query_info_close,$info->table_name)) {
+        if ($this->form_validation->run() == true && $this->approval_model->updateStatusChunk($approve_details_new, $previous_approve_data, $query_info_close, $info->table_name)) {
             $this->session->set_flashdata('message', lang('status_updated'));
             redirect('approval/approval_list/' . $info->table_name);
         } else {
