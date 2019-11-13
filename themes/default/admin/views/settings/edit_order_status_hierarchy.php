@@ -12,9 +12,9 @@
                 <p><?= lang('update_info'); ?></p>
 
                 <div class="form-group">
-                    <?= lang("Order_type", "Order_type")."<b> *</b>"; ?>
+                    <?= lang("Process", "Process")."<b> *</b>"; ?>
                     <?php
-                    $cat2[''] = lang('select') . ' ' . lang('category');
+                    $cat2[''] = lang('select') . ' ' . lang('Process');
                     foreach ($types as $pcat) {
                         $cat2[$pcat->id] = $pcat->name;
                     }

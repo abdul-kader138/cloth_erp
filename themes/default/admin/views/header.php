@@ -702,12 +702,29 @@
                                                         </a>
                                                     </li>
 
+
+                                                    <li id="system_settings_process">
+                                                        <a href="<?= admin_url('system_settings/process') ?>">
+                                                            <i class="fa fa-th-list"></i><span
+                                                                    class="text"> <?= lang('Process'); ?></span>
+                                                        </a>
+                                                    </li>
+
+
                                                     <li id="system_settings_order_status_hierarchy">
                                                         <a href="<?= admin_url('system_settings/order_status_hierarchy') ?>">
                                                             <i class="fa fa-th-list"></i><span
                                                                     class="text"> <?= lang('Order_Status_Hierarchy'); ?></span>
                                                         </a>
                                                     </li>
+
+                                                    <li id="system_settings_process_tagging">
+                                                        <a href="<?= admin_url('system_settings/process_tagging') ?>">
+                                                            <i class="fa fa-th-list"></i><span
+                                                                    class="text"> <?= lang('Process_Tagging'); ?></span>
+                                                        </a>
+                                                    </li>
+
                                                     <li id="system_settings_backups">
                                                         <a href="<?= admin_url('system_settings/backups') ?>">
                                                             <i class="fa fa-database"></i><span

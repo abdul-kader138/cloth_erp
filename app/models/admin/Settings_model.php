@@ -842,4 +842,104 @@ class Settings_model extends CI_Model
         return FALSE;
     }
 
+
+    public function add_process($data)
+    {
+        if ($this->db->insert("process", $data)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public function update_process($id, $data = array())
+    {
+        if ($this->db->update("process", $data, array('id' => $id))) {
+            return true;
+        }
+        return false;
+    }
+
+    public function brandHasprocess($brand_id)
+    {
+        $q = $this->db->get_where('products', array('brand' => $brand_id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function delete_process($id)
+    {
+        if ($this->db->delete("process", array('id' => $id))) {
+            return true;
+        }
+        return FALSE;
+    }
+
+
+    public function add_tagging($data)
+    {
+        if ($this->db->insert("process_tagging", $data)) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public function update_tagging($id, $data = array())
+    {
+        if ($this->db->update("process_tagging", $data, array('id' => $id))) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+    public function delete_tagging($id)
+    {
+        if ($this->db->delete("process_tagging", array('id' => $id))) {
+            return true;
+        }
+        return FALSE;
+    }
+
+    public function checkTaggingExistance($id,$p_id)
+    {
+        $q = $this->db->get_where("process_tagging", array('type_id' => $id,'process_id'=>$p_id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function processHasTagging($id)
+    {
+        $q = $this->db->get_where("process_tagging", array('process_id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function processHasApprover($id)
+    {
+        $q = $this->db->get_where("approver_list", array('category_id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function typeHasTagging($id)
+    {
+        $q = $this->db->get_where("process_tagging", array('type_id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+
 }

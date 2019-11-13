@@ -231,7 +231,6 @@
     <div class="box-content">
         <div class="row">
             <div class="col-lg-12">
-
                 <p class="introtext"><?php echo lang('enter_info'); ?></p>
                 <?php
                 $attrib = array('data-toggle' => 'validator', 'role' => 'form');
@@ -242,10 +241,42 @@
                 ?>
                 <div class="row">
                     <div class="col-lg-12">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <?= lang("Order_Type", "Order_Type"); ?>
+                                <?php
+                                $wh1[''] = lang('select').' '.lang('Order_Type');
+                                foreach ($types as $type) {
+                                    $wh1[$type->id] = $type->name;
+                                }
+                                echo form_dropdown('type_id', $wh1, (isset($_POST['type_id']) ? $_POST['type_id'] : ""), 'id="type_id" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("Type") . '" required="required" style="width:100%;" ');
+                                ?>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+
+                            <?= lang('Process', 'Process'); ?>
+                            <?php $uopts[''] = lang('Select_Process'); ?>
+                            <?= form_dropdown('process_id', $uopts, (isset($_POST['process_id']) ? $_POST['process_id'] : ""), 'class="form-control" id="process_id" style="width:100%;"'); ?>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <?= lang("Delivery_Date", "Delivery_Date"); ?>
+                                <?php echo form_input('ddate', (isset($_POST['ddate']) ? $_POST['ddate'] : ""), 'class="form-control input-tip date" id="dldate" required="required"'); ?>
+                            </div>
+                        </div>
+
+
+                        <div class="clearfix"></div>
                         <?php if ($Owner || $Admin) { ?>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <?= lang("date", "sldate"); ?>
+                                    <?= lang("Invoice_Date", "sldate"); ?>
                                     <?php echo form_input('date', (isset($_POST['date']) ? $_POST['date'] : ""), 'class="form-control input-tip datetime" id="sldate" required="required"'); ?>
                                 </div>
                             </div>
@@ -499,25 +530,6 @@
                         }
                         ?>
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <?= lang("Order_Type", "Order_Type"); ?>
-                                <?php
-                                $wh1[''] = '';
-                                foreach ($types as $type) {
-                                    $wh1[$type->id] = $type->name;
-                                }
-                                echo form_dropdown('category_id', $wh1, (isset($_POST['category_id']) ? $_POST['category_id'] : ""), 'id="category_id" class="form-control input-tip select" data-placeholder="' . lang("select") . ' ' . lang("Type") . '" required="required" style="width:100%;" ');
-                                ?>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <?= lang("Delivery_Date", "Delivery_Date"); ?>
-                                <?php echo form_input('ddate', (isset($_POST['ddate']) ? $_POST['ddate'] : ""), 'class="form-control input-tip date" id="dldate" required="required"'); ?>
-                            </div>
-                        </div>
 
 
                         <div class="col-md-12">
@@ -984,6 +996,33 @@
         });
         $('#extras').on('ifUnchecked', function () {
             $('#extras-con').slideUp();
+        });
+
+        $('#type_id').change(function(e) {
+            var v = $(this).val();
+            if (v) {
+                $.ajax({
+                    type: "get",
+                    async: false,
+                    url: "<?= admin_url('sales/getProcess') ?>/" + v,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data);
+                        $('#process_id').select2("destroy").empty().select2({minimumResultsForSearch: 7});
+                        $.each(data, function () {
+                            $("<option />", {value: this.id, text: this.name}).appendTo($('#process_id'));
+                        });
+                        $('#process_id').select2('val', v);
+                    },
+                    error: function () {
+                        bootbox.alert('<?= lang('ajax_error') ?>');
+                    }
+                });
+            } else {
+                $('#process_id').select2("destroy").empty();
+                $("<option />", {value: '', text: '<?= lang('select_Process') ?>'}).appendTo($('#process_id'));
+                $('#process_id').select2({minimumResultsForSearch: 7}).select2('val', '');
+            }
         });
 
 

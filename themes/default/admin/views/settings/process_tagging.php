@@ -6,7 +6,7 @@
             "aLengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "<?= lang('all') ?>"]],
             "iDisplayLength": <?= $Settings->rows_per_page ?>,
             'bProcessing': true, 'bServerSide': true,
-            'sAjaxSource': '<?= admin_url('system_settings/getOrderStatusHierarchy') ?>',
+            'sAjaxSource': '<?= admin_url('system_settings/getProcessTagging') ?>',
             'fnServerData': function (sSource, aoData, fnCallback) {
                 aoData.push({
                     "name": "<?= $this->security->get_csrf_token_name() ?>",
@@ -14,26 +14,19 @@
                 });
                 $.ajax({'dataType': 'json', 'type': 'POST', 'url': sSource, 'data': aoData, 'success': fnCallback});
             },
-            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null,null, null,null,{"mRender": statusView},{"bSortable": false}]
+            "aoColumns": [{"bSortable": false, "mRender": checkbox}, null,null, null]
         }).fnSetFilteringDelay().dtFilter([
-            {column_number: 1, filter_default_label: "[<?=lang('Process');?>]", filter_type: "text", data: []},
-            {column_number: 2, filter_default_label: "[<?=lang('Hierarchy_Type');?>]", filter_type: "text", data: []},
-            {column_number: 4, filter_default_label: "[<?=lang('Approver_name');?>]", filter_type: "text", data: []},
+            {column_number: 1, filter_default_label: "[<?=lang('Order_Type');?>]", filter_type: "text", data: []},
+            {column_number: 2, filter_default_label: "[<?=lang('Process');?>]", filter_type: "text", data: []},
         ], "footer");
     });
 
 
-    function statusView(x){
-        if(x =='Active') return '<span class="label label-success">Active</span>';
-        if(x =='Inactive') return '<span class="label label-danger">Inactive</span>';
-        return "";
-
-    }
 
 </script>
 <div class="box">
     <div class="box-header">
-        <h2 class="blue"><i class="fa fa-user"></i><?= lang('Order_Status_Hierarchy'); ?></h2>
+        <h2 class="blue"><i class="fa fa-user"></i><?= lang('Add_Tagging'); ?></h2>
 
         <div class="box-icon">
             <ul class="btn-tasks">
@@ -43,8 +36,8 @@
                     </a>
                     <ul class="dropdown-menu pull-right tasks-menus" role="menu" aria-labelledby="dLabel">
                         <li>
-                            <a href="<?php echo admin_url('system_settings/add_order_status_hierarchy'); ?>" data-toggle="modal" data-target="#myModal">
-                                <i class="fa fa-plus"></i> <?= lang('Add_Hierarchy') ?>
+                            <a href="<?php echo admin_url('system_settings/add_process_tagging'); ?>" data-toggle="modal" data-target="#myModal">
+                                <i class="fa fa-plus"></i> <?= lang('Add_Tagging') ?>
                             </a>
                         </li>
                         <li class="divider"></li>
@@ -64,20 +57,16 @@
                             <th style="min-width:30px; width: 30px; text-align: center;">
                                 <input class="checkbox checkth" type="checkbox" name="check"/>
                             </th>
-                            <th  class="col-sm-3">
-                                <?= lang("Process"); ?>
+                            <th>
+                                <?= lang("Order_Type"); ?>
                             </th>
-                            <th  class="col-sm-2"><?= lang("Hierarchy_Type"); ?></th>
-                            <th  class="col-sm-3"><?= lang("Approver_Name"); ?></th>
-                            <th  class="col-sm-1"><?= lang("Hierarchy_SL"); ?></th>
-
-                            <th  class="col-sm-1"><?= lang("Status"); ?></th>
-                            <th  class="col-sm-1"><?= lang("actions"); ?></th>
+                            <th><?= lang("Process"); ?></th>
+                            <th><?= lang("actions"); ?></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="7" class="dataTables_empty">
+                            <td colspan="4" class="dataTables_empty">
                                 <?= lang('loading_data_from_server') ?>
                             </td>
                         </tr>
@@ -87,9 +76,6 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th ></th>
-                            <th ></th>
-                            <th ></th>
                             <th style="width:85px;"><?= lang("actions"); ?></th>
                         </tr>
                         </tfoot>

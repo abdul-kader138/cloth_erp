@@ -36,7 +36,7 @@ function row_status($x)
                 <h2 class="bold" style="color: white"><?= lang('Total_Task') ?></h2>
                 <i class="icon fa fa-heart"></i>
                 <p class="bold">
-                <h1 style="text-align: center;color: white;"><?= ($total_pTask + $total_cTask) ?></h1></p>
+                <h1 style="text-align: center;color: white;"><?= $total_cTask ? $total_cTask : 0 ?></h1></p>
             </div>
         </div>
         <div class="col-sm-4">
@@ -53,7 +53,7 @@ function row_status($x)
                 <h2 class="bold" style="color: white"><?= lang('Total_Complete_Task') ?></h2>
                 <i class="icon fa fa-plus-circle"></i>
                 <p class="bold">
-                <h1 style="text-align: center;color: white;"><?= $total_cTask ? $total_cTask : 0 ?></h1></p>
+                <h1 style="text-align: center;color: white;"><?= $total_cTask ? ($total_cTask - $total_pTask) : 0 ?></h1></p>
             </div>
         </div>
     </div>
@@ -109,7 +109,7 @@ function row_status($x)
                             $class_name = "";
                             if (($Owner || $Admin) && $lst["c_status"] == 0) $class_name = " task_modal_open";
                             if (($lst["aprrover_id"] == $lst["user_id"]) && $lst["c_status"] == 0) $class_name = " task_modal_open";
-                            $value .= '<li id="' . $lst["id"] . '" class="' . strtolower($lst["status"]) . $class_name . '"> <span  class="' . strtolower($lst["status1"]) . '"></span>' . $lst["step"] . " (" . $lst["status2"] . ")" . '<br>' . $lst["f_name"] . ' ' . $lst["l_name"] .
+                            $value .= '<li id="' . $lst["id"] . '" class="' . strtolower($lst["status"]) . $class_name . '"> <span  class="' . strtolower($lst["status1"]) . '"></span>' . $lst["pname"] ."," . $lst["step"] . " (" . $lst["status2"] . ")" . '<br>' . $lst["f_name"] . ' ' . $lst["l_name"] .
                                 '<br>' . $lst["updated_date"] . '</li>';
                         }
                         $value .= '</ul>';

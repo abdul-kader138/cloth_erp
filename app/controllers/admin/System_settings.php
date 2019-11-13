@@ -3118,8 +3118,8 @@ class system_settings extends MY_Controller
     function delete_order_types($id = NULL)
     {
 
-        if ($this->settings_model->orderHasApprover($id)) {
-            $this->sma->send_json(array('error' => 1, 'msg' => lang("Type is associated with order hierarchy.")));
+        if ($this->settings_model->typeHasTagging($id)) {
+            $this->sma->send_json(array('error' => 1, 'msg' => lang("Type is associated with order tagging.")));
         }
 
         if ($this->settings_model->delete_Order_types($id)) {
@@ -3156,10 +3156,10 @@ class system_settings extends MY_Controller
 
         $this->load->library('datatables');
         $this->datatables
-            ->select("{$this->db->dbprefix('approver_list')}.id as ids,{$this->db->dbprefix('order_types')}.name as names, concat({$this->db->dbprefix('users')}.first_name,' ',{$this->db->dbprefix('users')}.last_name), {$this->db->dbprefix('approver_list')}.approver_seq,{$this->db->dbprefix('approver_list')}.approver_seq_name, {$this->db->dbprefix('approver_list')}.is_active", FALSE)
+            ->select("{$this->db->dbprefix('approver_list')}.id as ids,{$this->db->dbprefix('process')}.name as names, {$this->db->dbprefix('approver_list')}.approver_seq_name,concat({$this->db->dbprefix('users')}.first_name,' ',{$this->db->dbprefix('users')}.last_name) as unames, {$this->db->dbprefix('approver_list')}.approver_seq, {$this->db->dbprefix('approver_list')}.is_active", FALSE)
             ->from("approver_list")
             ->join("users", 'users.id=approver_list.approver_id', 'left')
-            ->join("order_types", 'order_types.id=approver_list.category_id', 'left')
+            ->join("process", 'process.id=approver_list.category_id', 'left')
             ->group_by('approver_list.id')
             ->add_column("Actions", "<div class=\"text-center\">".$edit_link.$delete_link."</div>", "ids");
 
@@ -3204,11 +3204,10 @@ class system_settings extends MY_Controller
         }
         if ($this->form_validation->run() == true && $this->settings_model->addApprover($data)) {
             $this->session->set_flashdata('message', lang("Info_added_Successfully"));
-            var_dump($data);
             admin_redirect("system_settings/order_status_hierarchy");
         } else {
             $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
-            $this->data['types'] = $this->site->getAllType();
+            $this->data['types'] = $this->site->getAllProcess();
             $this->data['users'] = $this->site->getAllUser();
             $this->data['modal_js'] = $this->site->modal_js();
             $this->load->view($this->theme . 'settings/add_order_status_hierarchy', $this->data);
@@ -3261,7 +3260,7 @@ class system_settings extends MY_Controller
             $pr_details = $this->settings_model->getApproverByID($id);
             $this->data['id'] = $id;
             $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
-            $this->data['types'] = $this->site->getAllType();
+            $this->data['types'] = $this->site->getAllProcess();
             $this->data['users'] = $this->site->getAllUser();
             $this->data['aprrover'] = $pr_details;
             $this->data['modal_js'] = $this->site->modal_js();
@@ -3278,6 +3277,244 @@ class system_settings extends MY_Controller
         }
 
         if ($this->settings_model->deleteApprover($id)) {
+            $this->sma->send_json(array('error' => 0, 'msg' => lang("Info_Deleted_Successfully")));
+
+        }
+    }
+
+    function process()
+    {
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => admin_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('Process')));
+        $meta = array('page_title' => lang('Process'), 'bc' => $bc);
+        $this->page_construct('settings/process', $meta, $this->data);
+    }
+
+    function getProcess()
+    {
+
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("id,id as ids,name,description")
+            ->from("process")
+            ->add_column("Actions", "<div class=\"text-center\"><a href='" . admin_url('system_settings/edit_process/$1') . "' data-toggle='modal' data-target='#myModal' class='tip' title='" . lang("Edit") . "'><i class=\"fa fa-edit\"></i></a> <a href='#' class='tip po' title='<b>" . lang("Delete") . "</b>' data-content=\"<p>" . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('system_settings/delete_process/$1') . "'>" . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i></a></div>", "id");
+
+        echo $this->datatables->generate();
+    }
+
+
+    function add_process()
+    {
+
+        $this->form_validation->set_rules('name', lang("Name"), 'trim|required|is_unique[process.name]');
+        $this->form_validation->set_rules('description', lang("Description"), 'trim|required');
+
+        if ($this->form_validation->run() == true) {
+
+            $data = array(
+                'name' => $this->input->post('name'),
+                'description' => $this->input->post('description'),
+            );
+
+
+        } elseif ($this->input->post('add_process')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/process");
+        }
+
+        if ($this->form_validation->run() == true && $this->settings_model->add_process($data)) {
+            $this->session->set_flashdata('message', lang("Info_Added_Successfully"));
+            admin_redirect("system_settings/process");
+        } else {
+
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'settings/add_process', $this->data);
+
+        }
+    }
+
+    function edit_process($id = NULL)
+    {
+
+        $this->form_validation->set_rules('name', lang("Name"), 'trim|required');
+        $type_details = $this->site->getProcessByID($id);
+        if ($this->input->post('name') != $type_details->name) {
+            $this->form_validation->set_rules('name', lang("brand_name"), 'required|is_unique[process.name]');
+        }
+        $this->form_validation->set_rules('description', lang("Description"), 'trim|required');
+
+        if ($this->form_validation->run() == true) {
+
+            $data = array(
+                'name' => $this->input->post('name'),
+                'description' => $this->input->post('description'),
+            );
+
+
+        } elseif ($this->input->post('edit_process')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/process");
+        }
+
+        if ($this->form_validation->run() == true && $this->settings_model->update_process($id, $data)) {
+            $this->session->set_flashdata('message', lang("Info_Updated_Successfully"));
+            admin_redirect("system_settings/process");
+        } else {
+
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->data['type'] = $type_details;
+            $this->load->view($this->theme . 'settings/edit_process', $this->data);
+
+        }
+    }
+
+    function delete_process($id = NULL)
+    {
+
+        if ($this->settings_model->processHasTagging($id) || $this->settings_model->processHasApprover($id)) {
+            $this->sma->send_json(array('error' => 1, 'msg' => lang("Process is associated with order tagging.")));
+        }
+
+        if ($this->settings_model->delete_process($id)) {
+            $this->sma->send_json(array('error' => 0, 'msg' => lang("Info_Deleted_Successfully")));
+        }
+    }
+
+
+
+    function process_tagging()
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect($_SERVER["HTTP_REFERER"]);
+        }
+
+        $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+        $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('system_settings'), 'page' => lang('system_settings')), array('link' => '#', 'page' => lang('Process_Tagging')));
+        $meta = array('page_title' => lang('Process_Tagging'), 'bc' => $bc);
+        $this->page_construct('settings/process_tagging', $meta, $this->data);
+    }
+
+    function getProcessTagging()
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            redirect($_SERVER["HTTP_REFERER"]);
+        }
+        $edit_link= '&nbsp<a href="' . admin_url("system_settings/edit_process_tagging/$1") . '"data-toggle="modal" data-target="#myModal" class="tip" title="' .  lang("Edit") . '"><i class="fa fa-edit"></i></a>';
+        $delete_link = "&nbsp<a href='#' class='po' title='<b>" . lang("Delete") . "</b>' data-content=\"<p>"
+            . lang('r_u_sure') . "</p><a class='btn btn-danger po-delete' href='" . admin_url('system_settings/delete_process_tagging/$1') . "'>"
+            . lang('i_m_sure') . "</a> <button class='btn po-close'>" . lang('no') . "</button>\"  rel='popover'><i class=\"fa fa-trash-o\"></i> </a>";
+
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("{$this->db->dbprefix('process_tagging')}.id as ids,{$this->db->dbprefix('order_types')}.name as names,  {$this->db->dbprefix('process')}.name", FALSE)
+            ->from("process_tagging")
+            ->join("order_types", 'order_types.id=process_tagging.type_id', 'left')
+            ->join("process", 'process.id=process_tagging.process_id', 'left')
+            ->add_column("Actions", "<div class=\"text-center\">".$edit_link.$delete_link."</div>", "ids");
+
+        echo $this->datatables->generate();
+    }
+
+    function add_process_tagging()
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            die("<script type='text/javascript'>setTimeout(function(){ window.top.location.href = '" . (isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : site_url('welcome')) . "'; }, 10);</script>");
+            admin_redirect($_SERVER["HTTP_REFERER"]);
+        }
+
+
+        $this->load->helper('security');
+        $this->form_validation->set_rules('process_id', lang("process_id"), 'required');
+        $this->form_validation->set_rules('type_id', lang("type_id"), 'required');
+
+        if ($this->form_validation->run() == true) {
+            if($this->settings_model->checkTaggingExistance($this->input->post('type_id'),$this->input->post('process_id'))){
+                $this->session->set_flashdata('error', 'Duplicate Data.');
+                admin_redirect("system_settings/process_tagging");
+            }
+
+            $data = array(
+                'process_id' => $this->input->post('process_id'),
+                'type_id' => $this->input->post('type_id'),
+                'created_by' => $this->session->userdata('user_id'),
+                'created_date' => date("Y-m-d H:i:s"),
+            );
+        } elseif ($this->input->post('add_process_tagging')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/process_tagging");
+        }
+        if ($this->form_validation->run() == true && $this->settings_model->add_tagging($data)) {
+            $this->session->set_flashdata('message', lang("Info_added_Successfully"));
+            admin_redirect("system_settings/process_tagging");
+        } else {
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['process'] = $this->site->getAllProcessWithSub();
+            $this->data['types'] = $this->site->getAllType();
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'settings/add_process_tagging', $this->data);
+        }
+    }
+
+    function edit_process_tagging($id = NULL)
+    {
+
+        if(! $this->Owner && ! $this->Admin) {
+            $this->session->set_flashdata('warning', lang('access_denied'));
+            die("<script type='text/javascript'>setTimeout(function(){ window.top.location.href = '" . (isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : site_url('welcome')) . "'; }, 10);</script>");
+            admin_redirect($_SERVER["HTTP_REFERER"]);
+        }
+        if ($this->input->get('id')) {
+            $id = $this->input->get('id');
+        }
+
+        $this->load->helper('security');
+        $this->form_validation->set_rules('process_id', lang("process_id"), 'required');
+        $this->form_validation->set_rules('type_id', lang("type_id"), 'required');
+
+        if ($this->form_validation->run() == true) {
+            $data = array(
+                'process_id' => $this->input->post('process_id'),
+                'type_id' => $this->input->post('type_id'),
+                'updated_by' => $this->session->userdata('user_id'),
+                'updated_date' => date("Y-m-d H:i:s"),
+            );
+        } elseif ($this->input->post('edit_process_tagging')) {
+            $this->session->set_flashdata('error', validation_errors());
+            admin_redirect("system_settings/process_tagging");
+        }
+
+        if ($this->form_validation->run() == true && $this->settings_model->update_tagging($id, $data)) {
+            $this->session->set_flashdata('message', lang("Info_Updated_Successfully"));
+            admin_redirect("system_settings/process_tagging");
+        } else {
+            $pg_details = $this->site->getTaggingByID($id);
+            $this->data['id'] = $id;
+            $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
+            $this->data['process'] = $this->site->getAllProcessWithSub();
+            $this->data['types'] = $this->site->getAllType();
+            $this->data['tagging'] = $pg_details;
+            $this->data['modal_js'] = $this->site->modal_js();
+            $this->load->view($this->theme . 'settings/edit_process_tagging', $this->data);
+
+        }
+    }
+
+    function delete_process_tagging($id = NULL)
+    {
+        $pr_details = $this->site->getTaggingByID($id);
+//        if ($this->settings_model->hierarchyHasSales($pr_details->category_id)) {
+//            $this->sma->send_json(array('error' => 1, 'msg' => lang("Hierarchy is associated with sales.")));
+//        }
+
+        if ($this->settings_model->delete_tagging($id)) {
             $this->sma->send_json(array('error' => 0, 'msg' => lang("Info_Deleted_Successfully")));
 
         }

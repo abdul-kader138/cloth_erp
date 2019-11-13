@@ -53,7 +53,7 @@
 
 .progress-indicator>li.completed,
 .progress-indicator>li.completed .bubble {
-    color: #1F9700
+    color: #1F9700;
 }
 
 .progress-indicator>li .bubble {

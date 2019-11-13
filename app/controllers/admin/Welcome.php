@@ -165,7 +165,7 @@ class Welcome extends MY_Controller
 
         foreach ($salesInfo as $item) {
             $salesStatusStep = array();
-            $getSlatesOrderStep = $this->db_model->getSalesStep($item->order_type);
+            $getSlatesOrderStep = $this->db_model->getSalesStep($item->process_type);
             if ($getSlatesOrderStep) {
                 foreach ($getSlatesOrderStep as $lst) {
                     $details = $this->db_model->getSalesStatus($item->id, $lst->approver_seq_name);
@@ -202,6 +202,7 @@ class Welcome extends MY_Controller
                             'status2' => $details->c_status,
                             'status' => strtolower($c_Status),
                             'c_status' => $details->status,
+                            'pname' => $details->pname,
                             'status1' => strtolower($c_Status1));
                     }
 

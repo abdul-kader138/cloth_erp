@@ -421,7 +421,8 @@ class Sales extends MY_Controller
         $this->form_validation->set_rules('biller', lang("biller"), 'required');
         $this->form_validation->set_rules('sale_status', lang("sale_status"), 'required');
         $this->form_validation->set_rules('payment_status', lang("payment_status"), 'required');
-        $this->form_validation->set_rules('category_id', lang("Order_Type"), 'required');
+        $this->form_validation->set_rules('type_id', lang("Order_Type"), 'required');
+        $this->form_validation->set_rules('process_id', lang("Process"), 'required');
         $this->form_validation->set_rules('ddate', lang("Delivery_Date"), 'required');
 
         if ($this->form_validation->run() == true) {
@@ -600,7 +601,7 @@ class Sales extends MY_Controller
             $total_tax = $this->sma->formatDecimal(($product_tax + $order_tax), 4);
             $grand_total = $this->sma->formatDecimal(($total + $total_tax + $this->sma->formatDecimal($shipping) - $order_discount), 4);
 
-            $user_details = $this->getAllApprovalList($this->input->post('category_id'));
+            $user_details = $this->getAllApprovalList($this->input->post('process_id'));
 
 
             $data = array('date' => $date,
@@ -635,7 +636,8 @@ class Sales extends MY_Controller
                 'payment_status' => $payment_status,
                 'payment_term' => $payment_term,
                 'due_date' => $due_date,
-                'order_type' => $this->input->post('category_id'),
+                'order_type' => $this->input->post('type_id'),
+                'process_type' => $this->input->post('process_id'),
                 'order_type_status' => 0,
                 'hierarchy_status' => '',
                 'delivery_date' => $ddate,
@@ -3002,5 +3004,18 @@ class Sales extends MY_Controller
         }
 
         return $allAppoverLists;
+    }
+
+
+    public function getProcess($id)
+    {
+        // $unit = $this->site->getUnitByID($unit_id);
+        // if ($units = $this->site->getUnitsByBUID($unit_id)) {
+        //     array_push($units, $unit);
+        // } else {
+        //     $units = array($unit);
+        // }
+        $units = $this->site->getProcessWithSubById($id);
+        $this->sma->send_json($units);
     }
 }

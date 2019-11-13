@@ -186,7 +186,7 @@ class Db_model extends CI_Model
     {
 
         $this->db
-            ->select("sales.id as id,sales.order_type,sales.reference_no")
+            ->select("sales.id as id,sales.order_type,sales.process_type,sales.reference_no")
             ->from('sales')
             ->join('approve_details', 'sales.id=approve_details.application_id', 'left');
         if (!$this->Owner && !$this->Admin) $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
@@ -205,9 +205,10 @@ class Db_model extends CI_Model
     public function getSalesStatus($id = NULL, $type = NULL)
     {
         $this->db
-            ->select("approve_details.id as ids,approve_details.aprrover_id, approve_details.approver_seq_name as step,approve_details.approve_status as c_status,approve_details.updated_by,approve_details.updated_date,users.first_name,users.last_name,approve_details.application_id,approve_details.status")
+            ->select("approve_details.id as ids,approve_details.aprrover_id, approve_details.approver_seq_name as step,approve_details.approve_status as c_status,approve_details.updated_by,approve_details.updated_date,users.first_name,users.last_name,approve_details.application_id,approve_details.status,process.name as pname")
             ->from('approve_details')
             ->join('users', 'approve_details.aprrover_id = users.id', 'inner')
+            ->join('process', 'process.id = approve_details.category_id', 'inner')
             ->where('approve_details.application_id', $id)
             ->where('approve_details.approver_seq_name', $type);
         $q = $this->db->get();
@@ -232,10 +233,12 @@ class Db_model extends CI_Model
 
     public function getTotalPendingTask()
     {
-        $this->db->select('id,application_id', FALSE);
-        $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
-        $this->db->where('approve_details.status', 0);
-        $this->db->group_by('approve_details.application_id');
+        $this->db->select('application_id as totals', FALSE);
+        if (!$this->Owner && !$this->Admin) {
+            $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
+        }
+        $this->db->where('status', '0');
+        $this->db->group_by('application_id');
         $q = $this->db->get('approve_details');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
@@ -250,8 +253,9 @@ class Db_model extends CI_Model
     public function getTotalCompleteTask()
     {
         $this->db->select('application_id as total', FALSE);
-        $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
-        $this->db->where('approve_details.status', '1');
+        if (!$this->Owner && !$this->Admin) {
+            $this->db->where('approve_details.aprrover_id', $this->session->userdata('user_id'));
+        }
         $this->db->group_by('approve_details.application_id');
         $q = $this->db->get('approve_details');
         if ($q->num_rows() > 0) {

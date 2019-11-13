@@ -1578,8 +1578,8 @@ class Site extends CI_Model
 
     public function getAllTypeByHierarchy()
     {
-        $this->db->select('order_types.id, order_types.name,approver_list.status')
-        ->join('approver_list', 'approver_list.category_id=order_types.id', 'inner');
+        $this->db->select('order_types.id, order_types.name')
+        ->join('process_tagging', 'process_tagging.type_id=order_types.id', 'inner');
         $q = $this->db->get('order_types');
 //        $this->db->where('approver_list.approver_next_sequence', 0);
 
@@ -1617,4 +1617,63 @@ class Site extends CI_Model
     }
 
 
+    public function getProcessByID($id)
+    {
+        $q = $this->db->get_where('process', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getAllProcess()
+    {
+        $q = $this->db->get("process");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getTaggingByID($id)
+    {
+        $q = $this->db->get_where('process_tagging', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+
+    public function getAllProcessWithSub()
+    {
+
+        $this->db->select('process.id,process.name');
+        $this->db->join('approver_list', 'approver_list.category_id=process.id', 'inner')->group_by('approver_list.category_id');
+        $q = $this->db->get("process");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
+
+    public function getProcessWithSubById($id)
+    {
+        $this->db->select('process.id,process.name');
+        $this->db->join('process', 'process_tagging.process_id=process.id', 'inner')->where('process_tagging.type_id',$id);
+        $q = $this->db->get("process_tagging");
+        if ($q->num_rows() > 0) {
+            foreach (($q->result()) as $row) {
+                $data[] = $row;
+            }
+            return $data;
+        }
+        return FALSE;
+    }
 }
